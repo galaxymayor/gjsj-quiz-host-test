@@ -16,7 +16,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/">Home</a>
+              <a class="nav-link active" aria-current="page" href="/gjsj-quiz-host-test/">Home</a>
             </li>
           </ul>
           <form class="d-flex" role="search" id="search_form">
@@ -30,15 +30,12 @@
     {% endblock %} -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
+        const host_page_path = "/gjsj-quiz-host-test/";
         const searchForm = document.getElementById('search_form');
         const searchInput = document.getElementById('search-input');
         searchForm.addEventListener('submit', (e) => {
           e.preventDefault();
-          if(window.location.href.endsWith("index.html")){
-            window.location.href = "./" + searchInput.value + ".iqm0.html";
-          }else{
-            window.location.href = "../" + searchInput.value + ".iqm0.html";
-          }
+          window.location.href = host_page_path + searchInput.value + ".iqm0.html";
         });
     </script>
   </body>

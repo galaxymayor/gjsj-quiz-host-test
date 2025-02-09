@@ -34,7 +34,11 @@
         const searchInput = document.getElementById('search-input');
         searchForm.addEventListener('submit', (e) => {
           e.preventDefault();
-          window.location.href = "../" + searchInput.value + ".iqm0.html";
+          if(window.location.href.endsWith("index.html")){
+            window.location.href = "./" + searchInput.value + ".iqm0.html";
+          }else{
+            window.location.href = "../" + searchInput.value + ".iqm0.html";
+          }
         });
     </script>
   </body>

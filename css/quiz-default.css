@@ -1,0 +1,179 @@
+@page {
+    @bottom-center {
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        content: "Page "counter(page) " of "counter(pages);
+    }
+}
+
+@media screen {
+    #paper {
+        width: fit-content;
+        justify-self: center;
+        justify-content: center;
+        margin: 12px;
+    }
+}
+
+@media print {
+    .pagebreak {
+        break-before: page;
+    }
+
+    /* break-after works, as well */
+    .no-print {
+        display: none;
+    }
+
+    .two-col {
+        column-count: 2;
+        column-gap: 20px;
+        column-fill: auto;
+    }
+
+    .b4-port-col {
+        column-width: 320mm;
+        /* column-count: 2;*/
+        column-gap: 20mm;
+        column-fill: auto;
+    }
+
+    .b5-port-col {
+        column-width: 158mm;
+        column-gap: 18mm;
+        column-fill: auto;
+    }
+
+    .narrow-col {
+        column-width: 50mm;
+        column-gap: 10mm;
+        column-fill: auto;
+    }
+
+    #paper {
+        width: 100%;
+        justify-self: center;
+        justify-content: center;
+    }
+}
+
+.narrow-col {
+    column-width: 50mm;
+    column-gap: 10mm;
+    column-fill: balance;
+}
+
+li {
+    list-style-type: none;
+}
+
+.q-inplace-inplace {
+    color: black;
+    white-space: pre;
+}
+
+.a-inplace-inplace {
+    color: rgb(208, 17, 17);
+    font-weight: bold;
+}
+
+.q-apart-inplace {
+    color: black;
+    white-space: pre;
+}
+
+.a-apart-inplace {
+    color: rgb(208, 17, 17);
+    font-weight: bold;
+}
+
+.a-front {
+    color: rgb(208, 17, 17);
+    font-weight: bold;
+}
+
+.a-block {
+    color: rgb(208, 17, 17);
+    font-weight: bold;
+}
+
+.a-full {
+    color: darkcyan;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.line-indent {
+    /* text-indent: 2cm; */
+    line-height: 2mm;
+}
+
+.no-height {
+    line-height: 0;
+    margin: 0;
+}
+
+.q-front-choice {
+    float: left;
+    min-width: 25mm;
+}
+
+.q-front-slot {
+    float: left;
+    min-width: 4cm;
+}
+
+.q-front-match {
+    float: left;
+    min-width: 25mm;
+}
+
+.left-qi {
+    float: left;
+    min-width: 12mm;
+}
+
+mark {
+    border: solid;
+    border-width: 1px;
+    border-radius: 6px;
+}
+
+.box>* {
+    border: 1px solid black;
+    background-color: rgb(96 139 168 / 0.2);
+    width: 200px;
+    margin-top: 0px;
+    margin-bottom: -1px;
+    margin-left: 0px;
+    margin-right: -1px;
+}
+
+.box {
+    width: fit-content;
+    display: flex;
+    flex-flow: row wrap;
+    border-radius: 0px;
+}
+
+input[type=number] {
+    width: 80px;
+}
+
+#title-input {
+    width: 400px;
+    max-width: 100%;
+}
+
+.option-hint {
+    padding: 2px;
+    hyphens: auto;
+    overflow-wrap: break-word;
+}
+
+.no-print {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: bisque;
+    padding: 10px;
+    margin: 15px;
+    border-radius: 12px;
+}

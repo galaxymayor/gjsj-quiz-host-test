@@ -1,6 +1,7 @@
 function update_title() {
     const title = document.getElementById('title-input').value;
     document.getElementById('title-text').innerHTML = title;
+    document.title = title;
 }
 function update_title_font_size() {
     const h1_size = document.getElementById('h1-size-input').value + 'pt';
@@ -19,7 +20,7 @@ function set_page_break(input_id, out_div_id) {
     let inner = '<div class="pagebreak"></div><div class="no-print">Page Break</div><pre> </pre>'
         .repeat(quantity);
     if (inner.endsWith('<pre> </pre>')) {
-        inner = inner.substr(0, inner.length - 12);
+        inner = inner.substring(0, inner.length - 12);
     }
     document.getElementById(out_div_id).innerHTML = inner;
 }

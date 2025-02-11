@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "GenRyuMin TW";
+    src: url(../fonts/GenRyuMin2TW-R.otf);
+}
+
 @page {
     @bottom-center {
         font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
@@ -135,10 +140,12 @@ li {
 mark {
     border: solid;
     border-width: 1px;
-    border-radius: 6px;
+    border-radius: 5px;
     padding: 2px;
     padding-top: 0px;
     padding-bottom: 1px;
+    display: inline-block;
+    /* margin: 1px; */
 }
 
 .box>* {

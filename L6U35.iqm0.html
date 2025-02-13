@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/quiz-default.css">
+  </head>
+  <body>
+    <style>
+      body {
+        font-size: 5mm;
+        font-family: Cambria, 'GenRyuMin TW', Cochin, Georgia, Times,
+          'Times New Roman', serif;
+      }
+      div{
+        line-height: 1.18;
+      }
+      :lang(en){
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+      }
+      h1 {
+        font-weight: normal;
+        font-family: FZYaoTi, 'Noto Sans TC Medium', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 30pt;
+      }
+      h2 {
+        font-weight: normal;
+        font-family: FZYaoTi, 'Noto Sans TC Medium', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 26pt;
+      }
+      h3 {
+        font-weight: normal;
+        font-family: 'Noto Sans TC Medium', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin-bottom: 5pt;
+        font-size: 20pt;
+      }
+      span.tagline {
+        font-size: 60%;
+        color: darkslategray;
+      }
+      p {
+        white-space: pre-wrap;
+        line-height: 1.18;
+        font-size: 14pt;
+      }
+      .normal-text {
+        font-size: 14pt;
+      }
+    </style>
+    <script src="js/quiz-default.js"></script>
+    <div class="no-print">
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="title-input" class="col-form-label">Title</label>
+        </div>
+        <div class="col-auto">
+          <input id="title-input" class="form-control" type="text" value="高級單字 L6U35 首捲挖啥物" oninput="update_title();"/>
+        </div>
+        <div class="col-auto">
+          <label for="h1-size-input" class="col-form-label">Title Font Size</label>
+        </div>
+        <div class="col-auto">
+          <input id="h1-size-input" class="form-control" type="number" value="30" oninput="update_title_font_size();"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="font-size-input" class="col-form-label">Content Font Size</label>
+        </div>
+        <div class="col-auto">
+          <input id="font-size-input" class="form-control" type="number" value="14" oninput="update_text_font_size();"/>
+        </div>
+        <div class="col-auto">
+          <label for="box-width-input" class="col-form-label">Hint Box Width</label>
+        </div>
+        <div class="col-auto">
+          <input id="box-width-input" class="form-control" type="number" value="200" oninput="update_hint_box_width();"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="part-question-include-input" class="col-form-label">Include Question Part</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-check-input" id="part-question-include-input" type="checkbox" checked onchange="set_visible('part-question-include-input', 'part-question');"/>
+        </div>
+        <div class="col-auto">
+          <label for="break-hq-input" class="col-form-label">Page Break(s) for Question</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-control" id="break-hq-input" type="number" value="0" oninput="set_page_break('break-hq-input', 'inter-h-q');"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="part-full-answer-include-input" class="col-form-label">Include Full Answer Part</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-check-input" id="part-full-answer-include-input" type="checkbox" checked onchange="set_visible('part-full-answer-include-input', 'part-full-answer');"/>
+        </div>
+        <div class="col-auto">
+          <label for="break-qa-input" class="col-form-label">Page Break(s) for Full Answer</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-control" id="break-qa-input" type="number" value="1" oninput="set_page_break('break-qa-input', 'inter-q-fa');"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="part-simple-answer-include-input" class="col-form-label">Include Simple Answer Part</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-check-input" id="part-simple-answer-include-input" type="checkbox" checked onchange="set_visible('part-simple-answer-include-input', 'part-simple-answer');"/>
+        </div>
+        <div class="col-auto">
+          <label for="break-aa-input" class="col-form-label">Page Break(s) for Simple Answer</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-control" id="break-aa-input" type="number" value="1" oninput="set_page_break('break-aa-input', 'inter-fa-sa');"/>
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary" onclick="window.print();" id="print-button">
+        Print The Quiz
+      </button>
+    </div>
+
+    <!-- start filling -->
+
+    <div id="paper">
+      <div id="inter-h-q"></div>
+      <h1 id="title-text">
+        高級單字 L6U35 首捲挖啥物
+      </h1>
+      <div id="part-question">
+        <h3>
+          題目
+        </h3>
+        <div class="b5-port-col">
+          <div class="box normal-text" id="hint-box">
+            
+          </div>
+          <p>Clean the <span class="q-inplace-inplace">(1)<u>s                </u></span> <span class="q-inplace-inplace">(2)<u>o                t</u></span> every time you finish washing the dishes. 每次洗完碗後，都要清理水槽出水口。</p>
+<p>Teenagers need an <span class="q-inplace-inplace">(3)<u>o                t</u></span> <span class="q-inplace-inplace">(4)<u>                </u></span> their energy. 青少年需要一個發洩精力的出口（管道）。</p>
+<p>This <span class="q-inplace-inplace">(5)<u>c                      c</u></span> firm has 3 <span class="q-inplace-inplace">(6)<u>o                 ts</u></span> <span class="q-inplace-inplace">(7)<u>                </u></span> Taiwan. 這家化妝品公司在臺灣有三個銷售據點。</p>
+<p>Plug the <span class="q-inplace-inplace">(8)<u>p                </u></span> <span class="q-inplace-inplace">(9)<u>                </u></span> the power <span class="q-inplace-inplace">(10)<u>o                t</u></span>. 把插頭插入插座。</p>
+<p>The handle of the <span class="q-inplace-inplace">(11)<u>s                d</u></span> <mark>is <span class="q-inplace-inplace">(12)<u>de                        d</u></span> <span class="q-inplace-inplace">(13)<u>                </u></span></mark> a <span class="q-inplace-inplace">(14)<u>r                </u></span>. 這把劍的劍把飾有紅寶石。</p>
+<p>I know I will never be a <span class="q-inplace-inplace">(15)<u>ph                      t</u></span>. I am too <span class="q-inplace-inplace">(16)<u>s                        e</u></span>. 我知道我永遠都當不了物理學家，我太主觀了。</p>
+<p>There is a <span class="q-inplace-inplace">(17)<u>s                c</u></span> road along the shore. 沿著海濱有一條風景很優美的道路。</p>
+<p>Many traditional arts of Taiwan are waiting <span class="q-inplace-inplace">(18)<u>                </u></span> <span class="q-inplace-inplace">(19)<u>r                            e</u></span>. 許多臺灣傳統藝術等待著再生。</p>
+<p>The <span class="q-inplace-inplace">(20)<u>R                              e</u></span> started in Italy and slowly spread throughout Europe. 文藝復興開始於義大利，然後慢慢散播至全歐洲。</p>
+<p>The film <span class="q-inplace-inplace">(21)<u>ch                        s</u></span> her <span class="q-inplace-inplace">(22)<u>t                                      n</u></span> <span class="q-inplace-inplace">(23)<u>                </u></span> housewife to <span class="q-inplace-inplace">(24)<u>co                                      n</u></span>. 這部影片記錄了她從家庭主婦到國會議員的轉變歷程。</p>
+<p>Autumn rain and fallen leaves often make me <span class="q-inplace-inplace">(25)<u>s                            l</u></span>. 秋雨和落葉常令我感傷。</p>
+<p>Though it is a cheap ring, yet it has great <span class="q-inplace-inplace">(26)<u>s                            l</u></span> value for me. 這只戒指雖便宜，但它對我來說情感上的意義深重。</p>
+<p>The <span class="q-inplace-inplace">(27)<u>s                    s</u></span> began to move <span class="q-inplace-inplace">(28)<u>i                d</u></span> and <span class="q-inplace-inplace">(29)<u>p                    e</u></span> the river valleys. 移民開始往內地移動，並在河谷居住。</p>
+<p>The traditional belief in men’s <span class="q-inplace-inplace">(30)<u>s                           y</u></span> <span class="q-inplace-inplace">(31)<u>                </u></span> woman causes many serious problems in China. 男優於女的傳統觀念在中國引起許多嚴重的問題。</p>
+<p>Many Chinese have a sense of <span class="q-inplace-inplace">(32)<u>s                           y</u></span> <span class="q-inplace-inplace">(33)<u>                </u></span> being Chinese. 許多中國人有一種身為中國人的優越感。</p>
+<p>He has a sense of <span class="q-inplace-inplace">(34)<u>i                          y</u></span>. 他有自卑感。</p>
+<p>Some teenagers like to <span class="q-inplace-inplace">(35)<u>v                   e</u></span> <span class="q-inplace-inplace">(36)<u>                </u></span> the <span class="q-inplace-inplace">(37)<u>c                       y</u></span> <span class="q-inplace-inplace">(38)<u>                </u></span> night. 一些青少年喜歡在晚上到公墓裡探險。</p>
+<p>The film was not well received and was a major <span class="q-inplace-inplace">(39)<u>s                   k</u></span> <span class="q-inplace-inplace">(40)<u>                </u></span> the director. 這部電影反應不好，這對導演來說是很重大的挫折。</p>
+<p>When farmers <span class="q-inplace-inplace">(41)<u>r                e</u></span> <span class="q-inplace-inplace">(42)<u>c                s</u></span>, they regularly change <span class="q-inplace-inplace">(43)<u>c                s</u></span> they grow in the field. 當農民們輪種時，他們會規律地在田裡變換作物。</p>
+<p>The Earth <span class="q-inplace-inplace">(44)<u>r                   es</u></span> <span class="q-inplace-inplace">(45)<u>                </u></span> its <span class="q-inplace-inplace">(46)<u>a                </u></span> once every 24 hours. 地球每24小時繞著地軸轉一圈。</p>
+<p>Three plays will be performed <span class="q-inplace-inplace">(47)<u>                </u></span> <span class="q-inplace-inplace">(48)<u>r                    n</u></span> during the drama festival. 在戲劇季期間，三齣戲會輪流演出。</p>
+<p>Saturn completes a <span class="q-inplace-inplace">(49)<u>r                    n</u></span> <span class="q-inplace-inplace">(50)<u>                </u></span> about 10 hours. 土星大約每十小時就自轉一次。</p>
+<p>He <span class="q-inplace-inplace">(51)<u>d                   ed</u></span> $350,000 <span class="q-inplace-inplace">(52)<u>                </u></span> the <span class="q-inplace-inplace">(53)<u>c                 y</u></span>. 他捐贈三十五萬元給慈善機構。</p>
+<p>Every winter, the <span class="q-inplace-inplace">(54)<u>or                        e</u></span> asks <span class="q-inplace-inplace">(55)<u>                </u></span> <span class="q-inplace-inplace">(56)<u>d                       ns</u></span>. 每到冬天，那家孤兒院就會進行募捐。</p>
+<p>Every blood <span class="q-inplace-inplace">(57)<u>d                r</u></span> will receive a free T-shirt. 每個捐血者都可拿到一件免費的T恤。</p>
+<p>Sand is mostly <span class="q-inplace-inplace">(58)<u>c                       d</u></span> <span class="q-inplace-inplace">(59)<u>                </u></span> <span class="q-inplace-inplace">(60)<u>s                n</u></span>. 砂的成分大部分都是矽。</p>
+<p><span class="q-inplace-inplace">(61)<u>S                n</u></span> Valley is <span class="q-inplace-inplace">(62)<u>l                 d</u></span> <span class="q-inplace-inplace">(63)<u>                </u></span> the <span class="q-inplace-inplace">(64)<u>m                </u></span>-west part of California. 矽谷位於加州的中西部。</p>
+<p>Some people believe that US <span class="q-inplace-inplace">(65)<u>a                          n</u></span> <span class="q-inplace-inplace">(66)<u>b                s</u></span> terrorism. 一些人相信，美國的侵略行為化育了恐怖主義。</p>
+<p>The <span class="q-inplace-inplace">(67)<u>t                   l</u></span> zone is between <mark>the <span class="q-inplace-inplace">(68)<u>T                c</u></span> <span class="q-inplace-inplace">(69)<u>                </u></span> <span class="q-inplace-inplace">(70)<u>C                 r</u></span></mark> and <mark>the <span class="q-inplace-inplace">(71)<u>T                c</u></span> <span class="q-inplace-inplace">(72)<u>                </u></span> <span class="q-inplace-inplace">(73)<u>C                        n</u></span></mark>. 熱帶地區位於北回歸線與南回歸線之間。</p>
+<p>People living <span class="q-inplace-inplace">(74)<u>                </u></span> the <span class="q-inplace-inplace">(75)<u>t                 cs</u></span> know nothing about winter. 住在熱帶地區的人們不曉得冬天是什麼。</p>
+<p>We will do a <span class="q-inplace-inplace">(76)<u>b                      l</u></span> <span class="q-inplace-inplace">(77)<u>ex                           t</u></span> <span class="q-inplace-inplace">(78)<u>                </u></span> Thursday. 星期四我們要做生物實驗。</p>
+<p>Gavin majored <span class="q-inplace-inplace">(79)<u>                </u></span> <span class="q-inplace-inplace">(80)<u>b                               y</u></span> <span class="q-inplace-inplace">(81)<u>                </u></span> university. 蓋文在大學時主修生化。</p>
+<p>His face was <span class="q-inplace-inplace">(82)<u>d                       ted</u></span> <span class="q-inplace-inplace">(83)<u>                </u></span> anger. 他的險因憤怒而扭曲。</p>
+<p>Don’t <span class="q-inplace-inplace">(84)<u>d                 t</u></span> my words. 不要曲解我的話。</p>
+<p><mark>the <span class="q-inplace-inplace">(85)<u>d                        n</u></span> <span class="q-inplace-inplace">(86)<u>                </u></span> <span class="q-inplace-inplace">(87)<u>s                e</u></span></mark> is commonly known as <span class="q-inplace-inplace">(88)<u>g                 y</u></span>. 空間的扭曲就是所謂的重力。</p>
+<p>The <span class="q-inplace-inplace">(89)<u>hi                        s</u></span> are very careful to avoid the <span class="q-inplace-inplace">(90)<u>d                        n</u></span> <span class="q-inplace-inplace">(91)<u>                </u></span> historical facts. 歷史學家小心翼翼地避免史實被曲解。</p>
+<p>Let’s look at the questions <span class="q-inplace-inplace">(92)<u>                </u></span> the <span class="q-inplace-inplace">(93)<u>s                          t</u></span> <span class="q-inplace-inplace">(94)<u>                </u></span> children. 讓我們從兒童的觀點來看這些問題。</p>
+<p>Branch managers have full <span class="q-inplace-inplace">(95)<u>a                       y</u></span> <span class="q-inplace-inplace">(96)<u>                </u></span> their own areas, 分公司的經理在其管轄範圍內有充分的自主權。</p>
+<p>The <span class="q-inplace-inplace">(97)<u>s                n</u></span> went <span class="q-inplace-inplace">(98)<u>                </u></span>, <span class="q-inplace-inplace">(99)<u>si                    g</u></span> the start of the fire <span class="q-inplace-inplace">(100)<u>d                l</u></span>. 警報器響起，表示防火演習開始了。</p>
+<p>I cannot but <span class="q-inplace-inplace">(101)<u>s                </u></span> tears for the poor boy. 我不禁為這名可憐的男孩掬一把淚。</p>
+<p>As it grows, a snake will regularly <span class="q-inplace-inplace">(102)<u>s                </u></span> its skin. 蛇成長時會規律地脫皮。</p>
+<p>The <span class="q-inplace-inplace">(103)<u>s                </u></span> is used to store farming tools. 士兵有時會對無辜的人們施加嚴重的傷害。</p>
+<p>Soldiers sometimes <span class="q-inplace-inplace">(104)<u>i                t</u></span> serious injury <span class="q-inplace-inplace">(105)<u>                </u></span> <span class="q-inplace-inplace">(106)<u>i                    t</u></span> people. </p>
+<p>We must encourage <span class="q-inplace-inplace">(107)<u>i                        n</u></span> if the company is to <span class="q-inplace-inplace">(108)<u>r                n</u></span> <span class="q-inplace-inplace">(109)<u>co                            e</u></span>. 如果要公司維持競爭力，我們必須鼓勵創新。</p>
+<p>The students came up with many <span class="q-inplace-inplace">(110)<u>i                        e</u></span> ideas. 學生們想出許多創新的點子。</p>
+<p>It <mark>is <span class="q-inplace-inplace">(111)<u>in                                 e</u></span> <span class="q-inplace-inplace">(112)<u>                </u></span></mark> use <span class="q-inplace-inplace">(113)<u>s                g</u></span> <span class="q-inplace-inplace">(114)<u>                </u></span> formal speech or writing. 在正式的言談及寫作中，使用俚語是不恰當的。</p>
+<p>Jones refused to <span class="q-inplace-inplace">(115)<u>s                       e</u></span> <span class="q-inplace-inplace">(116)<u>                </u></span> what <span class="q-inplace-inplace">(117)<u>m                t</u></span> happen. 瓊斯拒絕推測會發生什麼事。</p>
+<p>No <span class="q-inplace-inplace">(118)<u>e                    e</u></span> has been found, so any <span class="q-inplace-inplace">(119)<u>c                      t</u></span> <span class="q-inplace-inplace">(120)<u>                </u></span> the case is <span class="q-inplace-inplace">(121)<u>p                </u></span> <span class="q-inplace-inplace">(122)<u>s                           n</u></span>. 在沒有發現任何證據的情況下，任何對這個案子的評論都純屬臆測。</p>
+<p>She <span class="q-inplace-inplace">(123)<u>b                      ned</u></span> (<span class="q-inplace-inplace">(124)<u>                </u></span>) the waitress <mark><span class="q-inplace-inplace">(125)<u>                </u></span> a <span class="q-inplace-inplace">(126)<u>r                l</u></span> <span class="q-inplace-inplace">(127)<u>                </u></span></mark></mark> her glass. 她向女服務生招手要續杯。</p>
+<p>The teller has been <span class="q-inplace-inplace">(128)<u>s                y</u></span> lately. Maybe he has something to do <span class="q-inplace-inplace">(129)<u>                </u></span> the <span class="q-inplace-inplace">(130)<u>t                t</u></span> <span class="q-inplace-inplace">(131)<u>                </u></span> the bank. 這名行員最近鬼鬼祟祟的，也許他和銀行的失竊案有關。</p>
+<p>We were away for the weekend <span class="q-inplace-inplace">(132)<u>                </u></span> a <span class="q-inplace-inplace">(133)<u>s                </u></span> hotel. 我們在一家溫泉旅館度週末。</p>
+<p>Some glass <span class="q-inplace-inplace">(134)<u>f                          ts</u></span> hit me when the window was <span class="q-inplace-inplace">(135)<u>s                    d</u></span>. 窗戶被打碎時，有些玻璃碎片打到我。</p>
+<p>The <span class="q-inplace-inplace">(136)<u>b                 t</u></span> is <span class="q-inplace-inplace">(137)<u>c                    ed</u></span> <span class="q-inplace-inplace">(138)<u>                </u></span> the Tourism Bureau. 這本小冊子是由觀光局編纂的。</p>
+<p>The army <span class="q-inplace-inplace">(139)<u>l                    d</u></span> several cross-border <span class="q-inplace-inplace">(140)<u>r                </u></span> last night. 昨晚軍隊發動好幾次越境突擊。</p>
+<p>The police didn’t find the <span class="q-inplace-inplace">(141)<u>s                   t</u></span> <span class="q-inplace-inplace">(142)<u>                </u></span> the <span class="q-inplace-inplace">(143)<u>r                    e</u></span> <span class="q-inplace-inplace">(144)<u>r                </u></span> last night. 昨天晚上警方在路邊臨檢時，並沒有找到嫌犯。</p>
+<p>The <span class="q-inplace-inplace">(145)<u>r                s</u></span> <span class="q-inplace-inplace">(146)<u>r                </u></span> the village late at night. 叛軍於深夜突擊這個村莊。</p>
+<p>Political <span class="q-inplace-inplace">(147)<u>a                    ts</u></span> expect the Conservatives to win. 政治分析家認為保守黨會贏。</p>
+<p>The <span class="q-inplace-inplace">(148)<u>c                        y</u></span> teacher asked us to hand in an <span class="q-inplace-inplace">(149)<u>a                       l</u></span> report of the water quality here. 化學老師要我們交一份此地的水質分析報告。</p>
+<p>The salesman <span class="q-inplace-inplace">(150)<u>u                d</u></span> us <span class="q-inplace-inplace">(151)<u>                </u></span> test drive their <span class="q-inplace-inplace">(152)<u>s                    s</u></span> <span class="q-inplace-inplace">(153)<u>v                </u></span>. 這名推銷員慫恿我們試駕他們空間寬敞的廂型車。</p>
+<p>The fair seemed to <span class="q-inplace-inplace">(154)<u>s                l</u></span> <span class="q-inplace-inplace">(155)<u>                </u></span> miles. 這個市集似乎綿延數英里。</p>
+<p>He <span class="q-inplace-inplace">(156)<u>s                      led</u></span> out on the bed. 他在床上躺成大字形。</p>
+<p>A victory is always good <span class="q-inplace-inplace">(157)<u>                </u></span> <span class="q-inplace-inplace">(158)<u>m                e</u></span> and <span class="q-inplace-inplace">(159)<u>co                          e</u></span>. 勝利對士氣及信心一定有幫助。</p>
+<p>Many whites believed that the <span class="q-inplace-inplace">(160)<u>s                    r</u></span> races had the duty to <span class="q-inplace-inplace">(161)<u>c                e</u></span> the <span class="q-inplace-inplace">(162)<u>i                   r</u></span> races. 許多白人相信，優越民族有責任要教化劣等民族。</p>
+<p>What are the differences between <span class="q-inplace-inplace">(163)<u>c                   d</u></span> life and <span class="q-inplace-inplace">(164)<u>pr                      e</u></span> life? 文明生活與原始生活的差別為何？</p>
+<p>You should avoid <span class="q-inplace-inplace">(165)<u>c                                  n</u></span> <span class="q-inplace-inplace">(166)<u>                </u></span> your <span class="q-inplace-inplace">(167)<u>s                       rs</u></span>. 你應該避免和你的上司正面衝突。</p>
+<p>With only a little high school French, I <span class="q-inplace-inplace">(168)<u>s                           red</u></span> my order, “Un... café s’il <span class="q-inplace-inplace">(169)<u>v                </u></span> <span class="q-inplace-inplace">(170)<u>p                t</u></span>.” 我用只有高中程度的法文，結結巴巴說出我要點的東西，「請…給我……一杯………咖啡」。</p>
+<p>I went to a doctor, hoping to cure my <span class="q-inplace-inplace">(171)<u>s                      r</u></span>. 我去看醫生，希望可以治療我的口吃。</p>
+<p>The <span class="q-inplace-inplace">(172)<u>fo                          n</u></span> <span class="q-inplace-inplace">(173)<u>                </u></span> the castle was <span class="q-inplace-inplace">(174)<u>u                           ed</u></span> <span class="q-inplace-inplace">(175)<u>                </u></span> <span class="q-inplace-inplace">(176)<u>t                s</u></span>. 城堡的地基被潮水破壞了。</p>
+<p>Constant <span class="q-inplace-inplace">(177)<u>cr                      m</u></span> <span class="q-inplace-inplace">(178)<u>u                           ed</u></span> her <span class="q-inplace-inplace">(179)<u>co                          e</u></span>. 不斷的批評削弱了她的信心。</p>
+
+        </div>
+      </div>
+      <div id="part-full-answer">
+        <div id="inter-q-fa"></div>
+        <h3>
+          詳解
+        </h3>
+        <div class="b5-port-col">
+          <p>Clean the <span class="q-inplace-inplace">(1)<u> <span class="a-inplace-inplace">sink</span> </u></span> <span class="q-inplace-inplace">(2)<u> <span class="a-inplace-inplace">outlet</span> </u></span> every time you finish washing the dishes. 每次洗完碗後，都要清理水槽出水口。</p>
+<p>Teenagers need an <span class="q-inplace-inplace">(3)<u> <span class="a-inplace-inplace">outlet</span> </u></span> <span class="q-inplace-inplace">(4)<u> <span class="a-inplace-inplace">for</span> </u></span> their energy. 青少年需要一個發洩精力的出口（管道）。</p>
+<p>This <span class="q-inplace-inplace">(5)<u> <span class="a-inplace-inplace">cosmetic</span> </u></span> firm has 3 <span class="q-inplace-inplace">(6)<u> <span class="a-inplace-inplace">outlets</span> </u></span> <span class="q-inplace-inplace">(7)<u> <span class="a-inplace-inplace">in</span> </u></span> Taiwan. 這家化妝品公司在臺灣有三個銷售據點。</p>
+<p>Plug the <span class="q-inplace-inplace">(8)<u> <span class="a-inplace-inplace">plug</span> </u></span> <span class="q-inplace-inplace">(9)<u> <span class="a-inplace-inplace">into</span> </u></span> the power <span class="q-inplace-inplace">(10)<u> <span class="a-inplace-inplace">outlet</span> </u></span>. 把插頭插入插座。</p>
+<p>The handle of the <span class="q-inplace-inplace">(11)<u> <span class="a-inplace-inplace">sword</span> </u></span> <mark>is <span class="q-inplace-inplace">(12)<u> <span class="a-inplace-inplace">decorated</span> </u></span> <span class="q-inplace-inplace">(13)<u> <span class="a-inplace-inplace">with</span> </u></span></mark> a <span class="q-inplace-inplace">(14)<u> <span class="a-inplace-inplace">ruby</span> </u></span>. 這把劍的劍把飾有紅寶石。</p>
+<p>I know I will never be a <span class="q-inplace-inplace">(15)<u> <span class="a-inplace-inplace">physicist</span> </u></span>. I am too <span class="q-inplace-inplace">(16)<u> <span class="a-inplace-inplace">subjective</span> </u></span>. 我知道我永遠都當不了物理學家，我太主觀了。</p>
+<p>There is a <span class="q-inplace-inplace">(17)<u> <span class="a-inplace-inplace">scenic</span> </u></span> road along the shore. 沿著海濱有一條風景很優美的道路。</p>
+<p>Many traditional arts of Taiwan are waiting <span class="q-inplace-inplace">(18)<u> <span class="a-inplace-inplace">for</span> </u></span> <span class="q-inplace-inplace">(19)<u> <span class="a-inplace-inplace">renaissance</span> </u></span>. 許多臺灣傳統藝術等待著再生。</p>
+<p>The <span class="q-inplace-inplace">(20)<u> <span class="a-inplace-inplace">Renaissance</span> </u></span> started in Italy and slowly spread throughout Europe. 文藝復興開始於義大利，然後慢慢散播至全歐洲。</p>
+<p>The film <span class="q-inplace-inplace">(21)<u> <span class="a-inplace-inplace">chronicles</span> </u></span> her <span class="q-inplace-inplace">(22)<u> <span class="a-inplace-inplace">transformation</span> </u></span> <span class="q-inplace-inplace">(23)<u> <span class="a-inplace-inplace">from</span> </u></span> housewife to <span class="q-inplace-inplace">(24)<u> <span class="a-inplace-inplace">congresswoman</span> </u></span>. 這部影片記錄了她從家庭主婦到國會議員的轉變歷程。</p>
+<p>Autumn rain and fallen leaves often make me <span class="q-inplace-inplace">(25)<u> <span class="a-inplace-inplace">sentimental</span> </u></span>. 秋雨和落葉常令我感傷。</p>
+<p>Though it is a cheap ring, yet it has great <span class="q-inplace-inplace">(26)<u> <span class="a-inplace-inplace">sentimental</span> </u></span> value for me. 這只戒指雖便宜，但它對我來說情感上的意義深重。</p>
+<p>The <span class="q-inplace-inplace">(27)<u> <span class="a-inplace-inplace">settlers</span> </u></span> began to move <span class="q-inplace-inplace">(28)<u> <span class="a-inplace-inplace">inland</span> </u></span> and <span class="q-inplace-inplace">(29)<u> <span class="a-inplace-inplace">populate</span> </u></span> the river valleys. 移民開始往內地移動，並在河谷居住。</p>
+<p>The traditional belief in men’s <span class="q-inplace-inplace">(30)<u> <span class="a-inplace-inplace">superiority</span> </u></span> <span class="q-inplace-inplace">(31)<u> <span class="a-inplace-inplace">over</span> </u></span> woman causes many serious problems in China. 男優於女的傳統觀念在中國引起許多嚴重的問題。</p>
+<p>Many Chinese have a sense of <span class="q-inplace-inplace">(32)<u> <span class="a-inplace-inplace">superiority</span> </u></span> <span class="q-inplace-inplace">(33)<u> <span class="a-inplace-inplace">for</span> </u></span> being Chinese. 許多中國人有一種身為中國人的優越感。</p>
+<p>He has a sense of <span class="q-inplace-inplace">(34)<u> <span class="a-inplace-inplace">inferiority</span> </u></span>. 他有自卑感。</p>
+<p>Some teenagers like to <span class="q-inplace-inplace">(35)<u> <span class="a-inplace-inplace">venture</span> </u></span> <span class="q-inplace-inplace">(36)<u> <span class="a-inplace-inplace">into</span> </u></span> the <span class="q-inplace-inplace">(37)<u> <span class="a-inplace-inplace">cemetery</span> </u></span> <span class="q-inplace-inplace">(38)<u> <span class="a-inplace-inplace">at</span> </u></span> night. 一些青少年喜歡在晚上到公墓裡探險。</p>
+<p>The film was not well received and was a major <span class="q-inplace-inplace">(39)<u> <span class="a-inplace-inplace">setback</span> </u></span> <span class="q-inplace-inplace">(40)<u> <span class="a-inplace-inplace">for</span> </u></span> the director. 這部電影反應不好，這對導演來說是很重大的挫折。</p>
+<p>When farmers <span class="q-inplace-inplace">(41)<u> <span class="a-inplace-inplace">rotate</span> </u></span> <span class="q-inplace-inplace">(42)<u> <span class="a-inplace-inplace">crops</span> </u></span>, they regularly change <span class="q-inplace-inplace">(43)<u> <span class="a-inplace-inplace">crops</span> </u></span> they grow in the field. 當農民們輪種時，他們會規律地在田裡變換作物。</p>
+<p>The Earth <span class="q-inplace-inplace">(44)<u> <span class="a-inplace-inplace">rotates</span> </u></span> <span class="q-inplace-inplace">(45)<u> <span class="a-inplace-inplace">on</span> </u></span> its <span class="q-inplace-inplace">(46)<u> <span class="a-inplace-inplace">axis</span> </u></span> once every 24 hours. 地球每24小時繞著地軸轉一圈。</p>
+<p>Three plays will be performed <span class="q-inplace-inplace">(47)<u> <span class="a-inplace-inplace">in</span> </u></span> <span class="q-inplace-inplace">(48)<u> <span class="a-inplace-inplace">rotation</span> </u></span> during the drama festival. 在戲劇季期間，三齣戲會輪流演出。</p>
+<p>Saturn completes a <span class="q-inplace-inplace">(49)<u> <span class="a-inplace-inplace">rotation</span> </u></span> <span class="q-inplace-inplace">(50)<u> <span class="a-inplace-inplace">in</span> </u></span> about 10 hours. 土星大約每十小時就自轉一次。</p>
+<p>He <span class="q-inplace-inplace">(51)<u> <span class="a-inplace-inplace">donated</span> </u></span> $350,000 <span class="q-inplace-inplace">(52)<u> <span class="a-inplace-inplace">to</span> </u></span> the <span class="q-inplace-inplace">(53)<u> <span class="a-inplace-inplace">charity</span> </u></span>. 他捐贈三十五萬元給慈善機構。</p>
+<p>Every winter, the <span class="q-inplace-inplace">(54)<u> <span class="a-inplace-inplace">orphanage</span> </u></span> asks <span class="q-inplace-inplace">(55)<u> <span class="a-inplace-inplace">for</span> </u></span> <span class="q-inplace-inplace">(56)<u> <span class="a-inplace-inplace">donations</span> </u></span>. 每到冬天，那家孤兒院就會進行募捐。</p>
+<p>Every blood <span class="q-inplace-inplace">(57)<u> <span class="a-inplace-inplace">donor</span> </u></span> will receive a free T-shirt. 每個捐血者都可拿到一件免費的T恤。</p>
+<p>Sand is mostly <span class="q-inplace-inplace">(58)<u> <span class="a-inplace-inplace">composed</span> </u></span> <span class="q-inplace-inplace">(59)<u> <span class="a-inplace-inplace">of</span> </u></span> <span class="q-inplace-inplace">(60)<u> <span class="a-inplace-inplace">silicon</span> </u></span>. 砂的成分大部分都是矽。</p>
+<p><span class="q-inplace-inplace">(61)<u> <span class="a-inplace-inplace">Silicon</span> </u></span> Valley is <span class="q-inplace-inplace">(62)<u> <span class="a-inplace-inplace">located</span> </u></span> <span class="q-inplace-inplace">(63)<u> <span class="a-inplace-inplace">in</span> </u></span> the <span class="q-inplace-inplace">(64)<u> <span class="a-inplace-inplace">mid</span> </u></span>-west part of California. 矽谷位於加州的中西部。</p>
+<p>Some people believe that US <span class="q-inplace-inplace">(65)<u> <span class="a-inplace-inplace">aggression</span> </u></span> <span class="q-inplace-inplace">(66)<u> <span class="a-inplace-inplace">breeds</span> </u></span> terrorism. 一些人相信，美國的侵略行為化育了恐怖主義。</p>
+<p>The <span class="q-inplace-inplace">(67)<u> <span class="a-inplace-inplace">tropical</span> </u></span> zone is between <mark>the <span class="q-inplace-inplace">(68)<u> <span class="a-inplace-inplace">Tropic</span> </u></span> <span class="q-inplace-inplace">(69)<u> <span class="a-inplace-inplace">of</span> </u></span> <span class="q-inplace-inplace">(70)<u> <span class="a-inplace-inplace">Cancer</span> </u></span></mark> and <mark>the <span class="q-inplace-inplace">(71)<u> <span class="a-inplace-inplace">Tropic</span> </u></span> <span class="q-inplace-inplace">(72)<u> <span class="a-inplace-inplace">of</span> </u></span> <span class="q-inplace-inplace">(73)<u> <span class="a-inplace-inplace">Capricorn</span> </u></span></mark>. 熱帶地區位於北回歸線與南回歸線之間。</p>
+<p>People living <span class="q-inplace-inplace">(74)<u> <span class="a-inplace-inplace">in</span> </u></span> the <span class="q-inplace-inplace">(75)<u> <span class="a-inplace-inplace">tropics</span> </u></span> know nothing about winter. 住在熱帶地區的人們不曉得冬天是什麼。</p>
+<p>We will do a <span class="q-inplace-inplace">(76)<u> <span class="a-inplace-inplace">biological</span> </u></span> <span class="q-inplace-inplace">(77)<u> <span class="a-inplace-inplace">experiment</span> </u></span> <span class="q-inplace-inplace">(78)<u> <span class="a-inplace-inplace">on</span> </u></span> Thursday. 星期四我們要做生物實驗。</p>
+<p>Gavin majored <span class="q-inplace-inplace">(79)<u> <span class="a-inplace-inplace">in</span> </u></span> <span class="q-inplace-inplace">(80)<u> <span class="a-inplace-inplace">biochemistry</span> </u></span> <span class="q-inplace-inplace">(81)<u> <span class="a-inplace-inplace">in</span> </u></span> university. 蓋文在大學時主修生化。</p>
+<p>His face was <span class="q-inplace-inplace">(82)<u> <span class="a-inplace-inplace">distorted</span> </u></span> <span class="q-inplace-inplace">(83)<u> <span class="a-inplace-inplace">in</span> </u></span> anger. 他的險因憤怒而扭曲。</p>
+<p>Don’t <span class="q-inplace-inplace">(84)<u> <span class="a-inplace-inplace">distort</span> </u></span> my words. 不要曲解我的話。</p>
+<p><mark>the <span class="q-inplace-inplace">(85)<u> <span class="a-inplace-inplace">distortion</span> </u></span> <span class="q-inplace-inplace">(86)<u> <span class="a-inplace-inplace">of</span> </u></span> <span class="q-inplace-inplace">(87)<u> <span class="a-inplace-inplace">space</span> </u></span></mark> is commonly known as <span class="q-inplace-inplace">(88)<u> <span class="a-inplace-inplace">gravity</span> </u></span>. 空間的扭曲就是所謂的重力。</p>
+<p>The <span class="q-inplace-inplace">(89)<u> <span class="a-inplace-inplace">historians</span> </u></span> are very careful to avoid the <span class="q-inplace-inplace">(90)<u> <span class="a-inplace-inplace">distortion</span> </u></span> <span class="q-inplace-inplace">(91)<u> <span class="a-inplace-inplace">of</span> </u></span> historical facts. 歷史學家小心翼翼地避免史實被曲解。</p>
+<p>Let’s look at the questions <span class="q-inplace-inplace">(92)<u> <span class="a-inplace-inplace">from</span> </u></span> the <span class="q-inplace-inplace">(93)<u> <span class="a-inplace-inplace">standpoint</span> </u></span> <span class="q-inplace-inplace">(94)<u> <span class="a-inplace-inplace">of</span> </u></span> children. 讓我們從兒童的觀點來看這些問題。</p>
+<p>Branch managers have full <span class="q-inplace-inplace">(95)<u> <span class="a-inplace-inplace">autonomy</span> </u></span> <span class="q-inplace-inplace">(96)<u> <span class="a-inplace-inplace">in</span> </u></span> their own areas, 分公司的經理在其管轄範圍內有充分的自主權。</p>
+<p>The <span class="q-inplace-inplace">(97)<u> <span class="a-inplace-inplace">siren</span> </u></span> went <span class="q-inplace-inplace">(98)<u> <span class="a-inplace-inplace">off</span> </u></span>, <span class="q-inplace-inplace">(99)<u> <span class="a-inplace-inplace">signaling</span> </u></span> the start of the fire <span class="q-inplace-inplace">(100)<u> <span class="a-inplace-inplace">drill</span> </u></span>. 警報器響起，表示防火演習開始了。</p>
+<p>I cannot but <span class="q-inplace-inplace">(101)<u> <span class="a-inplace-inplace">shed</span> </u></span> tears for the poor boy. 我不禁為這名可憐的男孩掬一把淚。</p>
+<p>As it grows, a snake will regularly <span class="q-inplace-inplace">(102)<u> <span class="a-inplace-inplace">shed</span> </u></span> its skin. 蛇成長時會規律地脫皮。</p>
+<p>The <span class="q-inplace-inplace">(103)<u> <span class="a-inplace-inplace">shed</span> </u></span> is used to store farming tools. 士兵有時會對無辜的人們施加嚴重的傷害。</p>
+<p>Soldiers sometimes <span class="q-inplace-inplace">(104)<u> <span class="a-inplace-inplace">inflict</span> </u></span> serious injury <span class="q-inplace-inplace">(105)<u> <span class="a-inplace-inplace">on</span> </u></span> <span class="q-inplace-inplace">(106)<u> <span class="a-inplace-inplace">innocent</span> </u></span> people. </p>
+<p>We must encourage <span class="q-inplace-inplace">(107)<u> <span class="a-inplace-inplace">innovation</span> </u></span> if the company is to <span class="q-inplace-inplace">(108)<u> <span class="a-inplace-inplace">remain</span> </u></span> <span class="q-inplace-inplace">(109)<u> <span class="a-inplace-inplace">competitive</span> </u></span>. 如果要公司維持競爭力，我們必須鼓勵創新。</p>
+<p>The students came up with many <span class="q-inplace-inplace">(110)<u> <span class="a-inplace-inplace">innovative</span> </u></span> ideas. 學生們想出許多創新的點子。</p>
+<p>It <mark>is <span class="q-inplace-inplace">(111)<u> <span class="a-inplace-inplace">inappropriate</span> </u></span> <span class="q-inplace-inplace">(112)<u> <span class="a-inplace-inplace">to</span> </u></span></mark> use <span class="q-inplace-inplace">(113)<u> <span class="a-inplace-inplace">slang</span> </u></span> <span class="q-inplace-inplace">(114)<u> <span class="a-inplace-inplace">in</span> </u></span> formal speech or writing. 在正式的言談及寫作中，使用俚語是不恰當的。</p>
+<p>Jones refused to <span class="q-inplace-inplace">(115)<u> <span class="a-inplace-inplace">speculate</span> </u></span> <span class="q-inplace-inplace">(116)<u> <span class="a-inplace-inplace">about</span> </u></span> what <span class="q-inplace-inplace">(117)<u> <span class="a-inplace-inplace">might</span> </u></span> happen. 瓊斯拒絕推測會發生什麼事。</p>
+<p>No <span class="q-inplace-inplace">(118)<u> <span class="a-inplace-inplace">evidence</span> </u></span> has been found, so any <span class="q-inplace-inplace">(119)<u> <span class="a-inplace-inplace">comment</span> </u></span> <span class="q-inplace-inplace">(120)<u> <span class="a-inplace-inplace">on</span> </u></span> the case is <span class="q-inplace-inplace">(121)<u> <span class="a-inplace-inplace">pure</span> </u></span> <span class="q-inplace-inplace">(122)<u> <span class="a-inplace-inplace">speculation</span> </u></span>. 在沒有發現任何證據的情況下，任何對這個案子的評論都純屬臆測。</p>
+<p>She <span class="q-inplace-inplace">(123)<u> <span class="a-inplace-inplace">beckoned</span> </u></span> (<span class="q-inplace-inplace">(124)<u> <span class="a-inplace-inplace">to</span> </u></span>) the waitress <mark><span class="q-inplace-inplace">(125)<u> <span class="a-inplace-inplace">for</span> </u></span> a <span class="q-inplace-inplace">(126)<u> <span class="a-inplace-inplace">refill</span> </u></span> <span class="q-inplace-inplace">(127)<u> <span class="a-inplace-inplace">of</span> </u></span></mark></mark> her glass. 她向女服務生招手要續杯。</p>
+<p>The teller has been <span class="q-inplace-inplace">(128)<u> <span class="a-inplace-inplace">sneaky</span> </u></span> lately. Maybe he has something to do <span class="q-inplace-inplace">(129)<u> <span class="a-inplace-inplace">with</span> </u></span> the <span class="q-inplace-inplace">(130)<u> <span class="a-inplace-inplace">theft</span> </u></span> <span class="q-inplace-inplace">(131)<u> <span class="a-inplace-inplace">in</span> </u></span> the bank. 這名行員最近鬼鬼祟祟的，也許他和銀行的失竊案有關。</p>
+<p>We were away for the weekend <span class="q-inplace-inplace">(132)<u> <span class="a-inplace-inplace">at</span> </u></span> a <span class="q-inplace-inplace">(133)<u> <span class="a-inplace-inplace">spa</span> </u></span> hotel. 我們在一家溫泉旅館度週末。</p>
+<p>Some glass <span class="q-inplace-inplace">(134)<u> <span class="a-inplace-inplace">fragments</span> </u></span> hit me when the window was <span class="q-inplace-inplace">(135)<u> <span class="a-inplace-inplace">smashed</span> </u></span>. 窗戶被打碎時，有些玻璃碎片打到我。</p>
+<p>The <span class="q-inplace-inplace">(136)<u> <span class="a-inplace-inplace">booklet</span> </u></span> is <span class="q-inplace-inplace">(137)<u> <span class="a-inplace-inplace">compiled</span> </u></span> <span class="q-inplace-inplace">(138)<u> <span class="a-inplace-inplace">by</span> </u></span> the Tourism Bureau. 這本小冊子是由觀光局編纂的。</p>
+<p>The army <span class="q-inplace-inplace">(139)<u> <span class="a-inplace-inplace">launched</span> </u></span> several cross-border <span class="q-inplace-inplace">(140)<u> <span class="a-inplace-inplace">raids</span> </u></span> last night. 昨晚軍隊發動好幾次越境突擊。</p>
+<p>The police didn’t find the <span class="q-inplace-inplace">(141)<u> <span class="a-inplace-inplace">suspect</span> </u></span> <span class="q-inplace-inplace">(142)<u> <span class="a-inplace-inplace">in</span> </u></span> the <span class="q-inplace-inplace">(143)<u> <span class="a-inplace-inplace">roadside</span> </u></span> <span class="q-inplace-inplace">(144)<u> <span class="a-inplace-inplace">raid</span> </u></span> last night. 昨天晚上警方在路邊臨檢時，並沒有找到嫌犯。</p>
+<p>The <span class="q-inplace-inplace">(145)<u> <span class="a-inplace-inplace">rebels</span> </u></span> <span class="q-inplace-inplace">(146)<u> <span class="a-inplace-inplace">raided</span> </u></span> the village late at night. 叛軍於深夜突擊這個村莊。</p>
+<p>Political <span class="q-inplace-inplace">(147)<u> <span class="a-inplace-inplace">analysts</span> </u></span> expect the Conservatives to win. 政治分析家認為保守黨會贏。</p>
+<p>The <span class="q-inplace-inplace">(148)<u> <span class="a-inplace-inplace">chemistry</span> </u></span> teacher asked us to hand in an <span class="q-inplace-inplace">(149)<u> <span class="a-inplace-inplace">analytical</span> </u></span> report of the water quality here. 化學老師要我們交一份此地的水質分析報告。</p>
+<p>The salesman <span class="q-inplace-inplace">(150)<u> <span class="a-inplace-inplace">urged</span> </u></span> us <span class="q-inplace-inplace">(151)<u> <span class="a-inplace-inplace">to</span> </u></span> test drive their <span class="q-inplace-inplace">(152)<u> <span class="a-inplace-inplace">spacious</span> </u></span> <span class="q-inplace-inplace">(153)<u> <span class="a-inplace-inplace">van</span> </u></span>. 這名推銷員慫恿我們試駕他們空間寬敞的廂型車。</p>
+<p>The fair seemed to <span class="q-inplace-inplace">(154)<u> <span class="a-inplace-inplace">sprawl</span> </u></span> <span class="q-inplace-inplace">(155)<u> <span class="a-inplace-inplace">for</span> </u></span> miles. 這個市集似乎綿延數英里。</p>
+<p>He <span class="q-inplace-inplace">(156)<u> <span class="a-inplace-inplace">sprawled</span> </u></span> out on the bed. 他在床上躺成大字形。</p>
+<p>A victory is always good <span class="q-inplace-inplace">(157)<u> <span class="a-inplace-inplace">for</span> </u></span> <span class="q-inplace-inplace">(158)<u> <span class="a-inplace-inplace">morale</span> </u></span> and <span class="q-inplace-inplace">(159)<u> <span class="a-inplace-inplace">confidence</span> </u></span>. 勝利對士氣及信心一定有幫助。</p>
+<p>Many whites believed that the <span class="q-inplace-inplace">(160)<u> <span class="a-inplace-inplace">superior</span> </u></span> races had the duty to <span class="q-inplace-inplace">(161)<u> <span class="a-inplace-inplace">civilize</span> </u></span> the <span class="q-inplace-inplace">(162)<u> <span class="a-inplace-inplace">inferior</span> </u></span> races. 許多白人相信，優越民族有責任要教化劣等民族。</p>
+<p>What are the differences between <span class="q-inplace-inplace">(163)<u> <span class="a-inplace-inplace">civilized</span> </u></span> life and <span class="q-inplace-inplace">(164)<u> <span class="a-inplace-inplace">primitive</span> </u></span> life? 文明生活與原始生活的差別為何？</p>
+<p>You should avoid <span class="q-inplace-inplace">(165)<u> <span class="a-inplace-inplace">confrontation</span> </u></span> <span class="q-inplace-inplace">(166)<u> <span class="a-inplace-inplace">with</span> </u></span> your <span class="q-inplace-inplace">(167)<u> <span class="a-inplace-inplace">superiors</span> </u></span>. 你應該避免和你的上司正面衝突。</p>
+<p>With only a little high school French, I <span class="q-inplace-inplace">(168)<u> <span class="a-inplace-inplace">stammered</span> </u></span> my order, “Un... café s’il <span class="q-inplace-inplace">(169)<u> <span class="a-inplace-inplace">vous</span> </u></span> <span class="q-inplace-inplace">(170)<u> <span class="a-inplace-inplace">plaît</span> </u></span>.” 我用只有高中程度的法文，結結巴巴說出我要點的東西，「請…給我……一杯………咖啡」。</p>
+<p>I went to a doctor, hoping to cure my <span class="q-inplace-inplace">(171)<u> <span class="a-inplace-inplace">stammer</span> </u></span>. 我去看醫生，希望可以治療我的口吃。</p>
+<p>The <span class="q-inplace-inplace">(172)<u> <span class="a-inplace-inplace">foundation</span> </u></span> <span class="q-inplace-inplace">(173)<u> <span class="a-inplace-inplace">of</span> </u></span> the castle was <span class="q-inplace-inplace">(174)<u> <span class="a-inplace-inplace">undermined</span> </u></span> <span class="q-inplace-inplace">(175)<u> <span class="a-inplace-inplace">by</span> </u></span> <span class="q-inplace-inplace">(176)<u> <span class="a-inplace-inplace">tides</span> </u></span>. 城堡的地基被潮水破壞了。</p>
+<p>Constant <span class="q-inplace-inplace">(177)<u> <span class="a-inplace-inplace">criticism</span> </u></span> <span class="q-inplace-inplace">(178)<u> <span class="a-inplace-inplace">undermined</span> </u></span> her <span class="q-inplace-inplace">(179)<u> <span class="a-inplace-inplace">confidence</span> </u></span>. 不斷的批評削弱了她的信心。</p>
+
+        </div>
+      </div>
+      <div id="part-simple-answer">
+        <div id="inter-fa-sa"></div>
+        <h3>
+          簡答
+        </h3>
+        <div class="narrow-col normal-text">
+          <span class="left-qi">1.</span>sink<br/>
+<span class="left-qi">2.</span>outlet<br/>
+<span class="left-qi">3.</span>outlet<br/>
+<span class="left-qi">4.</span>for<br/>
+<span class="left-qi">5.</span>cosmetic<br/>
+<span class="left-qi">6.</span>outlets<br/>
+<span class="left-qi">7.</span>in<br/>
+<span class="left-qi">8.</span>plug<br/>
+<span class="left-qi">9.</span>into<br/>
+<span class="left-qi">10.</span>outlet<br/>
+<span class="left-qi">11.</span>sword<br/>
+<span class="left-qi">12.</span>decorated<br/>
+<span class="left-qi">13.</span>with<br/>
+<span class="left-qi">14.</span>ruby<br/>
+<span class="left-qi">15.</span>physicist<br/>
+<span class="left-qi">16.</span>subjective<br/>
+<span class="left-qi">17.</span>scenic<br/>
+<span class="left-qi">18.</span>for<br/>
+<span class="left-qi">19.</span>renaissance<br/>
+<span class="left-qi">20.</span>Renaissance<br/>
+<span class="left-qi">21.</span>chronicles<br/>
+<span class="left-qi">22.</span>transformation<br/>
+<span class="left-qi">23.</span>from<br/>
+<span class="left-qi">24.</span>congresswoman<br/>
+<span class="left-qi">25.</span>sentimental<br/>
+<span class="left-qi">26.</span>sentimental<br/>
+<span class="left-qi">27.</span>settlers<br/>
+<span class="left-qi">28.</span>inland<br/>
+<span class="left-qi">29.</span>populate<br/>
+<span class="left-qi">30.</span>superiority<br/>
+<span class="left-qi">31.</span>over<br/>
+<span class="left-qi">32.</span>superiority<br/>
+<span class="left-qi">33.</span>for<br/>
+<span class="left-qi">34.</span>inferiority<br/>
+<span class="left-qi">35.</span>venture<br/>
+<span class="left-qi">36.</span>into<br/>
+<span class="left-qi">37.</span>cemetery<br/>
+<span class="left-qi">38.</span>at<br/>
+<span class="left-qi">39.</span>setback<br/>
+<span class="left-qi">40.</span>for<br/>
+<span class="left-qi">41.</span>rotate<br/>
+<span class="left-qi">42.</span>crops<br/>
+<span class="left-qi">43.</span>crops<br/>
+<span class="left-qi">44.</span>rotates<br/>
+<span class="left-qi">45.</span>on<br/>
+<span class="left-qi">46.</span>axis<br/>
+<span class="left-qi">47.</span>in<br/>
+<span class="left-qi">48.</span>rotation<br/>
+<span class="left-qi">49.</span>rotation<br/>
+<span class="left-qi">50.</span>in<br/>
+<span class="left-qi">51.</span>donated<br/>
+<span class="left-qi">52.</span>to<br/>
+<span class="left-qi">53.</span>charity<br/>
+<span class="left-qi">54.</span>orphanage<br/>
+<span class="left-qi">55.</span>for<br/>
+<span class="left-qi">56.</span>donations<br/>
+<span class="left-qi">57.</span>donor<br/>
+<span class="left-qi">58.</span>composed<br/>
+<span class="left-qi">59.</span>of<br/>
+<span class="left-qi">60.</span>silicon<br/>
+<span class="left-qi">61.</span>Silicon<br/>
+<span class="left-qi">62.</span>located<br/>
+<span class="left-qi">63.</span>in<br/>
+<span class="left-qi">64.</span>mid<br/>
+<span class="left-qi">65.</span>aggression<br/>
+<span class="left-qi">66.</span>breeds<br/>
+<span class="left-qi">67.</span>tropical<br/>
+<span class="left-qi">68.</span>Tropic<br/>
+<span class="left-qi">69.</span>of<br/>
+<span class="left-qi">70.</span>Cancer<br/>
+<span class="left-qi">71.</span>Tropic<br/>
+<span class="left-qi">72.</span>of<br/>
+<span class="left-qi">73.</span>Capricorn<br/>
+<span class="left-qi">74.</span>in<br/>
+<span class="left-qi">75.</span>tropics<br/>
+<span class="left-qi">76.</span>biological<br/>
+<span class="left-qi">77.</span>experiment<br/>
+<span class="left-qi">78.</span>on<br/>
+<span class="left-qi">79.</span>in<br/>
+<span class="left-qi">80.</span>biochemistry<br/>
+<span class="left-qi">81.</span>in<br/>
+<span class="left-qi">82.</span>distorted<br/>
+<span class="left-qi">83.</span>in<br/>
+<span class="left-qi">84.</span>distort<br/>
+<span class="left-qi">85.</span>distortion<br/>
+<span class="left-qi">86.</span>of<br/>
+<span class="left-qi">87.</span>space<br/>
+<span class="left-qi">88.</span>gravity<br/>
+<span class="left-qi">89.</span>historians<br/>
+<span class="left-qi">90.</span>distortion<br/>
+<span class="left-qi">91.</span>of<br/>
+<span class="left-qi">92.</span>from<br/>
+<span class="left-qi">93.</span>standpoint<br/>
+<span class="left-qi">94.</span>of<br/>
+<span class="left-qi">95.</span>autonomy<br/>
+<span class="left-qi">96.</span>in<br/>
+<span class="left-qi">97.</span>siren<br/>
+<span class="left-qi">98.</span>off<br/>
+<span class="left-qi">99.</span>signaling<br/>
+<span class="left-qi">100.</span>drill<br/>
+<span class="left-qi">101.</span>shed<br/>
+<span class="left-qi">102.</span>shed<br/>
+<span class="left-qi">103.</span>shed<br/>
+<span class="left-qi">104.</span>inflict<br/>
+<span class="left-qi">105.</span>on<br/>
+<span class="left-qi">106.</span>innocent<br/>
+<span class="left-qi">107.</span>innovation<br/>
+<span class="left-qi">108.</span>remain<br/>
+<span class="left-qi">109.</span>competitive<br/>
+<span class="left-qi">110.</span>innovative<br/>
+<span class="left-qi">111.</span>inappropriate<br/>
+<span class="left-qi">112.</span>to<br/>
+<span class="left-qi">113.</span>slang<br/>
+<span class="left-qi">114.</span>in<br/>
+<span class="left-qi">115.</span>speculate<br/>
+<span class="left-qi">116.</span>about<br/>
+<span class="left-qi">117.</span>might<br/>
+<span class="left-qi">118.</span>evidence<br/>
+<span class="left-qi">119.</span>comment<br/>
+<span class="left-qi">120.</span>on<br/>
+<span class="left-qi">121.</span>pure<br/>
+<span class="left-qi">122.</span>speculation<br/>
+<span class="left-qi">123.</span>beckoned<br/>
+<span class="left-qi">124.</span>to<br/>
+<span class="left-qi">125.</span>for<br/>
+<span class="left-qi">126.</span>refill<br/>
+<span class="left-qi">127.</span>of<br/>
+<span class="left-qi">128.</span>sneaky<br/>
+<span class="left-qi">129.</span>with<br/>
+<span class="left-qi">130.</span>theft<br/>
+<span class="left-qi">131.</span>in<br/>
+<span class="left-qi">132.</span>at<br/>
+<span class="left-qi">133.</span>spa<br/>
+<span class="left-qi">134.</span>fragments<br/>
+<span class="left-qi">135.</span>smashed<br/>
+<span class="left-qi">136.</span>booklet<br/>
+<span class="left-qi">137.</span>compiled<br/>
+<span class="left-qi">138.</span>by<br/>
+<span class="left-qi">139.</span>launched<br/>
+<span class="left-qi">140.</span>raids<br/>
+<span class="left-qi">141.</span>suspect<br/>
+<span class="left-qi">142.</span>in<br/>
+<span class="left-qi">143.</span>roadside<br/>
+<span class="left-qi">144.</span>raid<br/>
+<span class="left-qi">145.</span>rebels<br/>
+<span class="left-qi">146.</span>raided<br/>
+<span class="left-qi">147.</span>analysts<br/>
+<span class="left-qi">148.</span>chemistry<br/>
+<span class="left-qi">149.</span>analytical<br/>
+<span class="left-qi">150.</span>urged<br/>
+<span class="left-qi">151.</span>to<br/>
+<span class="left-qi">152.</span>spacious<br/>
+<span class="left-qi">153.</span>van<br/>
+<span class="left-qi">154.</span>sprawl<br/>
+<span class="left-qi">155.</span>for<br/>
+<span class="left-qi">156.</span>sprawled<br/>
+<span class="left-qi">157.</span>for<br/>
+<span class="left-qi">158.</span>morale<br/>
+<span class="left-qi">159.</span>confidence<br/>
+<span class="left-qi">160.</span>superior<br/>
+<span class="left-qi">161.</span>civilize<br/>
+<span class="left-qi">162.</span>inferior<br/>
+<span class="left-qi">163.</span>civilized<br/>
+<span class="left-qi">164.</span>primitive<br/>
+<span class="left-qi">165.</span>confrontation<br/>
+<span class="left-qi">166.</span>with<br/>
+<span class="left-qi">167.</span>superiors<br/>
+<span class="left-qi">168.</span>stammered<br/>
+<span class="left-qi">169.</span>vous<br/>
+<span class="left-qi">170.</span>plaît<br/>
+<span class="left-qi">171.</span>stammer<br/>
+<span class="left-qi">172.</span>foundation<br/>
+<span class="left-qi">173.</span>of<br/>
+<span class="left-qi">174.</span>undermined<br/>
+<span class="left-qi">175.</span>by<br/>
+<span class="left-qi">176.</span>tides<br/>
+<span class="left-qi">177.</span>criticism<br/>
+<span class="left-qi">178.</span>undermined<br/>
+<span class="left-qi">179.</span>confidence<br/>
+
+        </div>
+      </div>
+    </div>
+    <script>
+      set_page_break('break-qa-input', 'inter-q-fa');
+      set_page_break('break-aa-input', 'inter-fa-sa');
+      update_title();
+    </script>
+  </body>
+</html>

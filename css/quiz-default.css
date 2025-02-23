@@ -1,13 +1,10 @@
-@font-face {
-    font-family: "GenRyuMin TW";
-    src: url(../fonts/GenRyuMin2TW-R.otf);
-}
-
 @page {
     @bottom-center {
+        vertical-align: middle;
+        height: max-content;
         font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-        content: "Page "counter(page) " of "counter(pages);
-    }
+        content: "Page " counter(page) " of " counter(pages);
+      }
 }
 
 @media screen {
@@ -66,14 +63,57 @@
     }
 }
 
-
 li {
     list-style-type: none;
+}
+
+.q-inplace{
+    color: black;
+    white-space: pre;
+    display: inline-block;
+}
+
+.q-inplace-choice {
+    vertical-align: text-top;
+    border-bottom: 1.5px black solid;
+    display: inline-block;
+    padding-bottom: 1px;
+    min-width: 15mm;
+}
+
+.q-inplace-slot {
+    vertical-align: text-top;
+    border-bottom: 1.5px black solid;
+    display: inline-block;
+    padding-bottom: 1px;
+}
+
+.q-inplace-match {
+    vertical-align: text-top;
+    border-bottom: 1.5px black solid;
+    display: inline-block;
+    padding-bottom: 1px;
+    min-width: 15mm;
+}
+
+.q-inplace-askinfo {
+    vertical-align: text-top;
+    border-bottom: 1.5px black solid;
+    display: inline-block;
+    padding-bottom: 1px;
+    min-width: 15mm;
 }
 
 .q-inplace-inplace {
     color: black;
     white-space: pre;
+}
+
+.a-inplace-space {
+    color: rgb(208, 17, 17);
+    font-weight: bold;
+    margin-left: 1.5mm;
+    margin-right: 1.5mm;
 }
 
 .a-inplace-inplace {
@@ -82,8 +122,12 @@ li {
 }
 
 .q-apart-inplace {
+    vertical-align: text-top;
     color: black;
     white-space: pre;
+    border-bottom: 1.5px black solid;
+    display: inline-block;
+    padding-bottom: 1px;
 }
 
 .a-apart-inplace {
@@ -94,9 +138,28 @@ li {
 .a-front {
     color: rgb(208, 17, 17);
     font-weight: bold;
+    margin-left: 1.5mm;
+    margin-right: 1.5mm;
 }
 
 .a-block {
+    color: rgb(208, 17, 17);
+    font-weight: bold;
+    margin-left: 1.5mm;
+    margin-right: 1.5mm;
+}
+
+.a-front-option {
+    color: rgb(208, 17, 17);
+    font-weight: bold;
+}
+
+.a-inplace-option {
+    color: rgb(208, 17, 17);
+    font-weight: bold;
+}
+
+.a-block-option {
     color: rgb(208, 17, 17);
     font-weight: bold;
 }
@@ -105,6 +168,17 @@ li {
     color: darkcyan;
     font-weight: bold;
     font-style: italic;
+}
+
+ul.option-list {
+    list-style: none;
+    flex-wrap: wrap;
+    display: flex;
+    column-gap: 5mm;
+}
+
+ul.option-list > li {
+    display: inline-block;
 }
 
 .line-indent {
@@ -118,34 +192,56 @@ li {
 }
 
 .q-front-choice {
-    float: left;
+    display: inline-block;
     min-width: 25mm;
 }
 
 .q-front-slot {
-    float: left;
+    display: inline-block;
     min-width: 4cm;
 }
 
 .q-front-match {
-    float: left;
+    display: inline-block;
     min-width: 25mm;
 }
 
 .left-qi {
-    float: left;
+    display: inline-block;
     min-width: 12mm;
+}
+
+.qi-left {
+    display: inline-block;
+    min-width: 12mm;
+}
+
+.mid-answer-slot {
+    vertical-align: bottom;
+    border-bottom: 1.5px black solid;
+    display: inline-block;
+    padding-bottom: 1px;
+    min-width: 10mm;
+    margin-right: 3mm;
+    text-align: center;
+}
+
+.big-answer-slot {
+    vertical-align: bottom;
+    border-bottom: 1.5px black solid;
+    display: inline-block;
+    padding-bottom: 1px;
+    min-width: 50mm;
+    margin-right: 3mm;
+    text-align: center;
 }
 
 mark {
     border: solid;
     border-width: 1px;
-    border-radius: 5px;
-    padding: 2px;
-    padding-top: 0px;
-    padding-bottom: 1px;
+    border-radius: 6px;
     display: inline-block;
-    /* margin: 1px; */
+    margin: 1px;
 }
 
 .box>* {
@@ -176,6 +272,7 @@ input[type=number] {
 
 .option-hint {
     padding: 2px;
+    -webkit-hyphens: auto;
     hyphens: auto;
     overflow-wrap: break-word;
 }

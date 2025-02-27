@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/quiz-default.css">
+  </head>
+  <body>
+    <style>
+      body {
+        font-size: 5mm;
+        font-family: Cambria, 'GenRyuMin TW', Cochin, Georgia, Times,
+          'Times New Roman', serif;
+      }
+      div{
+        line-height: 1.18;
+      }
+      :lang(en){
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+      }
+      h1 {
+        font-weight: normal;
+        font-family: FZYaoTi, 'Noto Sans TC Medium', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 30pt;
+      }
+      h2 {
+        font-weight: normal;
+        font-family: FZYaoTi, 'Noto Sans TC Medium', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 26pt;
+      }
+      h3 {
+        font-weight: normal;
+        font-family: 'Noto Sans TC Medium', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin-bottom: 5pt;
+        font-size: 20pt;
+      }
+      span.tagline {
+        font-size: 60%;
+        color: darkslategray;
+      }
+      p {
+        white-space: pre-wrap;
+        line-height: 1.1;
+        font-size: 14pt;
+      }
+      .normal-text {
+        font-size: 14pt;
+      }
+    </style>
+    <script src="js/quiz-default.js"></script>
+    <div class="no-print">
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="title-input" class="col-form-label">Title</label>
+        </div>
+        <div class="col-auto">
+          <input id="title-input" class="form-control" type="text" value="高級單字 L6U37 首捲大補帖" oninput="update_title();"/>
+        </div>
+        <div class="col-auto">
+          <label for="h1-size-input" class="col-form-label">Title Font Size</label>
+        </div>
+        <div class="col-auto">
+          <input id="h1-size-input" class="form-control" type="number" value="30" oninput="update_title_font_size();"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="font-size-input" class="col-form-label">Content Font Size</label>
+        </div>
+        <div class="col-auto">
+          <input id="font-size-input" class="form-control" type="number" value="14" oninput="update_text_font_size();"/>
+        </div>
+        <div class="col-auto">
+          <label for="box-width-input" class="col-form-label">Hint Box Width</label>
+        </div>
+        <div class="col-auto">
+          <input id="box-width-input" class="form-control" type="number" value="200" oninput="update_hint_box_width();"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="part-question-include-input" class="col-form-label">Include Question Part</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-check-input" id="part-question-include-input" type="checkbox" checked onchange="set_visible('part-question-include-input', 'part-question');"/>
+        </div>
+        <div class="col-auto">
+          <label for="break-hq-input" class="col-form-label">Page Break(s) for Question</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-control" id="break-hq-input" type="number" value="0" oninput="set_page_break('break-hq-input', 'inter-h-q');"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="part-full-answer-include-input" class="col-form-label">Include Full Answer Part</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-check-input" id="part-full-answer-include-input" type="checkbox" checked onchange="set_visible('part-full-answer-include-input', 'part-full-answer');"/>
+        </div>
+        <div class="col-auto">
+          <label for="break-qa-input" class="col-form-label">Page Break(s) for Full Answer</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-control" id="break-qa-input" type="number" value="1" oninput="set_page_break('break-qa-input', 'inter-q-fa');"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="part-simple-answer-include-input" class="col-form-label">Include Simple Answer Part</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-check-input" id="part-simple-answer-include-input" type="checkbox" checked onchange="set_visible('part-simple-answer-include-input', 'part-simple-answer');"/>
+        </div>
+        <div class="col-auto">
+          <label for="break-aa-input" class="col-form-label">Page Break(s) for Simple Answer</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-control" id="break-aa-input" type="number" value="1" oninput="set_page_break('break-aa-input', 'inter-fa-sa');"/>
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary" onclick="window.print();" id="print-button">
+        Print The Quiz
+      </button>
+    </div>
+
+    <!-- start filling -->
+
+    <div id="paper">
+      <div id="inter-h-q"></div>
+      <h1 id="title-text">
+        高級單字 L6U37 首捲大補帖
+      </h1>
+      <div id="part-question">
+        <h3>
+          題目
+        </h3>
+        <div class="b5-port-col">
+          <div class="box normal-text" id="hint-box">
+            
+          </div>
+          <p><span class="q-front-choice"><span class="qi-left">1.</span><span class="mid-answer-slot"></span></span>The company’s decision to <span class="q-apart-inplace">        </span> its outdated systems led to significant improvements in efficiency.</p>
+<p><ul class="option-list"><li>(A)	abandon</li><li>(B)	delay</li><li>(C)	modernize</li><li>(D)	disrupt</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">2.</span><span class="mid-answer-slot"></span></span>Caught <span class="q-apart-inplace">        </span>, the nation struggled to respond to the sudden economic collapse.</p>
+<p><ul class="option-list"><li>(A)	off guard</li><li>(B)	in turmoil</li><li>(C)	by surprise</li><li>(D)	under pressure</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">3.</span><span class="mid-answer-slot"></span></span>Her <span class="q-apart-inplace">        </span> over the unfair treatment of her peers spurred her to speak out.</p>
+<p><ul class="option-list"><li>(A)	apathy</li><li>(B)	curiosity</li><li>(C)	indignation</li><li>(D)	fear</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">4.</span><span class="mid-answer-slot"></span></span>The experimental <span class="q-apart-inplace">        </span> helped patients regain strength after months of illness.</p>
+<p><ul class="option-list"><li>(A)	surgery</li><li>(B)	therapy</li><li>(C)	exercise</li><li>(D)	diet</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">5.</span><span class="mid-answer-slot"></span></span>The photographer’s <span class="q-apart-inplace">        </span> memory allowed him to recall every detail of the breathtaking landscape.</p>
+<p><ul class="option-list"><li>(A)	chaotic</li><li>(B)	photographic</li><li>(C)	abstract</li><li>(D)	musical</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">6.</span><span class="mid-answer-slot"></span></span>Standing <span class="q-apart-inplace">        </span> a major breakthrough, the scientist felt both excitement and pressure.</p>
+<p><ul class="option-list"><li>(A)	in line</li><li>(B)	alone</li><li>(C)	on the verge of</li><li>(D)	at a distance from</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">7.</span><span class="mid-answer-slot"></span></span>The loudspeakers <span class="q-apart-inplace">        </span> the crowd’s cheers across the stadium during the final match.</p>
+<p><ul class="option-list"><li>(A)	muted</li><li>(B)	distorted</li><li>(C)	dispersed</li><li>(D)	amplified</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">8.</span><span class="mid-answer-slot"></span></span>The government struggled to <span class="q-apart-inplace">        </span> the growing unrest among the protestors.</p>
+<p><ul class="option-list"><li>(A)	release</li><li>(B)	rein in</li><li>(C)	expand</li><li>(D)	ignite</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">9.</span><span class="mid-answer-slot"></span></span>A <span class="q-apart-inplace">        </span> jet broke the sound barrier, leaving spectators in awe of its speed.</p>
+<p><ul class="option-list"><li>(A)	faulty</li><li>(B)	shiny</li><li>(C)	supersonic</li><li>(D)	fragile</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">10.</span><span class="mid-answer-slot"></span></span>The new policy was designed to <span class="q-apart-inplace">        </span> the quality of education across all regions.</p>
+<p><ul class="option-list"><li>(A)	weaken</li><li>(B)	enhance</li><li>(C)	confuse</li><li>(D)	limit</li></ul></p>
+<p><span class="q-front-slot"><span class="qi-left">11.</span><span class="big-answer-slot"></span></span>More and more companies provide jobs for the <span class="q-apart-inplace">d          d</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">12.</span><span class="big-answer-slot"></span></span>She was <span class="q-apart-inplace">d          d</span> in the car accident.</p>
+<p><span class="q-front-slot"><span class="qi-left">13.</span><span class="big-answer-slot"></span></span>Can you <span class="q-apart-inplace">g          e</span> what you’ve learned about group communication in this course?</p>
+<p><span class="q-front-slot"><span class="qi-left">14.</span><span class="big-answer-slot"></span></span>My hometown now becomes <span class="q-apart-inplace">t          g</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">15.</span><span class="big-answer-slot"></span></span>He expressed his <span class="q-apart-inplace">i          n</span> over being treated as a suspect.</p>
+<p><span class="q-front-slot"><span class="qi-left">16.</span><span class="big-answer-slot"></span></span>Many supplements come in <span class="q-apart-inplace">c          es</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">17.</span><span class="big-answer-slot"></span></span>Falling objects gather more and more <span class="q-apart-inplace">m          m</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">18.</span><span class="big-answer-slot"></span></span>Fifty percent of the fund will be available for <span class="q-apart-inplace">a          n</span> this year.</p>
+<p><span class="q-front-slot"><span class="qi-left">19.</span><span class="big-answer-slot"></span></span>The Golden Gate Bridge is a famous <span class="q-apart-inplace">s          n</span> bridge.</p>
+<p><span class="q-front-slot"><span class="qi-left">20.</span><span class="big-answer-slot"></span></span>There is an exhibit of Egyptian <span class="q-apart-inplace">a          ts</span> at the museum.</p>
+<p><span class="q-front-slot"><span class="qi-left">21.</span><span class="big-answer-slot"></span></span>Could you <span class="q-apart-inplace">X          x</span> the abstract for me?</p>
+<p><span class="q-front-slot"><span class="qi-left">22.</span><span class="big-answer-slot"></span></span>As soon as we entered the auditorium, we heard the thunderous <span class="q-apart-inplace">h          </span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">23.</span><span class="big-answer-slot"></span></span>To produce a <span class="q-apart-inplace">s          c</span> car is a remarkable feat of engineering.</p>
+<p><span class="q-front-slot"><span class="qi-left">24.</span><span class="big-answer-slot"></span></span>He is <span class="q-apart-inplace">p          e</span> to anger, so nobody feels like working with him.</p>
+<p><span class="q-front-slot"><span class="qi-left">25.</span><span class="big-answer-slot"></span></span>The campaign to end smoking in public spaces has gained <span class="q-apart-inplace">m          m</span> with the support of the mayor.</p>
+<p><span class="q-front-slot"><span class="qi-left">26.</span><span class="big-answer-slot"></span></span>The Security Council decided to impose <span class="q-apart-inplace">s          ns</span> on Iraq.</p>
+<p><span class="q-front-slot"><span class="qi-left">27.</span><span class="big-answer-slot"></span></span>Those who violate traffic rules will be punished <span class="q-apart-inplace">a          y</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">28.</span><span class="big-answer-slot"></span></span>Jimmy Carter was Ronald Reagon’s <span class="q-apart-inplace">p          r</span> as president of the US.</p>
+<p><span class="q-front-slot"><span class="qi-left">29.</span><span class="big-answer-slot"></span></span>In <span class="q-apart-inplace">a          e</span> with her wishes, she was buried in France.</p>
+<p><span class="q-front-slot"><span class="qi-left">30.</span><span class="big-answer-slot"></span></span>The nation’s economy is on the <span class="q-apart-inplace">b          k</span> of collapse.</p>
+<p><span class="q-front-slot"><span class="qi-left">31.</span><span class="big-answer-slot"></span></span>Hosting the Olympic Games can <span class="q-apart-inplace">e          e</span> the country’s reputation.</p>
+<p><span class="q-front-slot"><span class="qi-left">32.</span><span class="big-answer-slot"></span></span>It <span class="q-apart-inplace">h          </span> for half an hour and did serious damage to the crops.</p>
+<p><span class="q-front-slot"><span class="qi-left">33.</span><span class="big-answer-slot"></span></span>I found a flyer on the <span class="q-apart-inplace">w          d</span> of my car.</p>
+<p><span class="q-front-slot"><span class="qi-left">34.</span><span class="big-answer-slot"></span></span>His entertaining performance <span class="q-apart-inplace">a          ed</span> those sick children.</p>
+<p><span class="q-front-slot"><span class="qi-left">35.</span><span class="big-answer-slot"></span></span>Diabetics have to <span class="q-apart-inplace">i          t</span> insulin into themselves every day.</p>
+<p><span class="q-front-slot"><span class="qi-left">36.</span><span class="big-answer-slot"></span></span>I like to read <span class="q-apart-inplace">l          c</span> poems.</p>
+<p><span class="q-front-slot"><span class="qi-left">37.</span><span class="big-answer-slot"></span></span>He is under <span class="q-apart-inplace">t          y</span> for depression.</p>
+<p><span class="q-front-slot"><span class="qi-left">38.</span><span class="big-answer-slot"></span></span>Troops were called in to <span class="q-apart-inplace">d          e</span> the crowd.</p>
+<p><span class="q-front-slot"><span class="qi-left">39.</span><span class="big-answer-slot"></span></span>He wrote some great music, but his <span class="q-apart-inplace">l          cs</span> were not that good.</p>
+<p><span class="q-front-slot"><span class="qi-left">40.</span><span class="big-answer-slot"></span></span>Our chief engineer has a <span class="q-apart-inplace">p          c</span> memory; he can remember everything he reads.</p>
+<p><span class="q-front-slot"><span class="qi-left">41.</span><span class="big-answer-slot"></span></span>He is <span class="q-apart-inplace">p          e</span> to get angry, so nobody feels like working with him.</p>
+<p><span class="q-front-slot"><span class="qi-left">42.</span><span class="big-answer-slot"></span></span>He ended the story abruptly, leaving us in <span class="q-apart-inplace">s          e</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">43.</span><span class="big-answer-slot"></span></span>The government is reluctant to <span class="q-apart-inplace">s          n</span> homosexual marriages.</p>
+<p><span class="q-front-slot"><span class="qi-left">44.</span><span class="big-answer-slot"></span></span>What an <span class="q-apart-inplace">i          y</span> of fate that the man was struck and killed by a truck moments after winning the lottery!</p>
+<p><span class="q-front-slot"><span class="qi-left">45.</span><span class="big-answer-slot"></span></span>Many women are sexually <span class="q-apart-inplace">h          sed</span> at work.</p>
+<p><span class="q-front-slot"><span class="qi-left">46.</span><span class="big-answer-slot"></span></span>The government <span class="q-apart-inplace">a          ed</span> one million dollars for health education.</p>
+<p><span class="q-front-slot"><span class="qi-left">47.</span><span class="big-answer-slot"></span></span><i>Finding Nemo</i> is the best-selling <span class="q-apart-inplace">a          n</span> of all time.</p>
+<p><span class="q-front-slot"><span class="qi-left">48.</span><span class="big-answer-slot"></span></span>His business <span class="q-apart-inplace">t          ed</span> in the years before the war.</p>
+<p><span class="q-front-slot"><span class="qi-left">49.</span><span class="big-answer-slot"></span></span>Flu is highly <span class="q-apart-inplace">i          s</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">50.</span><span class="big-answer-slot"></span></span>These prestigious private schools are believed to be able to <span class="q-apart-inplace">r          e</span> young people.</p>
+<p><span class="q-front-slot"><span class="qi-left">51.</span><span class="big-answer-slot"></span></span>His manners show <span class="q-apart-inplace">r          t</span> and good breeding.</p>
+<p><span class="q-front-slot"><span class="qi-left">52.</span><span class="big-answer-slot"></span></span><span class="q-apart-inplace">C          y</span> will cause vomiting and hair loss.</p>
+<p><span class="q-front-slot"><span class="qi-left">53.</span><span class="big-answer-slot"></span></span>Stop torturing her. She is on the <span class="q-apart-inplace">v          e</span> of breakdown.</p>
+<p><span class="q-front-slot"><span class="qi-left">54.</span><span class="big-answer-slot"></span></span>His version of the events does not <span class="q-apart-inplace">a          d</span> with the witnesses’ statements.</p>
+<p><span class="q-front-slot"><span class="qi-left">55.</span><span class="big-answer-slot"></span></span>He felt dizzy, standing at the <span class="q-apart-inplace">b          k</span> of the cliff looking down.</p>
+<p><span class="q-front-slot"><span class="qi-left">56.</span><span class="big-answer-slot"></span></span>Don’t forget to <span class="q-apart-inplace">b          e</span> up your safety belt.</p>
+<p><span class="q-front-slot"><span class="qi-left">57.</span><span class="big-answer-slot"></span></span>Employers have the obligation to prevent sexual <span class="q-apart-inplace">h          t</span> at work.</p>
+<p><span class="q-front-slot"><span class="qi-left">58.</span><span class="big-answer-slot"></span></span>The trees on the <span class="q-apart-inplace">v          e</span> of the road provide shade.</p>
+<p><span class="q-front-slot"><span class="qi-left">59.</span><span class="big-answer-slot"></span></span>The store sells all types of professional <span class="q-apart-inplace">p          c</span> equipment.</p>
+<p><span class="q-front-slot"><span class="qi-left">60.</span><span class="big-answer-slot"></span></span>Our government is trying to <span class="q-apart-inplace">g          e</span> the use of the Internet.</p>
+<p><span class="q-front-slot"><span class="qi-left">61.</span><span class="big-answer-slot"></span></span>What can I do to bring endangered species back from the <span class="q-apart-inplace">b          k</span>?</p>
+<p><span class="q-front-slot"><span class="qi-left">62.</span><span class="big-answer-slot"></span></span>This <span class="q-apart-inplace">r          r</span> supplies water to several towns nearby.</p>
+<p><span class="q-front-slot"><span class="qi-left">63.</span><span class="big-answer-slot"></span></span>I’m too tired to walk. Let’s <span class="q-apart-inplace">h          </span> a taxi!</p>
+<p><span class="q-front-slot"><span class="qi-left">64.</span><span class="big-answer-slot"></span></span>Pull on the right <span class="q-apart-inplace">r          </span> and the horse will turn to the right.</p>
+<p><span class="q-front-slot"><span class="qi-left">65.</span><span class="big-answer-slot"></span></span>The <span class="q-apart-inplace">h          </span> destroyed lots of things and many people got hurt.</p>
+<p><span class="q-front-slot"><span class="qi-left">66.</span><span class="big-answer-slot"></span></span>“That’s really a lovely garment, that is!” he said with heavy <span class="q-apart-inplace">i          y</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">67.</span><span class="big-answer-slot"></span></span>People sometimes find amber with insects inside. Amber is like a time <span class="q-apart-inplace">c          e</span> made by nature herself.</p>
+<p><span class="q-front-slot"><span class="qi-left">68.</span><span class="big-answer-slot"></span></span>Diabetics have to <span class="q-apart-inplace">i          t</span> themselves with insulin every day.</p>
+<p><span class="q-front-slot"><span class="qi-left">69.</span><span class="big-answer-slot"></span></span>It is so <span class="q-apart-inplace">i          c</span> that many Chinese do all they can to emigrate to the USA and then force their second generation to learn Chinese well there.</p>
+<p><span class="q-front-slot"><span class="qi-left">70.</span><span class="big-answer-slot"></span></span>Some people proposed the <span class="q-apart-inplace">s          n</span> of the death penalty.</p>
+<p><span class="q-front-slot"><span class="qi-left">71.</span><span class="big-answer-slot"></span></span>The gangsters looked at each other with <span class="q-apart-inplace">h          y</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">72.</span><span class="big-answer-slot"></span></span>Is the object <span class="q-apart-inplace">a          e</span> or inanimate?</p>
+<p><span class="q-front-slot"><span class="qi-left">73.</span><span class="big-answer-slot"></span></span>Cockroaches <span class="q-apart-inplace">t          e</span> in warm and damp places.</p>
+<p><span class="q-front-slot"><span class="qi-left">74.</span><span class="big-answer-slot"></span></span>Professional singers do <span class="q-apart-inplace">v          l</span> exercises every day.</p>
+<p><span class="q-front-slot"><span class="qi-left">75.</span><span class="big-answer-slot"></span></span>The shuttle is <span class="q-apart-inplace">b          ted</span> into space by solid fuel booster rockets.</p>
+<p><span class="q-front-slot"><span class="qi-left">76.</span><span class="big-answer-slot"></span></span>Physical <span class="q-apart-inplace">t          ts</span> can help patients with massage or heat and cold treatments.</p>
+<p><span class="q-front-slot"><span class="qi-left">77.</span><span class="big-answer-slot"></span></span>Few kings now hold the <span class="q-apart-inplace">r          </span> of government.</p>
+<p><span class="q-front-slot"><span class="qi-left">78.</span><span class="big-answer-slot"></span></span>The <span class="q-apart-inplace">m          n</span> of the country met with a lot of difficulties.</p>
+<p><span class="q-front-slot"><span class="qi-left">79.</span><span class="big-answer-slot"></span></span>The <span class="q-apart-inplace">b          e</span> of his belt was rusty.</p>
+<p><span class="q-front-slot"><span class="qi-left">80.</span><span class="big-answer-slot"></span></span>The city was in <span class="q-apart-inplace">t          l</span> when the electricity was out.</p>
+<p><span class="q-front-slot"><span class="qi-left">81.</span><span class="big-answer-slot"></span></span>He is making <span class="q-apart-inplace">r          c</span> tapping sounds with his feet.</p>
+<p><span class="q-front-slot"><span class="qi-left">82.</span><span class="big-answer-slot"></span></span>The lips of the wise <span class="q-apart-inplace">d          e</span> knowledge.</p>
+<p><span class="q-front-slot"><span class="qi-left">83.</span><span class="big-answer-slot"></span></span>These workshops aim at <span class="q-apart-inplace">r          ing</span> students’ leadership skills.</p>
+<p><span class="q-front-slot"><span class="qi-left">84.</span><span class="big-answer-slot"></span></span>The <span class="q-apart-inplace">r          t</span> of crude oil creates a wide range of final products.</p>
+<p><span class="q-front-slot"><span class="qi-left">85.</span><span class="big-answer-slot"></span></span>Communities have a clear responsibility to help people with <span class="q-apart-inplace">d          y</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">86.</span><span class="big-answer-slot"></span></span>His speech was lacking in <span class="q-apart-inplace">a          n</span> and energy.</p>
+<p><span class="q-front-slot"><span class="qi-left">87.</span><span class="big-answer-slot"></span></span>I tried to <span class="q-apart-inplace">b          t</span> his confidence by praising his sculptures.</p>
+<p><span class="q-front-slot"><span class="qi-left">88.</span><span class="big-answer-slot"></span></span>The players of the soccer team were <span class="q-apart-inplace">h          </span> as heroes after they won the World Cup.</p>
+<p><span class="q-front-slot"><span class="qi-left">89.</span><span class="big-answer-slot"></span></span>Before I returned the book to the library, I made a few <span class="q-apart-inplace">X          xes</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">90.</span><span class="big-answer-slot"></span></span>Most children hate <span class="q-apart-inplace">i          ns</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">91.</span><span class="big-answer-slot"></span></span>His behavior <span class="q-apart-inplace">v          es</span> on insanity.</p>
+<p><span class="q-front-slot"><span class="qi-left">92.</span><span class="big-answer-slot"></span></span>The situation raises questions about <span class="q-apart-inplace">s          y</span> among member states of the EU.</p>
+<p><span class="q-front-slot"><span class="qi-left">93.</span><span class="big-answer-slot"></span></span>The committee haven’t reached an agreement. The <span class="q-apart-inplace">s          e</span> is terrible.</p>
+<p><span class="q-front-slot"><span class="qi-left">94.</span><span class="big-answer-slot"></span></span>He struggled to <span class="q-apart-inplace">r          </span> his anger.</p>
+<p><span class="q-front-slot"><span class="qi-left">95.</span><span class="big-answer-slot"></span></span>The organization received the official <span class="q-apart-inplace">s          n</span> from the government.</p>
+<p><span class="q-front-slot"><span class="qi-left">96.</span><span class="big-answer-slot"></span></span>The ball is held in <span class="q-apart-inplace">s          n</span> by a thread.</p>
+<p><span class="q-front-slot"><span class="qi-left">97.</span><span class="big-answer-slot"></span></span>He is a <span class="q-apart-inplace">v          l</span> supporter of the bill.</p>
+<p><span class="q-front-slot"><span class="qi-left">98.</span><span class="big-answer-slot"></span></span>All students have received a copy of the semester calendar, so they can plan <span class="q-apart-inplace">a          y</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">99.</span><span class="big-answer-slot"></span></span>The tax cuts have given the economy a <span class="q-apart-inplace">b          t</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">100.</span><span class="big-answer-slot"></span></span>Football players wear <span class="q-apart-inplace">b          y</span> gear.</p>
+<p><span class="q-front-slot"><span class="qi-left">101.</span><span class="big-answer-slot"></span></span>Many films are <span class="q-apart-inplace">a          ed</span> during the post-production phase.</p>
+
+        </div>
+      </div>
+      <div id="part-full-answer">
+        <div id="inter-q-fa"></div>
+        <h3>
+          詳解
+        </h3>
+        <div class="b5-port-col">
+          <p><span class="q-front-choice"><span class="qi-left">1.</span><span class="mid-answer-slot"><span class="a-front"> C </span></span></span>The company’s decision to <span class="q-apart-inplace">        </span> its outdated systems led to significant improvements in efficiency.</p>
+<p><ul class="option-list"><li>(A)	abandon</li><li>(B)	delay</li><li><span class="a-front-option">[C]	modernize</span></li><li>(D)	disrupt</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">2.</span><span class="mid-answer-slot"><span class="a-front"> B </span></span></span>Caught <span class="q-apart-inplace">        </span>, the nation struggled to respond to the sudden economic collapse.</p>
+<p><ul class="option-list"><li>(A)	off guard</li><li><span class="a-front-option">[B]	in turmoil</span></li><li>(C)	by surprise</li><li>(D)	under pressure</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">3.</span><span class="mid-answer-slot"><span class="a-front"> C </span></span></span>Her <span class="q-apart-inplace">        </span> over the unfair treatment of her peers spurred her to speak out.</p>
+<p><ul class="option-list"><li>(A)	apathy</li><li>(B)	curiosity</li><li><span class="a-front-option">[C]	indignation</span></li><li>(D)	fear</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">4.</span><span class="mid-answer-slot"><span class="a-front"> B </span></span></span>The experimental <span class="q-apart-inplace">        </span> helped patients regain strength after months of illness.</p>
+<p><ul class="option-list"><li>(A)	surgery</li><li><span class="a-front-option">[B]	therapy</span></li><li>(C)	exercise</li><li>(D)	diet</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">5.</span><span class="mid-answer-slot"><span class="a-front"> B </span></span></span>The photographer’s <span class="q-apart-inplace">        </span> memory allowed him to recall every detail of the breathtaking landscape.</p>
+<p><ul class="option-list"><li>(A)	chaotic</li><li><span class="a-front-option">[B]	photographic</span></li><li>(C)	abstract</li><li>(D)	musical</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">6.</span><span class="mid-answer-slot"><span class="a-front"> C </span></span></span>Standing <span class="q-apart-inplace">        </span> a major breakthrough, the scientist felt both excitement and pressure.</p>
+<p><ul class="option-list"><li>(A)	in line</li><li>(B)	alone</li><li><span class="a-front-option">[C]	on the verge of</span></li><li>(D)	at a distance from</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">7.</span><span class="mid-answer-slot"><span class="a-front"> C </span></span></span>The loudspeakers <span class="q-apart-inplace">        </span> the crowd’s cheers across the stadium during the final match.</p>
+<p><ul class="option-list"><li>(A)	muted</li><li>(B)	distorted</li><li><span class="a-front-option">[C]	dispersed</span></li><li>(D)	amplified</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">8.</span><span class="mid-answer-slot"><span class="a-front"> B </span></span></span>The government struggled to <span class="q-apart-inplace">        </span> the growing unrest among the protestors.</p>
+<p><ul class="option-list"><li>(A)	release</li><li><span class="a-front-option">[B]	rein in</span></li><li>(C)	expand</li><li>(D)	ignite</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">9.</span><span class="mid-answer-slot"><span class="a-front"> C </span></span></span>A <span class="q-apart-inplace">        </span> jet broke the sound barrier, leaving spectators in awe of its speed.</p>
+<p><ul class="option-list"><li>(A)	faulty</li><li>(B)	shiny</li><li><span class="a-front-option">[C]	supersonic</span></li><li>(D)	fragile</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">10.</span><span class="mid-answer-slot"><span class="a-front"> B </span></span></span>The new policy was designed to <span class="q-apart-inplace">        </span> the quality of education across all regions.</p>
+<p><ul class="option-list"><li>(A)	weaken</li><li><span class="a-front-option">[B]	enhance</span></li><li>(C)	confuse</li><li>(D)	limit</li></ul></p>
+<p><span class="q-front-slot"><span class="qi-left">11.</span><span class="big-answer-slot"><span class="a-front">disabled</span></span></span>More and more companies provide jobs for the <span class="q-apart-inplace">d          d</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">12.</span><span class="big-answer-slot"><span class="a-front">disabled</span></span></span>She was <span class="q-apart-inplace">d          d</span> in the car accident.</p>
+<p><span class="q-front-slot"><span class="qi-left">13.</span><span class="big-answer-slot"><span class="a-front">generalize</span></span></span>Can you <span class="q-apart-inplace">g          e</span> what you’ve learned about group communication in this course?</p>
+<p><span class="q-front-slot"><span class="qi-left">14.</span><span class="big-answer-slot"><span class="a-front">thriving</span></span></span>My hometown now becomes <span class="q-apart-inplace">t          g</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">15.</span><span class="big-answer-slot"><span class="a-front">indignation</span></span></span>He expressed his <span class="q-apart-inplace">i          n</span> over being treated as a suspect.</p>
+<p><span class="q-front-slot"><span class="qi-left">16.</span><span class="big-answer-slot"><span class="a-front">capsules</span></span></span>Many supplements come in <span class="q-apart-inplace">c          es</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">17.</span><span class="big-answer-slot"><span class="a-front">momentum</span></span></span>Falling objects gather more and more <span class="q-apart-inplace">m          m</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">18.</span><span class="big-answer-slot"><span class="a-front">allocation</span></span></span>Fifty percent of the fund will be available for <span class="q-apart-inplace">a          n</span> this year.</p>
+<p><span class="q-front-slot"><span class="qi-left">19.</span><span class="big-answer-slot"><span class="a-front">suspension</span></span></span>The Golden Gate Bridge is a famous <span class="q-apart-inplace">s          n</span> bridge.</p>
+<p><span class="q-front-slot"><span class="qi-left">20.</span><span class="big-answer-slot"><span class="a-front">artifacts</span></span></span>There is an exhibit of Egyptian <span class="q-apart-inplace">a          ts</span> at the museum.</p>
+<p><span class="q-front-slot"><span class="qi-left">21.</span><span class="big-answer-slot"><span class="a-front">Xerox</span></span></span>Could you <span class="q-apart-inplace">X          x</span> the abstract for me?</p>
+<p><span class="q-front-slot"><span class="qi-left">22.</span><span class="big-answer-slot"><span class="a-front">hail</span></span></span>As soon as we entered the auditorium, we heard the thunderous <span class="q-apart-inplace">h          </span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">23.</span><span class="big-answer-slot"><span class="a-front">supersonic</span></span></span>To produce a <span class="q-apart-inplace">s          c</span> car is a remarkable feat of engineering.</p>
+<p><span class="q-front-slot"><span class="qi-left">24.</span><span class="big-answer-slot"><span class="a-front">prone</span></span></span>He is <span class="q-apart-inplace">p          e</span> to anger, so nobody feels like working with him.</p>
+<p><span class="q-front-slot"><span class="qi-left">25.</span><span class="big-answer-slot"><span class="a-front">momentum</span></span></span>The campaign to end smoking in public spaces has gained <span class="q-apart-inplace">m          m</span> with the support of the mayor.</p>
+<p><span class="q-front-slot"><span class="qi-left">26.</span><span class="big-answer-slot"><span class="a-front">sanctions</span></span></span>The Security Council decided to impose <span class="q-apart-inplace">s          ns</span> on Iraq.</p>
+<p><span class="q-front-slot"><span class="qi-left">27.</span><span class="big-answer-slot"><span class="a-front">accordingly</span></span></span>Those who violate traffic rules will be punished <span class="q-apart-inplace">a          y</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">28.</span><span class="big-answer-slot"><span class="a-front">predecessor</span></span></span>Jimmy Carter was Ronald Reagon’s <span class="q-apart-inplace">p          r</span> as president of the US.</p>
+<p><span class="q-front-slot"><span class="qi-left">29.</span><span class="big-answer-slot"><span class="a-front">accordance</span></span></span>In <span class="q-apart-inplace">a          e</span> with her wishes, she was buried in France.</p>
+<p><span class="q-front-slot"><span class="qi-left">30.</span><span class="big-answer-slot"><span class="a-front">brink</span></span></span>The nation’s economy is on the <span class="q-apart-inplace">b          k</span> of collapse.</p>
+<p><span class="q-front-slot"><span class="qi-left">31.</span><span class="big-answer-slot"><span class="a-front">enhance</span></span></span>Hosting the Olympic Games can <span class="q-apart-inplace">e          e</span> the country’s reputation.</p>
+<p><span class="q-front-slot"><span class="qi-left">32.</span><span class="big-answer-slot"><span class="a-front">hailed</span></span></span>It <span class="q-apart-inplace">h          </span> for half an hour and did serious damage to the crops.</p>
+<p><span class="q-front-slot"><span class="qi-left">33.</span><span class="big-answer-slot"><span class="a-front">windshield</span></span></span>I found a flyer on the <span class="q-apart-inplace">w          d</span> of my car.</p>
+<p><span class="q-front-slot"><span class="qi-left">34.</span><span class="big-answer-slot"><span class="a-front">animated</span></span></span>His entertaining performance <span class="q-apart-inplace">a          ed</span> those sick children.</p>
+<p><span class="q-front-slot"><span class="qi-left">35.</span><span class="big-answer-slot"><span class="a-front">inject</span></span></span>Diabetics have to <span class="q-apart-inplace">i          t</span> insulin into themselves every day.</p>
+<p><span class="q-front-slot"><span class="qi-left">36.</span><span class="big-answer-slot"><span class="a-front">lyric</span></span></span>I like to read <span class="q-apart-inplace">l          c</span> poems.</p>
+<p><span class="q-front-slot"><span class="qi-left">37.</span><span class="big-answer-slot"><span class="a-front">therapy</span></span></span>He is under <span class="q-apart-inplace">t          y</span> for depression.</p>
+<p><span class="q-front-slot"><span class="qi-left">38.</span><span class="big-answer-slot"><span class="a-front">disperse</span></span></span>Troops were called in to <span class="q-apart-inplace">d          e</span> the crowd.</p>
+<p><span class="q-front-slot"><span class="qi-left">39.</span><span class="big-answer-slot"><span class="a-front">lyrics</span></span></span>He wrote some great music, but his <span class="q-apart-inplace">l          cs</span> were not that good.</p>
+<p><span class="q-front-slot"><span class="qi-left">40.</span><span class="big-answer-slot"><span class="a-front">photographic</span></span></span>Our chief engineer has a <span class="q-apart-inplace">p          c</span> memory; he can remember everything he reads.</p>
+<p><span class="q-front-slot"><span class="qi-left">41.</span><span class="big-answer-slot"><span class="a-front">prone</span></span></span>He is <span class="q-apart-inplace">p          e</span> to get angry, so nobody feels like working with him.</p>
+<p><span class="q-front-slot"><span class="qi-left">42.</span><span class="big-answer-slot"><span class="a-front">suspense</span></span></span>He ended the story abruptly, leaving us in <span class="q-apart-inplace">s          e</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">43.</span><span class="big-answer-slot"><span class="a-front">sanction</span></span></span>The government is reluctant to <span class="q-apart-inplace">s          n</span> homosexual marriages.</p>
+<p><span class="q-front-slot"><span class="qi-left">44.</span><span class="big-answer-slot"><span class="a-front">irony</span></span></span>What an <span class="q-apart-inplace">i          y</span> of fate that the man was struck and killed by a truck moments after winning the lottery!</p>
+<p><span class="q-front-slot"><span class="qi-left">45.</span><span class="big-answer-slot"><span class="a-front">harassed</span></span></span>Many women are sexually <span class="q-apart-inplace">h          sed</span> at work.</p>
+<p><span class="q-front-slot"><span class="qi-left">46.</span><span class="big-answer-slot"><span class="a-front">allocated</span></span></span>The government <span class="q-apart-inplace">a          ed</span> one million dollars for health education.</p>
+<p><span class="q-front-slot"><span class="qi-left">47.</span><span class="big-answer-slot"><span class="a-front">animation</span></span></span><i>Finding Nemo</i> is the best-selling <span class="q-apart-inplace">a          n</span> of all time.</p>
+<p><span class="q-front-slot"><span class="qi-left">48.</span><span class="big-answer-slot"><span class="a-front">thrived</span></span></span>His business <span class="q-apart-inplace">t          ed</span> in the years before the war.</p>
+<p><span class="q-front-slot"><span class="qi-left">49.</span><span class="big-answer-slot"><span class="a-front">infectious</span></span></span>Flu is highly <span class="q-apart-inplace">i          s</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">50.</span><span class="big-answer-slot"><span class="a-front">refine</span></span></span>These prestigious private schools are believed to be able to <span class="q-apart-inplace">r          e</span> young people.</p>
+<p><span class="q-front-slot"><span class="qi-left">51.</span><span class="big-answer-slot"><span class="a-front">refinement</span></span></span>His manners show <span class="q-apart-inplace">r          t</span> and good breeding.</p>
+<p><span class="q-front-slot"><span class="qi-left">52.</span><span class="big-answer-slot"><span class="a-front">Chemotherapy</span></span></span><span class="q-apart-inplace">C          y</span> will cause vomiting and hair loss.</p>
+<p><span class="q-front-slot"><span class="qi-left">53.</span><span class="big-answer-slot"><span class="a-front">verge</span></span></span>Stop torturing her. She is on the <span class="q-apart-inplace">v          e</span> of breakdown.</p>
+<p><span class="q-front-slot"><span class="qi-left">54.</span><span class="big-answer-slot"><span class="a-front">accord</span></span></span>His version of the events does not <span class="q-apart-inplace">a          d</span> with the witnesses’ statements.</p>
+<p><span class="q-front-slot"><span class="qi-left">55.</span><span class="big-answer-slot"><span class="a-front">brink</span></span></span>He felt dizzy, standing at the <span class="q-apart-inplace">b          k</span> of the cliff looking down.</p>
+<p><span class="q-front-slot"><span class="qi-left">56.</span><span class="big-answer-slot"><span class="a-front">buckle</span></span></span>Don’t forget to <span class="q-apart-inplace">b          e</span> up your safety belt.</p>
+<p><span class="q-front-slot"><span class="qi-left">57.</span><span class="big-answer-slot"><span class="a-front">harassment</span></span></span>Employers have the obligation to prevent sexual <span class="q-apart-inplace">h          t</span> at work.</p>
+<p><span class="q-front-slot"><span class="qi-left">58.</span><span class="big-answer-slot"><span class="a-front">verge</span></span></span>The trees on the <span class="q-apart-inplace">v          e</span> of the road provide shade.</p>
+<p><span class="q-front-slot"><span class="qi-left">59.</span><span class="big-answer-slot"><span class="a-front">photographic</span></span></span>The store sells all types of professional <span class="q-apart-inplace">p          c</span> equipment.</p>
+<p><span class="q-front-slot"><span class="qi-left">60.</span><span class="big-answer-slot"><span class="a-front">generalize</span></span></span>Our government is trying to <span class="q-apart-inplace">g          e</span> the use of the Internet.</p>
+<p><span class="q-front-slot"><span class="qi-left">61.</span><span class="big-answer-slot"><span class="a-front">brink</span></span></span>What can I do to bring endangered species back from the <span class="q-apart-inplace">b          k</span>?</p>
+<p><span class="q-front-slot"><span class="qi-left">62.</span><span class="big-answer-slot"><span class="a-front">reservoir</span></span></span>This <span class="q-apart-inplace">r          r</span> supplies water to several towns nearby.</p>
+<p><span class="q-front-slot"><span class="qi-left">63.</span><span class="big-answer-slot"><span class="a-front">hail</span></span></span>I’m too tired to walk. Let’s <span class="q-apart-inplace">h          </span> a taxi!</p>
+<p><span class="q-front-slot"><span class="qi-left">64.</span><span class="big-answer-slot"><span class="a-front">rein</span></span></span>Pull on the right <span class="q-apart-inplace">r          </span> and the horse will turn to the right.</p>
+<p><span class="q-front-slot"><span class="qi-left">65.</span><span class="big-answer-slot"><span class="a-front">hails</span></span></span>The <span class="q-apart-inplace">h          </span> destroyed lots of things and many people got hurt.</p>
+<p><span class="q-front-slot"><span class="qi-left">66.</span><span class="big-answer-slot"><span class="a-front">irony</span></span></span>“That’s really a lovely garment, that is!” he said with heavy <span class="q-apart-inplace">i          y</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">67.</span><span class="big-answer-slot"><span class="a-front">capsule</span></span></span>People sometimes find amber with insects inside. Amber is like a time <span class="q-apart-inplace">c          e</span> made by nature herself.</p>
+<p><span class="q-front-slot"><span class="qi-left">68.</span><span class="big-answer-slot"><span class="a-front">inject</span></span></span>Diabetics have to <span class="q-apart-inplace">i          t</span> themselves with insulin every day.</p>
+<p><span class="q-front-slot"><span class="qi-left">69.</span><span class="big-answer-slot"><span class="a-front">ironic</span></span></span>It is so <span class="q-apart-inplace">i          c</span> that many Chinese do all they can to emigrate to the USA and then force their second generation to learn Chinese well there.</p>
+<p><span class="q-front-slot"><span class="qi-left">70.</span><span class="big-answer-slot"><span class="a-front">suspension</span></span></span>Some people proposed the <span class="q-apart-inplace">s          n</span> of the death penalty.</p>
+<p><span class="q-front-slot"><span class="qi-left">71.</span><span class="big-answer-slot"><span class="a-front">hostility</span></span></span>The gangsters looked at each other with <span class="q-apart-inplace">h          y</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">72.</span><span class="big-answer-slot"><span class="a-front">animate</span></span></span>Is the object <span class="q-apart-inplace">a          e</span> or inanimate?</p>
+<p><span class="q-front-slot"><span class="qi-left">73.</span><span class="big-answer-slot"><span class="a-front">thrive</span></span></span>Cockroaches <span class="q-apart-inplace">t          e</span> in warm and damp places.</p>
+<p><span class="q-front-slot"><span class="qi-left">74.</span><span class="big-answer-slot"><span class="a-front">vocal</span></span></span>Professional singers do <span class="q-apart-inplace">v          l</span> exercises every day.</p>
+<p><span class="q-front-slot"><span class="qi-left">75.</span><span class="big-answer-slot"><span class="a-front">boosted</span></span></span>The shuttle is <span class="q-apart-inplace">b          ted</span> into space by solid fuel booster rockets.</p>
+<p><span class="q-front-slot"><span class="qi-left">76.</span><span class="big-answer-slot"><span class="a-front">therapists</span></span></span>Physical <span class="q-apart-inplace">t          ts</span> can help patients with massage or heat and cold treatments.</p>
+<p><span class="q-front-slot"><span class="qi-left">77.</span><span class="big-answer-slot"><span class="a-front">reins</span></span></span>Few kings now hold the <span class="q-apart-inplace">r          </span> of government.</p>
+<p><span class="q-front-slot"><span class="qi-left">78.</span><span class="big-answer-slot"><span class="a-front">modernization</span></span></span>The <span class="q-apart-inplace">m          n</span> of the country met with a lot of difficulties.</p>
+<p><span class="q-front-slot"><span class="qi-left">79.</span><span class="big-answer-slot"><span class="a-front">buckle</span></span></span>The <span class="q-apart-inplace">b          e</span> of his belt was rusty.</p>
+<p><span class="q-front-slot"><span class="qi-left">80.</span><span class="big-answer-slot"><span class="a-front">turmoil</span></span></span>The city was in <span class="q-apart-inplace">t          l</span> when the electricity was out.</p>
+<p><span class="q-front-slot"><span class="qi-left">81.</span><span class="big-answer-slot"><span class="a-front">rhythmic</span></span></span>He is making <span class="q-apart-inplace">r          c</span> tapping sounds with his feet.</p>
+<p><span class="q-front-slot"><span class="qi-left">82.</span><span class="big-answer-slot"><span class="a-front">disperse</span></span></span>The lips of the wise <span class="q-apart-inplace">d          e</span> knowledge.</p>
+<p><span class="q-front-slot"><span class="qi-left">83.</span><span class="big-answer-slot"><span class="a-front">refining</span></span></span>These workshops aim at <span class="q-apart-inplace">r          ing</span> students’ leadership skills.</p>
+<p><span class="q-front-slot"><span class="qi-left">84.</span><span class="big-answer-slot"><span class="a-front">refinement</span></span></span>The <span class="q-apart-inplace">r          t</span> of crude oil creates a wide range of final products.</p>
+<p><span class="q-front-slot"><span class="qi-left">85.</span><span class="big-answer-slot"><span class="a-front">disability</span></span></span>Communities have a clear responsibility to help people with <span class="q-apart-inplace">d          y</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">86.</span><span class="big-answer-slot"><span class="a-front">animation</span></span></span>His speech was lacking in <span class="q-apart-inplace">a          n</span> and energy.</p>
+<p><span class="q-front-slot"><span class="qi-left">87.</span><span class="big-answer-slot"><span class="a-front">boost</span></span></span>I tried to <span class="q-apart-inplace">b          t</span> his confidence by praising his sculptures.</p>
+<p><span class="q-front-slot"><span class="qi-left">88.</span><span class="big-answer-slot"><span class="a-front">hailed</span></span></span>The players of the soccer team were <span class="q-apart-inplace">h          </span> as heroes after they won the World Cup.</p>
+<p><span class="q-front-slot"><span class="qi-left">89.</span><span class="big-answer-slot"><span class="a-front">Xeroxes</span></span></span>Before I returned the book to the library, I made a few <span class="q-apart-inplace">X          xes</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">90.</span><span class="big-answer-slot"><span class="a-front">injections</span></span></span>Most children hate <span class="q-apart-inplace">i          ns</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">91.</span><span class="big-answer-slot"><span class="a-front">verges</span></span></span>His behavior <span class="q-apart-inplace">v          es</span> on insanity.</p>
+<p><span class="q-front-slot"><span class="qi-left">92.</span><span class="big-answer-slot"><span class="a-front">solidarity</span></span></span>The situation raises questions about <span class="q-apart-inplace">s          y</span> among member states of the EU.</p>
+<p><span class="q-front-slot"><span class="qi-left">93.</span><span class="big-answer-slot"><span class="a-front">suspense</span></span></span>The committee haven’t reached an agreement. The <span class="q-apart-inplace">s          e</span> is terrible.</p>
+<p><span class="q-front-slot"><span class="qi-left">94.</span><span class="big-answer-slot"><span class="a-front">rein</span></span></span>He struggled to <span class="q-apart-inplace">r          </span> his anger.</p>
+<p><span class="q-front-slot"><span class="qi-left">95.</span><span class="big-answer-slot"><span class="a-front">sanction</span></span></span>The organization received the official <span class="q-apart-inplace">s          n</span> from the government.</p>
+<p><span class="q-front-slot"><span class="qi-left">96.</span><span class="big-answer-slot"><span class="a-front">suspension</span></span></span>The ball is held in <span class="q-apart-inplace">s          n</span> by a thread.</p>
+<p><span class="q-front-slot"><span class="qi-left">97.</span><span class="big-answer-slot"><span class="a-front">vocal</span></span></span>He is a <span class="q-apart-inplace">v          l</span> supporter of the bill.</p>
+<p><span class="q-front-slot"><span class="qi-left">98.</span><span class="big-answer-slot"><span class="a-front">accordingly</span></span></span>All students have received a copy of the semester calendar, so they can plan <span class="q-apart-inplace">a          y</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">99.</span><span class="big-answer-slot"><span class="a-front">boost</span></span></span>The tax cuts have given the economy a <span class="q-apart-inplace">b          t</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">100.</span><span class="big-answer-slot"><span class="a-front">bulky</span></span></span>Football players wear <span class="q-apart-inplace">b          y</span> gear.</p>
+<p><span class="q-front-slot"><span class="qi-left">101.</span><span class="big-answer-slot"><span class="a-front">animated</span></span></span>Many films are <span class="q-apart-inplace">a          ed</span> during the post-production phase.</p>
+
+        </div>
+      </div>
+      <div id="part-simple-answer">
+        <div id="inter-fa-sa"></div>
+        <h3>
+          簡答
+        </h3>
+        <div class="narrow-col normal-text">
+          <span class="qi-left">1.</span>(C)modernize<br/>
+<span class="qi-left">2.</span>(B)in turmoil<br/>
+<span class="qi-left">3.</span>(C)indignation<br/>
+<span class="qi-left">4.</span>(B)therapy<br/>
+<span class="qi-left">5.</span>(B)photographic<br/>
+<span class="qi-left">6.</span>(C)on the verge of<br/>
+<span class="qi-left">7.</span>(C)dispersed<br/>
+<span class="qi-left">8.</span>(B)rein in<br/>
+<span class="qi-left">9.</span>(C)supersonic<br/>
+<span class="qi-left">10.</span>(B)enhance<br/>
+<span class="qi-left">11.</span>disabled<br/>
+<span class="qi-left">12.</span>disabled<br/>
+<span class="qi-left">13.</span>generalize<br/>
+<span class="qi-left">14.</span>thriving<br/>
+<span class="qi-left">15.</span>indignation<br/>
+<span class="qi-left">16.</span>capsules<br/>
+<span class="qi-left">17.</span>momentum<br/>
+<span class="qi-left">18.</span>allocation<br/>
+<span class="qi-left">19.</span>suspension<br/>
+<span class="qi-left">20.</span>artifacts<br/>
+<span class="qi-left">21.</span>Xerox<br/>
+<span class="qi-left">22.</span>hail<br/>
+<span class="qi-left">23.</span>supersonic<br/>
+<span class="qi-left">24.</span>prone<br/>
+<span class="qi-left">25.</span>momentum<br/>
+<span class="qi-left">26.</span>sanctions<br/>
+<span class="qi-left">27.</span>accordingly<br/>
+<span class="qi-left">28.</span>predecessor<br/>
+<span class="qi-left">29.</span>accordance<br/>
+<span class="qi-left">30.</span>brink<br/>
+<span class="qi-left">31.</span>enhance<br/>
+<span class="qi-left">32.</span>hailed<br/>
+<span class="qi-left">33.</span>windshield<br/>
+<span class="qi-left">34.</span>animated<br/>
+<span class="qi-left">35.</span>inject<br/>
+<span class="qi-left">36.</span>lyric<br/>
+<span class="qi-left">37.</span>therapy<br/>
+<span class="qi-left">38.</span>disperse<br/>
+<span class="qi-left">39.</span>lyrics<br/>
+<span class="qi-left">40.</span>photographic<br/>
+<span class="qi-left">41.</span>prone<br/>
+<span class="qi-left">42.</span>suspense<br/>
+<span class="qi-left">43.</span>sanction<br/>
+<span class="qi-left">44.</span>irony<br/>
+<span class="qi-left">45.</span>harassed<br/>
+<span class="qi-left">46.</span>allocated<br/>
+<span class="qi-left">47.</span>animation<br/>
+<span class="qi-left">48.</span>thrived<br/>
+<span class="qi-left">49.</span>infectious<br/>
+<span class="qi-left">50.</span>refine<br/>
+<span class="qi-left">51.</span>refinement<br/>
+<span class="qi-left">52.</span>Chemotherapy<br/>
+<span class="qi-left">53.</span>verge<br/>
+<span class="qi-left">54.</span>accord<br/>
+<span class="qi-left">55.</span>brink<br/>
+<span class="qi-left">56.</span>buckle<br/>
+<span class="qi-left">57.</span>harassment<br/>
+<span class="qi-left">58.</span>verge<br/>
+<span class="qi-left">59.</span>photographic<br/>
+<span class="qi-left">60.</span>generalize<br/>
+<span class="qi-left">61.</span>brink<br/>
+<span class="qi-left">62.</span>reservoir<br/>
+<span class="qi-left">63.</span>hail<br/>
+<span class="qi-left">64.</span>rein<br/>
+<span class="qi-left">65.</span>hails<br/>
+<span class="qi-left">66.</span>irony<br/>
+<span class="qi-left">67.</span>capsule<br/>
+<span class="qi-left">68.</span>inject<br/>
+<span class="qi-left">69.</span>ironic<br/>
+<span class="qi-left">70.</span>suspension<br/>
+<span class="qi-left">71.</span>hostility<br/>
+<span class="qi-left">72.</span>animate<br/>
+<span class="qi-left">73.</span>thrive<br/>
+<span class="qi-left">74.</span>vocal<br/>
+<span class="qi-left">75.</span>boosted<br/>
+<span class="qi-left">76.</span>therapists<br/>
+<span class="qi-left">77.</span>reins<br/>
+<span class="qi-left">78.</span>modernization<br/>
+<span class="qi-left">79.</span>buckle<br/>
+<span class="qi-left">80.</span>turmoil<br/>
+<span class="qi-left">81.</span>rhythmic<br/>
+<span class="qi-left">82.</span>disperse<br/>
+<span class="qi-left">83.</span>refining<br/>
+<span class="qi-left">84.</span>refinement<br/>
+<span class="qi-left">85.</span>disability<br/>
+<span class="qi-left">86.</span>animation<br/>
+<span class="qi-left">87.</span>boost<br/>
+<span class="qi-left">88.</span>hailed<br/>
+<span class="qi-left">89.</span>Xeroxes<br/>
+<span class="qi-left">90.</span>injections<br/>
+<span class="qi-left">91.</span>verges<br/>
+<span class="qi-left">92.</span>solidarity<br/>
+<span class="qi-left">93.</span>suspense<br/>
+<span class="qi-left">94.</span>rein<br/>
+<span class="qi-left">95.</span>sanction<br/>
+<span class="qi-left">96.</span>suspension<br/>
+<span class="qi-left">97.</span>vocal<br/>
+<span class="qi-left">98.</span>accordingly<br/>
+<span class="qi-left">99.</span>boost<br/>
+<span class="qi-left">100.</span>bulky<br/>
+<span class="qi-left">101.</span>animated<br/>
+
+        </div>
+      </div>
+    </div>
+    <script>
+      set_page_break('break-qa-input', 'inter-q-fa');
+      set_page_break('break-aa-input', 'inter-fa-sa');
+      update_title();
+      document.querySelectorAll('.mid-answer-slot').forEach((elem) => {if (elem.innerHTML == '') {elem.innerHTML = ' '};});
+      document.querySelectorAll('.big-answer-slot').forEach((elem) => {if (elem.innerHTML == '') {elem.innerHTML = ' '};});
+    </script>
+  </body>
+</html>

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/quiz-default.css">
+  </head>
+  <body>
+    <style>
+      body {
+        font-size: 5mm;
+        font-family: Cambria, 'GenRyuMin TW', Cochin, Georgia, Times,
+          'Times New Roman', serif;
+      }
+      div{
+        line-height: 1.18;
+      }
+      :lang(en){
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+      }
+      h1 {
+        font-weight: normal;
+        font-family: FZYaoTi, 'Noto Sans TC Medium', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 30pt;
+      }
+      h2 {
+        font-weight: normal;
+        font-family: FZYaoTi, 'Noto Sans TC Medium', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 26pt;
+      }
+      h3 {
+        font-weight: normal;
+        font-family: 'Noto Sans TC Medium', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin-bottom: 5pt;
+        font-size: 20pt;
+      }
+      span.tagline {
+        font-size: 60%;
+        color: darkslategray;
+      }
+      p {
+        white-space: pre-wrap;
+        line-height: 1.1;
+        font-size: 14pt;
+      }
+      .normal-text {
+        font-size: 14pt;
+      }
+    </style>
+    <script src="js/quiz-default.js"></script>
+    <div class="no-print">
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="title-input" class="col-form-label">Title</label>
+        </div>
+        <div class="col-auto">
+          <input id="title-input" class="form-control" type="text" value="高級單字 L6U35 首捲大補帖" oninput="update_title();"/>
+        </div>
+        <div class="col-auto">
+          <label for="h1-size-input" class="col-form-label">Title Font Size</label>
+        </div>
+        <div class="col-auto">
+          <input id="h1-size-input" class="form-control" type="number" value="30" oninput="update_title_font_size();"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="font-size-input" class="col-form-label">Content Font Size</label>
+        </div>
+        <div class="col-auto">
+          <input id="font-size-input" class="form-control" type="number" value="14" oninput="update_text_font_size();"/>
+        </div>
+        <div class="col-auto">
+          <label for="box-width-input" class="col-form-label">Hint Box Width</label>
+        </div>
+        <div class="col-auto">
+          <input id="box-width-input" class="form-control" type="number" value="200" oninput="update_hint_box_width();"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="part-question-include-input" class="col-form-label">Include Question Part</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-check-input" id="part-question-include-input" type="checkbox" checked onchange="set_visible('part-question-include-input', 'part-question');"/>
+        </div>
+        <div class="col-auto">
+          <label for="break-hq-input" class="col-form-label">Page Break(s) for Question</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-control" id="break-hq-input" type="number" value="0" oninput="set_page_break('break-hq-input', 'inter-h-q');"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="part-full-answer-include-input" class="col-form-label">Include Full Answer Part</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-check-input" id="part-full-answer-include-input" type="checkbox" checked onchange="set_visible('part-full-answer-include-input', 'part-full-answer');"/>
+        </div>
+        <div class="col-auto">
+          <label for="break-qa-input" class="col-form-label">Page Break(s) for Full Answer</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-control" id="break-qa-input" type="number" value="1" oninput="set_page_break('break-qa-input', 'inter-q-fa');"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="part-simple-answer-include-input" class="col-form-label">Include Simple Answer Part</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-check-input" id="part-simple-answer-include-input" type="checkbox" checked onchange="set_visible('part-simple-answer-include-input', 'part-simple-answer');"/>
+        </div>
+        <div class="col-auto">
+          <label for="break-aa-input" class="col-form-label">Page Break(s) for Simple Answer</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-control" id="break-aa-input" type="number" value="1" oninput="set_page_break('break-aa-input', 'inter-fa-sa');"/>
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary" onclick="window.print();" id="print-button">
+        Print The Quiz
+      </button>
+    </div>
+
+    <!-- start filling -->
+
+    <div id="paper">
+      <div id="inter-h-q"></div>
+      <h1 id="title-text">
+        高級單字 L6U35 首捲大補帖
+      </h1>
+      <div id="part-question">
+        <h3>
+          題目
+        </h3>
+        <div class="b5-port-col">
+          <div class="box normal-text" id="hint-box">
+            
+          </div>
+          <p><span class="q-front-choice"><span class="qi-left">1.</span><span class="mid-answer-slot"></span></span>The breathtaking views from the top of the mountain made the hike a truly <span class="q-apart-inplace">        </span> experience.</p>
+<p><ul class="option-list"><li>(A)	space</li><li>(B)	sentiment</li><li>(C)	scenic</li><li>(D)	subject</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">2.</span><span class="mid-answer-slot"></span></span>During <span class="q-apart-inplace">        </span>, artists like Michelangelo and da Vinci changed the world of art forever.</p>
+<p><ul class="option-list"><li>(A)	ruby</li><li>(B)	the Renaissance</li><li>(C)	rotation</li><li>(D)	Renaissance</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">3.</span><span class="mid-answer-slot"></span></span>The company plans to <span class="q-apart-inplace">        </span> a portion of its profits to help local charities this year.</p>
+<p><ul class="option-list"><li>(A)	stammer</li><li>(B)	donate</li><li>(C)	speculate</li><li>(D)	shed</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">4.</span><span class="mid-answer-slot"></span></span>Living in <span class="q-apart-inplace">        </span> often means enjoying warm weather and lush greenery all year round.</p>
+<p><ul class="option-list"><li>(A)	sapphire</li><li>(B)	tropic</li><li>(C)	the tropics</li><li>(D)	Cancer</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">5.</span><span class="mid-answer-slot"></span></span>The loud <span class="q-apart-inplace">        </span> of the ambulance could be heard from blocks away as it rushed to the scene.</p>
+<p><ul class="option-list"><li>(A)	sprawl</li><li>(B)	siren</li><li>(C)	standpoint</li><li>(D)	fragment</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">6.</span><span class="mid-answer-slot"></span></span>From a scientific <span class="q-apart-inplace">        </span>, the experiment was designed to test a clear hypothesis.</p>
+<p><ul class="option-list"><li>(A)	population</li><li>(B)	slang</li><li>(C)	superiority</li><li>(D)	standpoint</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">7.</span><span class="mid-answer-slot"></span></span>The city’s rapid growth led to <span class="q-apart-inplace">        </span> increase that strained its resources.</p>
+<p><ul class="option-list"><li>(A)	raid</li><li>(B)	population</li><li>(C)	donor</li><li>(D)	autonomy</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">8.</span><span class="mid-answer-slot"></span></span>She tried to <span class="q-apart-inplace">        </span> her old bicycle into a piece of modern art for the exhibition.</p>
+<p><ul class="option-list"><li>(A)	compile</li><li>(B)	transform</li><li>(C)	distort</li><li>(D)	beckon</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">9.</span><span class="mid-answer-slot"></span></span>His <span class="q-apart-inplace">        </span> introduced a new way to solve the problem, earning him praise from the team.</p>
+<p><ul class="option-list"><li>(A)	cemetery</li><li>(B)	spa</li><li>(C)	innovation</li><li>(D)	aggression</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">10.</span><span class="mid-answer-slot"></span></span>The ancient ruins were a testament to a lost <span class="q-apart-inplace">        </span> that once thrived in the region.</p>
+<p><ul class="option-list"><li>(A)	civilization</li><li>(B)	speculation</li><li>(C)	emerald</li><li>(D)	superior</li></ul></p>
+<p><span class="q-front-slot"><span class="qi-left">11.</span><span class="big-answer-slot"></span></span>Many Chinese have a sense of <span class="q-apart-inplace">s          y</span> for being Chinese.</p>
+<p><span class="q-front-slot"><span class="qi-left">12.</span><span class="big-answer-slot"></span></span>Sand is mostly composed of <span class="q-apart-inplace">s          n</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">13.</span><span class="big-answer-slot"></span></span>We were away for the weekend at a <span class="q-apart-inplace">s          </span> hotel.</p>
+<p><span class="q-front-slot"><span class="qi-left">14.</span><span class="big-answer-slot"></span></span>Every winter, the orphanage asks for <span class="q-apart-inplace">d          ns</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">15.</span><span class="big-answer-slot"></span></span>Many traditional arts of Taiwan are waiting for <span class="q-apart-inplace">r          e</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">16.</span><span class="big-answer-slot"></span></span>When farmers <span class="q-apart-inplace">r          e</span> crops, they regularly change crops they grow in the field.</p>
+<p><span class="q-front-slot"><span class="qi-left">17.</span><span class="big-answer-slot"></span></span>With only a little high school French, I <span class="q-apart-inplace">s          red</span> my order, “Un... café s’il vous plaît.”</p>
+<p><span class="q-front-slot"><span class="qi-left">18.</span><span class="big-answer-slot"></span></span>Let’s look at the questions from the <span class="q-apart-inplace">s          t</span> of children.</p>
+<p><span class="q-front-slot"><span class="qi-left">19.</span><span class="big-answer-slot"></span></span>We will do a <span class="q-apart-inplace">b          l</span> experiment on Thursday.</p>
+<p><span class="q-front-slot"><span class="qi-left">20.</span><span class="big-answer-slot"></span></span>A victory is always good for <span class="q-apart-inplace">m          e</span> and confidence.</p>
+<p><span class="q-front-slot"><span class="qi-left">21.</span><span class="big-answer-slot"></span></span>The army launched several cross-border <span class="q-apart-inplace">r          </span> last night.</p>
+<p><span class="q-front-slot"><span class="qi-left">22.</span><span class="big-answer-slot"></span></span>Some teenagers like to venture into the <span class="q-apart-inplace">c          y</span> at night.</p>
+<p><span class="q-front-slot"><span class="qi-left">23.</span><span class="big-answer-slot"></span></span>It is inappropriate to use <span class="q-apart-inplace">s          g</span> in formal speech or writing.</p>
+<p><span class="q-front-slot"><span class="qi-left">24.</span><span class="big-answer-slot"></span></span>What are the differences between <span class="q-apart-inplace">c          d</span> life and primitive life?</p>
+<p><span class="q-front-slot"><span class="qi-left">25.</span><span class="big-answer-slot"></span></span>The students came up with many <span class="q-apart-inplace">i          e</span> ideas.</p>
+<p><span class="q-front-slot"><span class="qi-left">26.</span><span class="big-answer-slot"></span></span>The settlers began to move inland and <span class="q-apart-inplace">p          e</span> the river valleys.</p>
+<p><span class="q-front-slot"><span class="qi-left">27.</span><span class="big-answer-slot"></span></span>The <span class="q-apart-inplace">c          y</span> teacher asked us to hand in...</p>
+<p><span class="q-front-slot"><span class="qi-left">28.</span><span class="big-answer-slot"></span></span>... an <span class="q-apart-inplace">a          l</span> report of the water quality here.</p>
+<p><span class="q-front-slot"><span class="qi-left">29.</span><span class="big-answer-slot"></span></span>The teller has been <span class="q-apart-inplace">s          y</span> lately. Maybe he has something to do with the theft in the bank.</p>
+<p><span class="q-front-slot"><span class="qi-left">30.</span><span class="big-answer-slot"></span></span>We must encourage <span class="q-apart-inplace">i          n</span> if the company is to remain competitive.</p>
+<p><span class="q-front-slot"><span class="qi-left">31.</span><span class="big-answer-slot"></span></span>As it grows, a snake will regularly <span class="q-apart-inplace">s          </span> its skin.</p>
+<p><span class="q-front-slot"><span class="qi-left">32.</span><span class="big-answer-slot"></span></span>Autumn rain and fallen leaves often make me <span class="q-apart-inplace">s          l</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">33.</span><span class="big-answer-slot"></span></span><span class="q-apart-inplace">S          n</span> Valley is located in the mid-west part of California.</p>
+<p><span class="q-front-slot"><span class="qi-left">34.</span><span class="big-answer-slot"></span></span>Many whites believed that the <span class="q-apart-inplace">s          r</span> races had the duty...</p>
+<p><span class="q-front-slot"><span class="qi-left">35.</span><span class="big-answer-slot"></span></span>... to <span class="q-apart-inplace">c          e</span> the inferior races.</p>
+<p><span class="q-front-slot"><span class="qi-left">36.</span><span class="big-answer-slot"></span></span>The <span class="q-apart-inplace">s          </span> is used to store farming tools.</p>
+<p><span class="q-front-slot"><span class="qi-left">37.</span><span class="big-answer-slot"></span></span>His face was <span class="q-apart-inplace">d          ted</span> in anger.</p>
+<p><span class="q-front-slot"><span class="qi-left">38.</span><span class="big-answer-slot"></span></span>Jones refused to <span class="q-apart-inplace">s          e</span> about what might happen.</p>
+<p><span class="q-front-slot"><span class="qi-left">39.</span><span class="big-answer-slot"></span></span>Every blood <span class="q-apart-inplace">d          r</span> will receive a free T-shirt.</p>
+<p><span class="q-front-slot"><span class="qi-left">40.</span><span class="big-answer-slot"></span></span>The <span class="q-apart-inplace">t          l</span> zone is between the <span class="q-apart-inplace">T          c</span> of Cancer and the <span class="q-apart-inplace">T          c</span> of Capricorn.</p>
+<p><span class="q-front-slot"><span class="qi-left">43.</span><span class="big-answer-slot"></span></span>The <span class="q-apart-inplace">s          n</span> went off, signaling the start of the fire drill.</p>
+<p><span class="q-front-slot"><span class="qi-left">44.</span><span class="big-answer-slot"></span></span>Plug the plug into the power <span class="q-apart-inplace">o          t</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">45.</span><span class="big-answer-slot"></span></span>Political <span class="q-apart-inplace">a          ts</span> expect the Conservatives to win.</p>
+<p><span class="q-front-slot"><span class="qi-left">46.</span><span class="big-answer-slot"></span></span>Though it is a cheap ring, yet it has great <span class="q-apart-inplace">s          l</span> value for me.</p>
+<p><span class="q-front-slot"><span class="qi-left">47.</span><span class="big-answer-slot"></span></span>This cosmetic firm has 3 <span class="q-apart-inplace">o          ts</span> in Taiwan.</p>
+<p><span class="q-front-slot"><span class="qi-left">48.</span><span class="big-answer-slot"></span></span>Don’t <span class="q-apart-inplace">d          t</span> my words.</p>
+<p><span class="q-front-slot"><span class="qi-left">49.</span><span class="big-answer-slot"></span></span>He <span class="q-apart-inplace">d          ed</span> $350,000 to the charity.</p>
+<p><span class="q-front-slot"><span class="qi-left">50.</span><span class="big-answer-slot"></span></span>The foundation of the castle was <span class="q-apart-inplace">u          ed</span> by tides.</p>
+<p><span class="q-front-slot"><span class="qi-left">51.</span><span class="big-answer-slot"></span></span>Some people believe that US <span class="q-apart-inplace">a          n</span> breeds terrorism.</p>
+<p><span class="q-front-slot"><span class="qi-left">52.</span><span class="big-answer-slot"></span></span>Branch managers have full <span class="q-apart-inplace">a          y</span> in their own areas.</p>
+<p><span class="q-front-slot"><span class="qi-left">53.</span><span class="big-answer-slot"></span></span>Soldiers sometimes <span class="q-apart-inplace">i          t</span> serious injury on innocent people.</p>
+<p><span class="q-front-slot"><span class="qi-left">54.</span><span class="big-answer-slot"></span></span>She <span class="q-apart-inplace">b          ned</span> (to) the waitress for a refill of her glass.</p>
+<p><span class="q-front-slot"><span class="qi-left">55.</span><span class="big-answer-slot"></span></span>The booklet is <span class="q-apart-inplace">c          ed</span> by the Tourism Bureau.</p>
+<p><span class="q-front-slot"><span class="qi-left">56.</span><span class="big-answer-slot"></span></span>Gavin majored in <span class="q-apart-inplace">b          y</span> in university.</p>
+<p><span class="q-front-slot"><span class="qi-left">57.</span><span class="big-answer-slot"></span></span>Teenagers need an <span class="q-apart-inplace">o          t</span> for their energy.</p>
+<p><span class="q-front-slot"><span class="qi-left">58.</span><span class="big-answer-slot"></span></span>Constant criticism <span class="q-apart-inplace">u          ed</span> her confidence.</p>
+<p><span class="q-front-slot"><span class="qi-left">59.</span><span class="big-answer-slot"></span></span>I cannot but <span class="q-apart-inplace">s          </span> tears for the poor boy.</p>
+<p><span class="q-front-slot"><span class="qi-left">60.</span><span class="big-answer-slot"></span></span>He <span class="q-apart-inplace">s          led</span> out on the bed.</p>
+<p><span class="q-front-slot"><span class="qi-left">61.</span><span class="big-answer-slot"></span></span>The Earth <span class="q-apart-inplace">r          es</span> on its axis once every 24 hours.</p>
+<p><span class="q-front-slot"><span class="qi-left">62.</span><span class="big-answer-slot"></span></span>The rebels <span class="q-apart-inplace">r          </span> the village late at night.</p>
+<p><span class="q-front-slot"><span class="qi-left">63.</span><span class="big-answer-slot"></span></span>He has a sense of <span class="q-apart-inplace">i          y</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">64.</span><span class="big-answer-slot"></span></span>The handle of the sword is decorated with a <span class="q-apart-inplace">r          </span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">65.</span><span class="big-answer-slot"></span></span>Some glass <span class="q-apart-inplace">f          ts</span> hit me when the window was smashed.</p>
+<p><span class="q-front-slot"><span class="qi-left">66.</span><span class="big-answer-slot"></span></span>The salesman urged us to test drive their <span class="q-apart-inplace">s          s</span> van.</p>
+<p><span class="q-front-slot"><span class="qi-left">67.</span><span class="big-answer-slot"></span></span>Saturn completes a <span class="q-apart-inplace">r          n</span> in about 10 hours.</p>
+<p><span class="q-front-slot"><span class="qi-left">68.</span><span class="big-answer-slot"></span></span>People living in the <span class="q-apart-inplace">t          cs</span> know nothing about winter.</p>
+<p><span class="q-front-slot"><span class="qi-left">69.</span><span class="big-answer-slot"></span></span>You should avoid <span class="q-apart-inplace">c          n</span>...</p>
+<p><span class="q-front-slot"><span class="qi-left">70.</span><span class="big-answer-slot"></span></span>... with your <span class="q-apart-inplace">s          rs</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">71.</span><span class="big-answer-slot"></span></span>I went to a doctor, hoping to cure my <span class="q-apart-inplace">s          r</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">72.</span><span class="big-answer-slot"></span></span>The police didn’t find the suspect in the roadside <span class="q-apart-inplace">r          </span> last night.</p>
+<p><span class="q-front-slot"><span class="qi-left">73.</span><span class="big-answer-slot"></span></span>The <span class="q-apart-inplace">R          e</span> started in Italy and slowly spread throughout Europe.</p>
+<p><span class="q-front-slot"><span class="qi-left">74.</span><span class="big-answer-slot"></span></span>There is a <span class="q-apart-inplace">s          c</span> road along the shore.</p>
+<p><span class="q-front-slot"><span class="qi-left">75.</span><span class="big-answer-slot"></span></span>Three plays will be performed in <span class="q-apart-inplace">r          n</span> during the drama festival.</p>
+<p><span class="q-front-slot"><span class="qi-left">76.</span><span class="big-answer-slot"></span></span>The fair seemed to <span class="q-apart-inplace">s          l</span> for miles.</p>
+<p><span class="q-front-slot"><span class="qi-left">77.</span><span class="big-answer-slot"></span></span>The film chronicles her <span class="q-apart-inplace">t          n</span> from housewife to congresswoman.</p>
+<p><span class="q-front-slot"><span class="qi-left">78.</span><span class="big-answer-slot"></span></span>No evidence has been found, so any comment on the case is pure <span class="q-apart-inplace">s          n</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">79.</span><span class="big-answer-slot"></span></span>The traditional belief in men’s <span class="q-apart-inplace">s          y</span> over woman causes many serious problems in China.</p>
+<p><span class="q-front-slot"><span class="qi-left">80.</span><span class="big-answer-slot"></span></span>I know I will never be a physicist. I am too <span class="q-apart-inplace">s          e</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">81.</span><span class="big-answer-slot"></span></span>The <span class="q-apart-inplace">d          n</span> of space is commonly known as gravity.</p>
+<p><span class="q-front-slot"><span class="qi-left">82.</span><span class="big-answer-slot"></span></span>The historians are very careful to avoid the <span class="q-apart-inplace">d          n</span> of historical facts.</p>
+<p><span class="q-front-slot"><span class="qi-left">83.</span><span class="big-answer-slot"></span></span>The film was not well received and was a major <span class="q-apart-inplace">s          k</span> for the director.</p>
+
+        </div>
+      </div>
+      <div id="part-full-answer">
+        <div id="inter-q-fa"></div>
+        <h3>
+          詳解
+        </h3>
+        <div class="b5-port-col">
+          <p><span class="q-front-choice"><span class="qi-left">1.</span><span class="mid-answer-slot"><span class="a-front"> C </span></span></span>The breathtaking views from the top of the mountain made the hike a truly <span class="q-apart-inplace">        </span> experience.</p>
+<p><ul class="option-list"><li>(A)	space</li><li>(B)	sentiment</li><li><span class="a-front-option">[C]	scenic</span></li><li>(D)	subject</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">2.</span><span class="mid-answer-slot"><span class="a-front"> B </span></span></span>During <span class="q-apart-inplace">        </span>, artists like Michelangelo and da Vinci changed the world of art forever.</p>
+<p><ul class="option-list"><li>(A)	ruby</li><li><span class="a-front-option">[B]	the Renaissance</span></li><li>(C)	rotation</li><li>(D)	Renaissance</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">3.</span><span class="mid-answer-slot"><span class="a-front"> B </span></span></span>The company plans to <span class="q-apart-inplace">        </span> a portion of its profits to help local charities this year.</p>
+<p><ul class="option-list"><li>(A)	stammer</li><li><span class="a-front-option">[B]	donate</span></li><li>(C)	speculate</li><li>(D)	shed</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">4.</span><span class="mid-answer-slot"><span class="a-front"> C </span></span></span>Living in <span class="q-apart-inplace">        </span> often means enjoying warm weather and lush greenery all year round.</p>
+<p><ul class="option-list"><li>(A)	sapphire</li><li>(B)	tropic</li><li><span class="a-front-option">[C]	the tropics</span></li><li>(D)	Cancer</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">5.</span><span class="mid-answer-slot"><span class="a-front"> B </span></span></span>The loud <span class="q-apart-inplace">        </span> of the ambulance could be heard from blocks away as it rushed to the scene.</p>
+<p><ul class="option-list"><li>(A)	sprawl</li><li><span class="a-front-option">[B]	siren</span></li><li>(C)	standpoint</li><li>(D)	fragment</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">6.</span><span class="mid-answer-slot"><span class="a-front"> D </span></span></span>From a scientific <span class="q-apart-inplace">        </span>, the experiment was designed to test a clear hypothesis.</p>
+<p><ul class="option-list"><li>(A)	population</li><li>(B)	slang</li><li>(C)	superiority</li><li><span class="a-front-option">[D]	standpoint</span></li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">7.</span><span class="mid-answer-slot"><span class="a-front"> B </span></span></span>The city’s rapid growth led to <span class="q-apart-inplace">        </span> increase that strained its resources.</p>
+<p><ul class="option-list"><li>(A)	raid</li><li><span class="a-front-option">[B]	population</span></li><li>(C)	donor</li><li>(D)	autonomy</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">8.</span><span class="mid-answer-slot"><span class="a-front"> B </span></span></span>She tried to <span class="q-apart-inplace">        </span> her old bicycle into a piece of modern art for the exhibition.</p>
+<p><ul class="option-list"><li>(A)	compile</li><li><span class="a-front-option">[B]	transform</span></li><li>(C)	distort</li><li>(D)	beckon</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">9.</span><span class="mid-answer-slot"><span class="a-front"> C </span></span></span>His <span class="q-apart-inplace">        </span> introduced a new way to solve the problem, earning him praise from the team.</p>
+<p><ul class="option-list"><li>(A)	cemetery</li><li>(B)	spa</li><li><span class="a-front-option">[C]	innovation</span></li><li>(D)	aggression</li></ul></p>
+<p><span class="q-front-choice"><span class="qi-left">10.</span><span class="mid-answer-slot"><span class="a-front"> A </span></span></span>The ancient ruins were a testament to a lost <span class="q-apart-inplace">        </span> that once thrived in the region.</p>
+<p><ul class="option-list"><li><span class="a-front-option">[A]	civilization</span></li><li>(B)	speculation</li><li>(C)	emerald</li><li>(D)	superior</li></ul></p>
+<p><span class="q-front-slot"><span class="qi-left">11.</span><span class="big-answer-slot"><span class="a-front">superiority</span></span></span>Many Chinese have a sense of <span class="q-apart-inplace">s          y</span> for being Chinese.</p>
+<p><span class="q-front-slot"><span class="qi-left">12.</span><span class="big-answer-slot"><span class="a-front">silicon</span></span></span>Sand is mostly composed of <span class="q-apart-inplace">s          n</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">13.</span><span class="big-answer-slot"><span class="a-front">spa</span></span></span>We were away for the weekend at a <span class="q-apart-inplace">s          </span> hotel.</p>
+<p><span class="q-front-slot"><span class="qi-left">14.</span><span class="big-answer-slot"><span class="a-front">donations</span></span></span>Every winter, the orphanage asks for <span class="q-apart-inplace">d          ns</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">15.</span><span class="big-answer-slot"><span class="a-front">renaissance</span></span></span>Many traditional arts of Taiwan are waiting for <span class="q-apart-inplace">r          e</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">16.</span><span class="big-answer-slot"><span class="a-front">rotate</span></span></span>When farmers <span class="q-apart-inplace">r          e</span> crops, they regularly change crops they grow in the field.</p>
+<p><span class="q-front-slot"><span class="qi-left">17.</span><span class="big-answer-slot"><span class="a-front">stammered</span></span></span>With only a little high school French, I <span class="q-apart-inplace">s          red</span> my order, “Un... café s’il vous plaît.”</p>
+<p><span class="q-front-slot"><span class="qi-left">18.</span><span class="big-answer-slot"><span class="a-front">standpoint</span></span></span>Let’s look at the questions from the <span class="q-apart-inplace">s          t</span> of children.</p>
+<p><span class="q-front-slot"><span class="qi-left">19.</span><span class="big-answer-slot"><span class="a-front">biological</span></span></span>We will do a <span class="q-apart-inplace">b          l</span> experiment on Thursday.</p>
+<p><span class="q-front-slot"><span class="qi-left">20.</span><span class="big-answer-slot"><span class="a-front">morale</span></span></span>A victory is always good for <span class="q-apart-inplace">m          e</span> and confidence.</p>
+<p><span class="q-front-slot"><span class="qi-left">21.</span><span class="big-answer-slot"><span class="a-front">raids</span></span></span>The army launched several cross-border <span class="q-apart-inplace">r          </span> last night.</p>
+<p><span class="q-front-slot"><span class="qi-left">22.</span><span class="big-answer-slot"><span class="a-front">cemetery</span></span></span>Some teenagers like to venture into the <span class="q-apart-inplace">c          y</span> at night.</p>
+<p><span class="q-front-slot"><span class="qi-left">23.</span><span class="big-answer-slot"><span class="a-front">slang</span></span></span>It is inappropriate to use <span class="q-apart-inplace">s          g</span> in formal speech or writing.</p>
+<p><span class="q-front-slot"><span class="qi-left">24.</span><span class="big-answer-slot"><span class="a-front">civilized</span></span></span>What are the differences between <span class="q-apart-inplace">c          d</span> life and primitive life?</p>
+<p><span class="q-front-slot"><span class="qi-left">25.</span><span class="big-answer-slot"><span class="a-front">innovative</span></span></span>The students came up with many <span class="q-apart-inplace">i          e</span> ideas.</p>
+<p><span class="q-front-slot"><span class="qi-left">26.</span><span class="big-answer-slot"><span class="a-front">populate</span></span></span>The settlers began to move inland and <span class="q-apart-inplace">p          e</span> the river valleys.</p>
+<p><span class="q-front-slot"><span class="qi-left">27.</span><span class="big-answer-slot"><span class="a-front">chemistry</span></span></span>The <span class="q-apart-inplace">c          y</span> teacher asked us to hand in...</p>
+<p><span class="q-front-slot"><span class="qi-left">28.</span><span class="big-answer-slot"><span class="a-front">analytical</span></span></span>... an <span class="q-apart-inplace">a          l</span> report of the water quality here.</p>
+<p><span class="q-front-slot"><span class="qi-left">29.</span><span class="big-answer-slot"><span class="a-front">sneaky</span></span></span>The teller has been <span class="q-apart-inplace">s          y</span> lately. Maybe he has something to do with the theft in the bank.</p>
+<p><span class="q-front-slot"><span class="qi-left">30.</span><span class="big-answer-slot"><span class="a-front">innovation</span></span></span>We must encourage <span class="q-apart-inplace">i          n</span> if the company is to remain competitive.</p>
+<p><span class="q-front-slot"><span class="qi-left">31.</span><span class="big-answer-slot"><span class="a-front">shed</span></span></span>As it grows, a snake will regularly <span class="q-apart-inplace">s          </span> its skin.</p>
+<p><span class="q-front-slot"><span class="qi-left">32.</span><span class="big-answer-slot"><span class="a-front">sentimental</span></span></span>Autumn rain and fallen leaves often make me <span class="q-apart-inplace">s          l</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">33.</span><span class="big-answer-slot"><span class="a-front">Silicon</span></span></span><span class="q-apart-inplace">S          n</span> Valley is located in the mid-west part of California.</p>
+<p><span class="q-front-slot"><span class="qi-left">34.</span><span class="big-answer-slot"><span class="a-front">superior</span></span></span>Many whites believed that the <span class="q-apart-inplace">s          r</span> races had the duty...</p>
+<p><span class="q-front-slot"><span class="qi-left">35.</span><span class="big-answer-slot"><span class="a-front">civilize</span></span></span>... to <span class="q-apart-inplace">c          e</span> the inferior races.</p>
+<p><span class="q-front-slot"><span class="qi-left">36.</span><span class="big-answer-slot"><span class="a-front">shed</span></span></span>The <span class="q-apart-inplace">s          </span> is used to store farming tools.</p>
+<p><span class="q-front-slot"><span class="qi-left">37.</span><span class="big-answer-slot"><span class="a-front">distorted</span></span></span>His face was <span class="q-apart-inplace">d          ted</span> in anger.</p>
+<p><span class="q-front-slot"><span class="qi-left">38.</span><span class="big-answer-slot"><span class="a-front">speculate</span></span></span>Jones refused to <span class="q-apart-inplace">s          e</span> about what might happen.</p>
+<p><span class="q-front-slot"><span class="qi-left">39.</span><span class="big-answer-slot"><span class="a-front">donor</span></span></span>Every blood <span class="q-apart-inplace">d          r</span> will receive a free T-shirt.</p>
+<p><span class="q-front-slot"><span class="qi-left">40.</span><span class="big-answer-slot"><span class="a-front">tropical</span></span></span>The <span class="q-apart-inplace">t          l</span> zone is between the <span class="q-apart-inplace">T          c</span> of Cancer and the <span class="q-apart-inplace">T          c</span> of Capricorn.</p>
+<p><span class="q-front-slot"><span class="qi-left">43.</span><span class="big-answer-slot"><span class="a-front">siren</span></span></span>The <span class="q-apart-inplace">s          n</span> went off, signaling the start of the fire drill.</p>
+<p><span class="q-front-slot"><span class="qi-left">44.</span><span class="big-answer-slot"><span class="a-front">outlet</span></span></span>Plug the plug into the power <span class="q-apart-inplace">o          t</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">45.</span><span class="big-answer-slot"><span class="a-front">analysts</span></span></span>Political <span class="q-apart-inplace">a          ts</span> expect the Conservatives to win.</p>
+<p><span class="q-front-slot"><span class="qi-left">46.</span><span class="big-answer-slot"><span class="a-front">sentimental</span></span></span>Though it is a cheap ring, yet it has great <span class="q-apart-inplace">s          l</span> value for me.</p>
+<p><span class="q-front-slot"><span class="qi-left">47.</span><span class="big-answer-slot"><span class="a-front">outlets</span></span></span>This cosmetic firm has 3 <span class="q-apart-inplace">o          ts</span> in Taiwan.</p>
+<p><span class="q-front-slot"><span class="qi-left">48.</span><span class="big-answer-slot"><span class="a-front">distort</span></span></span>Don’t <span class="q-apart-inplace">d          t</span> my words.</p>
+<p><span class="q-front-slot"><span class="qi-left">49.</span><span class="big-answer-slot"><span class="a-front">donated</span></span></span>He <span class="q-apart-inplace">d          ed</span> $350,000 to the charity.</p>
+<p><span class="q-front-slot"><span class="qi-left">50.</span><span class="big-answer-slot"><span class="a-front">undermined</span></span></span>The foundation of the castle was <span class="q-apart-inplace">u          ed</span> by tides.</p>
+<p><span class="q-front-slot"><span class="qi-left">51.</span><span class="big-answer-slot"><span class="a-front">aggression</span></span></span>Some people believe that US <span class="q-apart-inplace">a          n</span> breeds terrorism.</p>
+<p><span class="q-front-slot"><span class="qi-left">52.</span><span class="big-answer-slot"><span class="a-front">autonomy</span></span></span>Branch managers have full <span class="q-apart-inplace">a          y</span> in their own areas.</p>
+<p><span class="q-front-slot"><span class="qi-left">53.</span><span class="big-answer-slot"><span class="a-front">inflict</span></span></span>Soldiers sometimes <span class="q-apart-inplace">i          t</span> serious injury on innocent people.</p>
+<p><span class="q-front-slot"><span class="qi-left">54.</span><span class="big-answer-slot"><span class="a-front">beckoned</span></span></span>She <span class="q-apart-inplace">b          ned</span> (to) the waitress for a refill of her glass.</p>
+<p><span class="q-front-slot"><span class="qi-left">55.</span><span class="big-answer-slot"><span class="a-front">compiled</span></span></span>The booklet is <span class="q-apart-inplace">c          ed</span> by the Tourism Bureau.</p>
+<p><span class="q-front-slot"><span class="qi-left">56.</span><span class="big-answer-slot"><span class="a-front">biochemistry</span></span></span>Gavin majored in <span class="q-apart-inplace">b          y</span> in university.</p>
+<p><span class="q-front-slot"><span class="qi-left">57.</span><span class="big-answer-slot"><span class="a-front">outlet</span></span></span>Teenagers need an <span class="q-apart-inplace">o          t</span> for their energy.</p>
+<p><span class="q-front-slot"><span class="qi-left">58.</span><span class="big-answer-slot"><span class="a-front">undermined</span></span></span>Constant criticism <span class="q-apart-inplace">u          ed</span> her confidence.</p>
+<p><span class="q-front-slot"><span class="qi-left">59.</span><span class="big-answer-slot"><span class="a-front">shed</span></span></span>I cannot but <span class="q-apart-inplace">s          </span> tears for the poor boy.</p>
+<p><span class="q-front-slot"><span class="qi-left">60.</span><span class="big-answer-slot"><span class="a-front">sprawled</span></span></span>He <span class="q-apart-inplace">s          led</span> out on the bed.</p>
+<p><span class="q-front-slot"><span class="qi-left">61.</span><span class="big-answer-slot"><span class="a-front">rotates</span></span></span>The Earth <span class="q-apart-inplace">r          es</span> on its axis once every 24 hours.</p>
+<p><span class="q-front-slot"><span class="qi-left">62.</span><span class="big-answer-slot"><span class="a-front">raided</span></span></span>The rebels <span class="q-apart-inplace">r          </span> the village late at night.</p>
+<p><span class="q-front-slot"><span class="qi-left">63.</span><span class="big-answer-slot"><span class="a-front">inferiority</span></span></span>He has a sense of <span class="q-apart-inplace">i          y</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">64.</span><span class="big-answer-slot"><span class="a-front">ruby</span></span></span>The handle of the sword is decorated with a <span class="q-apart-inplace">r          </span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">65.</span><span class="big-answer-slot"><span class="a-front">fragments</span></span></span>Some glass <span class="q-apart-inplace">f          ts</span> hit me when the window was smashed.</p>
+<p><span class="q-front-slot"><span class="qi-left">66.</span><span class="big-answer-slot"><span class="a-front">spacious</span></span></span>The salesman urged us to test drive their <span class="q-apart-inplace">s          s</span> van.</p>
+<p><span class="q-front-slot"><span class="qi-left">67.</span><span class="big-answer-slot"><span class="a-front">rotation</span></span></span>Saturn completes a <span class="q-apart-inplace">r          n</span> in about 10 hours.</p>
+<p><span class="q-front-slot"><span class="qi-left">68.</span><span class="big-answer-slot"><span class="a-front">tropics</span></span></span>People living in the <span class="q-apart-inplace">t          cs</span> know nothing about winter.</p>
+<p><span class="q-front-slot"><span class="qi-left">69.</span><span class="big-answer-slot"><span class="a-front">confrontation</span></span></span>You should avoid <span class="q-apart-inplace">c          n</span>...</p>
+<p><span class="q-front-slot"><span class="qi-left">70.</span><span class="big-answer-slot"><span class="a-front">superiors</span></span></span>... with your <span class="q-apart-inplace">s          rs</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">71.</span><span class="big-answer-slot"><span class="a-front">stammer</span></span></span>I went to a doctor, hoping to cure my <span class="q-apart-inplace">s          r</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">72.</span><span class="big-answer-slot"><span class="a-front">raid</span></span></span>The police didn’t find the suspect in the roadside <span class="q-apart-inplace">r          </span> last night.</p>
+<p><span class="q-front-slot"><span class="qi-left">73.</span><span class="big-answer-slot"><span class="a-front">Renaissance</span></span></span>The <span class="q-apart-inplace">R          e</span> started in Italy and slowly spread throughout Europe.</p>
+<p><span class="q-front-slot"><span class="qi-left">74.</span><span class="big-answer-slot"><span class="a-front">scenic</span></span></span>There is a <span class="q-apart-inplace">s          c</span> road along the shore.</p>
+<p><span class="q-front-slot"><span class="qi-left">75.</span><span class="big-answer-slot"><span class="a-front">rotation</span></span></span>Three plays will be performed in <span class="q-apart-inplace">r          n</span> during the drama festival.</p>
+<p><span class="q-front-slot"><span class="qi-left">76.</span><span class="big-answer-slot"><span class="a-front">sprawl</span></span></span>The fair seemed to <span class="q-apart-inplace">s          l</span> for miles.</p>
+<p><span class="q-front-slot"><span class="qi-left">77.</span><span class="big-answer-slot"><span class="a-front">transformation</span></span></span>The film chronicles her <span class="q-apart-inplace">t          n</span> from housewife to congresswoman.</p>
+<p><span class="q-front-slot"><span class="qi-left">78.</span><span class="big-answer-slot"><span class="a-front">speculation</span></span></span>No evidence has been found, so any comment on the case is pure <span class="q-apart-inplace">s          n</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">79.</span><span class="big-answer-slot"><span class="a-front">superiority</span></span></span>The traditional belief in men’s <span class="q-apart-inplace">s          y</span> over woman causes many serious problems in China.</p>
+<p><span class="q-front-slot"><span class="qi-left">80.</span><span class="big-answer-slot"><span class="a-front">subjective</span></span></span>I know I will never be a physicist. I am too <span class="q-apart-inplace">s          e</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">81.</span><span class="big-answer-slot"><span class="a-front">distortion</span></span></span>The <span class="q-apart-inplace">d          n</span> of space is commonly known as gravity.</p>
+<p><span class="q-front-slot"><span class="qi-left">82.</span><span class="big-answer-slot"><span class="a-front">distortion</span></span></span>The historians are very careful to avoid the <span class="q-apart-inplace">d          n</span> of historical facts.</p>
+<p><span class="q-front-slot"><span class="qi-left">83.</span><span class="big-answer-slot"><span class="a-front">setback</span></span></span>The film was not well received and was a major <span class="q-apart-inplace">s          k</span> for the director.</p>
+
+        </div>
+      </div>
+      <div id="part-simple-answer">
+        <div id="inter-fa-sa"></div>
+        <h3>
+          簡答
+        </h3>
+        <div class="narrow-col normal-text">
+          <span class="qi-left">1.</span>(C)scenic<br/>
+<span class="qi-left">2.</span>(B)the Renaissance<br/>
+<span class="qi-left">3.</span>(B)donate<br/>
+<span class="qi-left">4.</span>(C)the tropics<br/>
+<span class="qi-left">5.</span>(B)siren<br/>
+<span class="qi-left">6.</span>(D)standpoint<br/>
+<span class="qi-left">7.</span>(B)population<br/>
+<span class="qi-left">8.</span>(B)transform<br/>
+<span class="qi-left">9.</span>(C)innovation<br/>
+<span class="qi-left">10.</span>(A)civilization<br/>
+<span class="qi-left">11.</span>superiority<br/>
+<span class="qi-left">12.</span>silicon<br/>
+<span class="qi-left">13.</span>spa<br/>
+<span class="qi-left">14.</span>donations<br/>
+<span class="qi-left">15.</span>renaissance<br/>
+<span class="qi-left">16.</span>rotate<br/>
+<span class="qi-left">17.</span>stammered<br/>
+<span class="qi-left">18.</span>standpoint<br/>
+<span class="qi-left">19.</span>biological<br/>
+<span class="qi-left">20.</span>morale<br/>
+<span class="qi-left">21.</span>raids<br/>
+<span class="qi-left">22.</span>cemetery<br/>
+<span class="qi-left">23.</span>slang<br/>
+<span class="qi-left">24.</span>civilized<br/>
+<span class="qi-left">25.</span>innovative<br/>
+<span class="qi-left">26.</span>populate<br/>
+<span class="qi-left">27.</span>chemistry<br/>
+<span class="qi-left">28.</span>analytical<br/>
+<span class="qi-left">29.</span>sneaky<br/>
+<span class="qi-left">30.</span>innovation<br/>
+<span class="qi-left">31.</span>shed<br/>
+<span class="qi-left">32.</span>sentimental<br/>
+<span class="qi-left">33.</span>Silicon<br/>
+<span class="qi-left">34.</span>superior<br/>
+<span class="qi-left">35.</span>civilize<br/>
+<span class="qi-left">36.</span>shed<br/>
+<span class="qi-left">37.</span>distorted<br/>
+<span class="qi-left">38.</span>speculate<br/>
+<span class="qi-left">39.</span>donor<br/>
+<span class="qi-left">40.</span>tropical<br/>
+<span class="qi-left">41.</span>Tropic<br/>
+<span class="qi-left">42.</span>Tropic<br/>
+<span class="qi-left">43.</span>siren<br/>
+<span class="qi-left">44.</span>outlet<br/>
+<span class="qi-left">45.</span>analysts<br/>
+<span class="qi-left">46.</span>sentimental<br/>
+<span class="qi-left">47.</span>outlets<br/>
+<span class="qi-left">48.</span>distort<br/>
+<span class="qi-left">49.</span>donated<br/>
+<span class="qi-left">50.</span>undermined<br/>
+<span class="qi-left">51.</span>aggression<br/>
+<span class="qi-left">52.</span>autonomy<br/>
+<span class="qi-left">53.</span>inflict<br/>
+<span class="qi-left">54.</span>beckoned<br/>
+<span class="qi-left">55.</span>compiled<br/>
+<span class="qi-left">56.</span>biochemistry<br/>
+<span class="qi-left">57.</span>outlet<br/>
+<span class="qi-left">58.</span>undermined<br/>
+<span class="qi-left">59.</span>shed<br/>
+<span class="qi-left">60.</span>sprawled<br/>
+<span class="qi-left">61.</span>rotates<br/>
+<span class="qi-left">62.</span>raided<br/>
+<span class="qi-left">63.</span>inferiority<br/>
+<span class="qi-left">64.</span>ruby<br/>
+<span class="qi-left">65.</span>fragments<br/>
+<span class="qi-left">66.</span>spacious<br/>
+<span class="qi-left">67.</span>rotation<br/>
+<span class="qi-left">68.</span>tropics<br/>
+<span class="qi-left">69.</span>confrontation<br/>
+<span class="qi-left">70.</span>superiors<br/>
+<span class="qi-left">71.</span>stammer<br/>
+<span class="qi-left">72.</span>raid<br/>
+<span class="qi-left">73.</span>Renaissance<br/>
+<span class="qi-left">74.</span>scenic<br/>
+<span class="qi-left">75.</span>rotation<br/>
+<span class="qi-left">76.</span>sprawl<br/>
+<span class="qi-left">77.</span>transformation<br/>
+<span class="qi-left">78.</span>speculation<br/>
+<span class="qi-left">79.</span>superiority<br/>
+<span class="qi-left">80.</span>subjective<br/>
+<span class="qi-left">81.</span>distortion<br/>
+<span class="qi-left">82.</span>distortion<br/>
+<span class="qi-left">83.</span>setback<br/>
+
+        </div>
+      </div>
+    </div>
+    <script>
+      set_page_break('break-qa-input', 'inter-q-fa');
+      set_page_break('break-aa-input', 'inter-fa-sa');
+      update_title();
+      document.querySelectorAll('.mid-answer-slot').forEach((elem) => {if (elem.innerHTML == '') {elem.innerHTML = ' '};});
+      document.querySelectorAll('.big-answer-slot').forEach((elem) => {if (elem.innerHTML == '') {elem.innerHTML = ' '};});
+    </script>
+  </body>
+</html>

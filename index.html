@@ -36,6 +36,7 @@
         const quiz_option = document.getElementById('quiz-options');
         for(let i = 26; i<=48; ++i){
           quiz_option.innerHTML += `<option value="L6U${i}"/>`;
+          quiz_option.innerHTML += `<option value="review/L6U${i}"/>`;
         }
         const host_page_path = "/gjsj-quiz-host-test/";
         const searchForm = document.getElementById('search_form');

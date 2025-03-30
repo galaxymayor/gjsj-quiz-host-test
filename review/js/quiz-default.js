@@ -8,8 +8,10 @@ function update_title_font_size() {
     document.querySelectorAll('h1').forEach((elem) => elem.style.fontSize = h1_size);
 }
 function update_text_font_size() {
-    const font_size = document.getElementById('font-size-input').value + 'pt'; document.querySelectorAll('p').forEach((elem) => elem.style.fontSize = font_size);
+    const font_size = document.getElementById('font-size-input').value + 'pt';
+    document.querySelectorAll('p').forEach((elem) => elem.style.fontSize = font_size);
     document.querySelectorAll('.normal-text').forEach((elem) => elem.style.fontSize = font_size);
+    document.querySelectorAll('.option-list').forEach((elem) => elem.style.fontSize = font_size);
 }
 function update_hint_box_width() {
     const box_width = document.getElementById('box-width-input').value + 'px';

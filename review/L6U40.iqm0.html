@@ -5,16 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/quiz-default.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css" integrity="sha384-zh0CIslj+VczCZtlzBcjt5ppRcsAmDnRem7ESsYwWwg3m/OaJ2l4x7YBZl9Kxxib" crossorigin="anonymous">
+
+    <!-- The loading of KaTeX is deferred to speed up page rendering -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js" integrity="sha384-Rma6DA2IPUwhNxmrB/7S3Tno0YY7sFu9WSYMCuulLhIqYSGZ2gKCJWIqhBWqMQfh" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/mhchem.min.js" integrity="sha384-F2ptQFZqNJuqfGGl28mIXyQ5kXH48spn7rcoS0Y9psqIKAcZPLd1NzwFlm/bl1mH"  crossorigin="anonymous"></script>
+    <!-- To automatically render math in text elements, include the auto-render extension: -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
+      onload="renderMathInElement(document.body);document.querySelectorAll('.text>.cjk_fallback').forEach((elem) => {elem.classList.add('normal-text');});"></script>
   </head>
   <body>
     <style>
       body {
-        font-size: 5mm;
+        font-size: 14pt;
         font-family: Cambria, 'GenRyuMin TW', Cochin, Georgia, Times,
           'Times New Roman', serif;
       }
+      .text>.cjk_fallback{
+        font-size: 14pt;
+        font-family: 'GenRyuMin TW';
+      }
       div{
-        line-height: 1.22;
+        line-height: 1.17;
       }
       :lang(en){
         font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
@@ -55,7 +68,7 @@
           <label for="title-input" class="col-form-label">Title</label>
         </div>
         <div class="col-auto">
-          <input id="title-input" class="form-control" type="text" value="高級單字 L6U40 首捲大補帖" oninput="update_title();"/>
+          <input id="title-input" class="form-control" type="text" value="高級單字 L6U40 首捲補丸" oninput="update_title();"/>
         </div>
         <div class="col-auto">
           <label for="h1-size-input" class="col-form-label">Title Font Size</label>
@@ -70,6 +83,24 @@
         </div>
         <div class="col-auto">
           <input id="font-size-input" class="form-control" type="number" value="14" oninput="update_text_font_size();"/>
+        </div>
+        <div class="col-auto pro-version-component">
+          <label for="line-height-input" class="col-form-label">Content Line Height</label>
+        </div>
+        <div class="col-auto pro-version-component">
+          <input id="line-height-input" class="form-control" type="number" step="0.1" value="1.17" oninput="update_line_height();"/>
+        </div>
+        <div class="col-auto pro-version-component">
+          <label for="paragraph-margin-input" class="col-form-label">Paragraph Margin</label>
+        </div>
+        <div class="col-auto pro-version-component">
+          <input id="paragraph-margin-input" class="form-control" type="number" value="6" oninput="update_paragraph_margin();"/>
+        </div>
+        <div class="col-auto basic-version-component">
+          <label for="compact-mode-input" class="col-form-label">Compact Mode</label>
+        </div>
+        <div class="col-auto basic-version-component">
+          <input class="form-check-input" id="compact-mode-input" type="checkbox" unchecked onchange="document.getElementById('line-height-input').value = (document.getElementById('compact-mode-input').checked && 1 || 1.17); update_line_height(); document.getElementById('paragraph-margin-input').value = (document.getElementById('compact-mode-input').checked && 2 || 10); update_paragraph_margin()"/>
         </div>
         <div class="col-auto">
           <label for="box-width-input" class="col-form-label">Hint Box Width</label>
@@ -130,7 +161,7 @@
     <div id="paper">
       <div id="inter-h-q"></div>
       <h1 id="title-text">
-        高級單字 L6U40 首捲大補帖
+        高級單字 L6U40 首捲補丸
       </h1>
       <div id="part-question">
         <h3>
@@ -168,7 +199,7 @@
 <p><span class="q-front-slot"><span class="qi-left">14.</span><span class="big-answer-slot"></span></span>Reading can <span class="q-apart-inplace">e          h</span> our lives.</p>
 <p><span class="q-front-slot"><span class="qi-left">15.</span><span class="big-answer-slot"></span></span>Have you ever dreamed about being smart, intelligent, wise and <span class="q-apart-inplace">w          y</span> like your father?</p>
 <p><span class="q-front-slot"><span class="qi-left">16.</span><span class="big-answer-slot"></span></span>The minister was criticized for his <span class="q-apart-inplace">d          </span> nationality.</p>
-<p><span class="q-front-slot"><span class="qi-left">17.</span><span class="big-answer-slot"></span></span>Paul is a very <span class="q-apart-inplace">w          y</span> boy, a 2 happy-go-lucky fellow, full of fun.</p>
+<p><span class="q-front-slot"><span class="qi-left">17.</span><span class="big-answer-slot"></span></span>Paul is a very <span class="q-apart-inplace">w          y</span> boy, a happy-go-lucky fellow, full of fun.</p>
 <p><span class="q-front-slot"><span class="qi-left">18.</span><span class="big-answer-slot"></span></span>The main opposition leader was <span class="q-apart-inplace">e          lled</span> from her own party.</p>
 <p><span class="q-front-slot"><span class="qi-left">19.</span><span class="big-answer-slot"></span></span>The police <span class="q-apart-inplace">g          led</span> him for hours.</p>
 <p><span class="q-front-slot"><span class="qi-left">20.</span><span class="big-answer-slot"></span></span>The man <span class="q-apart-inplace">w          ed</span> with the burglar while his wife called the police.</p>
@@ -177,7 +208,7 @@
 <p><span class="q-front-slot"><span class="qi-left">23.</span><span class="big-answer-slot"></span></span>The authorities are threatening to <span class="q-apart-inplace">e          l</span> all foreign diplomats.</p>
 <p><span class="q-front-slot"><span class="qi-left">24.</span><span class="big-answer-slot"></span></span>The actress’s affairs with politicians are only a <span class="q-apart-inplace">s          t</span> to attract attention.</p>
 <p><span class="q-front-slot"><span class="qi-left">25.</span><span class="big-answer-slot"></span></span>Pumpkins and calabashes are included in the <span class="q-apart-inplace">s          h</span> family.</p>
-<p><span class="q-front-slot"><span class="qi-left">26.</span><span class="big-answer-slot"></span></span>The Indians did not have <span class="q-apart-inplace">I          y</span> to diseases introduced by the whites</p>
+<p><span class="q-front-slot"><span class="qi-left">26.</span><span class="big-answer-slot"></span></span>The Indians did not have <span class="q-apart-inplace">i          y</span> to diseases introduced by the whites</p>
 <p><span class="q-front-slot"><span class="qi-left">27.</span><span class="big-answer-slot"></span></span>Oh, no, I heard the <span class="q-apart-inplace">s          h</span> of eggs.</p>
 <p><span class="q-front-slot"><span class="qi-left">28.</span><span class="big-answer-slot"></span></span>Who can resist the <span class="q-apart-inplace">g          r</span> of Hollywood?</p>
 <p><span class="q-front-slot"><span class="qi-left">29.</span><span class="big-answer-slot"></span></span>He never forgot this <span class="q-apart-inplace">h          g</span> experience.</p>
@@ -195,7 +226,7 @@
 <p><span class="q-front-slot"><span class="qi-left">41.</span><span class="big-answer-slot"></span></span>I felt a strong sense of <span class="q-apart-inplace">h          n</span> when punished in public.</p>
 <p><span class="q-front-slot"><span class="qi-left">42.</span><span class="big-answer-slot"></span></span>Eagles have very keen <span class="q-apart-inplace">e          t</span>.</p>
 <p><span class="q-front-slot"><span class="qi-left">43.</span><span class="big-answer-slot"></span></span>He plans to major in <span class="q-apart-inplace">e          y</span> in college.</p>
-<p><span class="q-front-slot"><span class="qi-left">44.</span><span class="big-answer-slot"></span></span>“Does anyone know when Mozart was born?” “ Look it up in the <span class="q-apart-inplace">e          a</span>.”</p>
+<p><span class="q-front-slot"><span class="qi-left">44.</span><span class="big-answer-slot"></span></span>“Does anyone know when Mozart was born?” “Look it up in the <span class="q-apart-inplace">e          a</span>.”</p>
 <p><span class="q-front-slot"><span class="qi-left">45.</span><span class="big-answer-slot"></span></span>The <span class="q-apart-inplace">v          s</span> team was hailed by the crowd.</p>
 <p><span class="q-front-slot"><span class="qi-left">46.</span><span class="big-answer-slot"></span></span>The milk is <span class="q-apart-inplace">e          hed</span> with vitamins and minerals.</p>
 <p><span class="q-front-slot"><span class="qi-left">47.</span><span class="big-answer-slot"></span></span>Widespread <span class="q-apart-inplace">f          e</span> has triggered a number of violent protests.</p>
@@ -214,7 +245,7 @@
 <p><span class="q-front-slot"><span class="qi-left">60.</span><span class="big-answer-slot"></span></span>His <span class="q-apart-inplace">e          c</span> behavior cost him his job.</p>
 <p><span class="q-front-slot"><span class="qi-left">61.</span><span class="big-answer-slot"></span></span>This virus attacks the <span class="q-apart-inplace">i          e</span> system.</p>
 <p><span class="q-front-slot"><span class="qi-left">62.</span><span class="big-answer-slot"></span></span>She has been <span class="q-apart-inplace">w          ing</span> with breast cancer for ten years.</p>
-<p><span class="q-front-slot"><span class="qi-left">63.</span><span class="big-answer-slot"></span></span>Be careful with that vase - it’s very <span class="q-apart-inplace">f          e</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">63.</span><span class="big-answer-slot"></span></span>Be careful with that vase—it’s very <span class="q-apart-inplace">f          e</span>.</p>
 <p><span class="q-front-slot"><span class="qi-left">64.</span><span class="big-answer-slot"></span></span>The object of the book is to <span class="q-apart-inplace">e          n</span> readers, not to entertain them.</p>
 <p><span class="q-front-slot"><span class="qi-left">65.</span><span class="big-answer-slot"></span></span>All of the <span class="q-apart-inplace">s          ts</span> in the movie were done by stuntmen.</p>
 <p><span class="q-front-slot"><span class="qi-left">66.</span><span class="big-answer-slot"></span></span>All the candidates do their best to <span class="q-apart-inplace">w          </span> voters.</p>
@@ -279,7 +310,7 @@
 <p><span class="q-front-slot"><span class="qi-left">14.</span><span class="big-answer-slot"><span class="a-front">enrich</span></span></span>Reading can <span class="q-apart-inplace">e          h</span> our lives.</p>
 <p><span class="q-front-slot"><span class="qi-left">15.</span><span class="big-answer-slot"><span class="a-front">witty</span></span></span>Have you ever dreamed about being smart, intelligent, wise and <span class="q-apart-inplace">w          y</span> like your father?</p>
 <p><span class="q-front-slot"><span class="qi-left">16.</span><span class="big-answer-slot"><span class="a-front">dual</span></span></span>The minister was criticized for his <span class="q-apart-inplace">d          </span> nationality.</p>
-<p><span class="q-front-slot"><span class="qi-left">17.</span><span class="big-answer-slot"><span class="a-front">witty</span></span></span>Paul is a very <span class="q-apart-inplace">w          y</span> boy, a 2 happy-go-lucky fellow, full of fun.</p>
+<p><span class="q-front-slot"><span class="qi-left">17.</span><span class="big-answer-slot"><span class="a-front">witty</span></span></span>Paul is a very <span class="q-apart-inplace">w          y</span> boy, a happy-go-lucky fellow, full of fun.</p>
 <p><span class="q-front-slot"><span class="qi-left">18.</span><span class="big-answer-slot"><span class="a-front">expelled</span></span></span>The main opposition leader was <span class="q-apart-inplace">e          lled</span> from her own party.</p>
 <p><span class="q-front-slot"><span class="qi-left">19.</span><span class="big-answer-slot"><span class="a-front">grilled</span></span></span>The police <span class="q-apart-inplace">g          led</span> him for hours.</p>
 <p><span class="q-front-slot"><span class="qi-left">20.</span><span class="big-answer-slot"><span class="a-front">wrestled</span></span></span>The man <span class="q-apart-inplace">w          ed</span> with the burglar while his wife called the police.</p>
@@ -288,7 +319,7 @@
 <p><span class="q-front-slot"><span class="qi-left">23.</span><span class="big-answer-slot"><span class="a-front">expel</span></span></span>The authorities are threatening to <span class="q-apart-inplace">e          l</span> all foreign diplomats.</p>
 <p><span class="q-front-slot"><span class="qi-left">24.</span><span class="big-answer-slot"><span class="a-front">stunt</span></span></span>The actress’s affairs with politicians are only a <span class="q-apart-inplace">s          t</span> to attract attention.</p>
 <p><span class="q-front-slot"><span class="qi-left">25.</span><span class="big-answer-slot"><span class="a-front">squash</span></span></span>Pumpkins and calabashes are included in the <span class="q-apart-inplace">s          h</span> family.</p>
-<p><span class="q-front-slot"><span class="qi-left">26.</span><span class="big-answer-slot"><span class="a-front">Immunity</span></span></span>The Indians did not have <span class="q-apart-inplace">I          y</span> to diseases introduced by the whites</p>
+<p><span class="q-front-slot"><span class="qi-left">26.</span><span class="big-answer-slot"><span class="a-front">immunity</span></span></span>The Indians did not have <span class="q-apart-inplace">i          y</span> to diseases introduced by the whites</p>
 <p><span class="q-front-slot"><span class="qi-left">27.</span><span class="big-answer-slot"><span class="a-front">squash</span></span></span>Oh, no, I heard the <span class="q-apart-inplace">s          h</span> of eggs.</p>
 <p><span class="q-front-slot"><span class="qi-left">28.</span><span class="big-answer-slot"><span class="a-front">glamour</span></span></span>Who can resist the <span class="q-apart-inplace">g          r</span> of Hollywood?</p>
 <p><span class="q-front-slot"><span class="qi-left">29.</span><span class="big-answer-slot"><span class="a-front">humiliating</span></span></span>He never forgot this <span class="q-apart-inplace">h          g</span> experience.</p>
@@ -306,7 +337,7 @@
 <p><span class="q-front-slot"><span class="qi-left">41.</span><span class="big-answer-slot"><span class="a-front">humiliation</span></span></span>I felt a strong sense of <span class="q-apart-inplace">h          n</span> when punished in public.</p>
 <p><span class="q-front-slot"><span class="qi-left">42.</span><span class="big-answer-slot"><span class="a-front">eyesight</span></span></span>Eagles have very keen <span class="q-apart-inplace">e          t</span>.</p>
 <p><span class="q-front-slot"><span class="qi-left">43.</span><span class="big-answer-slot"><span class="a-front">ecology</span></span></span>He plans to major in <span class="q-apart-inplace">e          y</span> in college.</p>
-<p><span class="q-front-slot"><span class="qi-left">44.</span><span class="big-answer-slot"><span class="a-front">encyclopedia</span></span></span>“Does anyone know when Mozart was born?” “ Look it up in the <span class="q-apart-inplace">e          a</span>.”</p>
+<p><span class="q-front-slot"><span class="qi-left">44.</span><span class="big-answer-slot"><span class="a-front">encyclopedia</span></span></span>“Does anyone know when Mozart was born?” “Look it up in the <span class="q-apart-inplace">e          a</span>.”</p>
 <p><span class="q-front-slot"><span class="qi-left">45.</span><span class="big-answer-slot"><span class="a-front">victorious</span></span></span>The <span class="q-apart-inplace">v          s</span> team was hailed by the crowd.</p>
 <p><span class="q-front-slot"><span class="qi-left">46.</span><span class="big-answer-slot"><span class="a-front">enriched</span></span></span>The milk is <span class="q-apart-inplace">e          hed</span> with vitamins and minerals.</p>
 <p><span class="q-front-slot"><span class="qi-left">47.</span><span class="big-answer-slot"><span class="a-front">famine</span></span></span>Widespread <span class="q-apart-inplace">f          e</span> has triggered a number of violent protests.</p>
@@ -325,7 +356,7 @@
 <p><span class="q-front-slot"><span class="qi-left">60.</span><span class="big-answer-slot"><span class="a-front">eccentric</span></span></span>His <span class="q-apart-inplace">e          c</span> behavior cost him his job.</p>
 <p><span class="q-front-slot"><span class="qi-left">61.</span><span class="big-answer-slot"><span class="a-front">immune</span></span></span>This virus attacks the <span class="q-apart-inplace">i          e</span> system.</p>
 <p><span class="q-front-slot"><span class="qi-left">62.</span><span class="big-answer-slot"><span class="a-front">wrestling</span></span></span>She has been <span class="q-apart-inplace">w          ing</span> with breast cancer for ten years.</p>
-<p><span class="q-front-slot"><span class="qi-left">63.</span><span class="big-answer-slot"><span class="a-front">fragile</span></span></span>Be careful with that vase - it’s very <span class="q-apart-inplace">f          e</span>.</p>
+<p><span class="q-front-slot"><span class="qi-left">63.</span><span class="big-answer-slot"><span class="a-front">fragile</span></span></span>Be careful with that vase—it’s very <span class="q-apart-inplace">f          e</span>.</p>
 <p><span class="q-front-slot"><span class="qi-left">64.</span><span class="big-answer-slot"><span class="a-front">enlighten</span></span></span>The object of the book is to <span class="q-apart-inplace">e          n</span> readers, not to entertain them.</p>
 <p><span class="q-front-slot"><span class="qi-left">65.</span><span class="big-answer-slot"><span class="a-front">stunts</span></span></span>All of the <span class="q-apart-inplace">s          ts</span> in the movie were done by stuntmen.</p>
 <p><span class="q-front-slot"><span class="qi-left">66.</span><span class="big-answer-slot"><span class="a-front">woo</span></span></span>All the candidates do their best to <span class="q-apart-inplace">w          </span> voters.</p>
@@ -387,7 +418,7 @@
 <span class="qi-left">23.</span>expel<br/>
 <span class="qi-left">24.</span>stunt<br/>
 <span class="qi-left">25.</span>squash<br/>
-<span class="qi-left">26.</span>Immunity<br/>
+<span class="qi-left">26.</span>immunity<br/>
 <span class="qi-left">27.</span>squash<br/>
 <span class="qi-left">28.</span>glamour<br/>
 <span class="qi-left">29.</span>humiliating<br/>
@@ -460,6 +491,16 @@
       set_page_break('break-qa-input', 'inter-q-fa');
       set_page_break('break-aa-input', 'inter-fa-sa');
       update_title();
+      update_line_height();
+      if(document.getElementById('compact-mode-input').checkVisibility()){
+        document.getElementById('paragraph-margin-input').value = 10;
+        document.getElementById('compact-mode-input').checked = true;
+        document.getElementById('line-height-input').value = 1;
+        update_line_height();
+        document.getElementById('paragraph-margin-input').value = 2;
+        update_paragraph_margin();
+      }
+      update_paragraph_margin();
       document.querySelectorAll('.mid-answer-slot').forEach((elem) => {if (elem.innerHTML == '') {elem.innerHTML = ' '};});
       document.querySelectorAll('.big-answer-slot').forEach((elem) => {if (elem.innerHTML == '') {elem.innerHTML = ' '};});
       document.querySelectorAll('p:has(+ul.option-list), ul.option-list+p').forEach((elem) => {if (elem.innerHTML == '') {elem.remove()}});

@@ -27,7 +27,7 @@
         font-family: 'GenRyuMin TW';
       }
       div{
-        line-height: 1.18;
+        line-height: 1.17;
       }
       :lang(en){
         font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
@@ -83,6 +83,24 @@
         </div>
         <div class="col-auto">
           <input id="font-size-input" class="form-control" type="number" value="14" oninput="update_text_font_size();"/>
+        </div>
+        <div class="col-auto pro-version-component">
+          <label for="line-height-input" class="col-form-label">Content Line Height</label>
+        </div>
+        <div class="col-auto pro-version-component">
+          <input id="line-height-input" class="form-control" type="number" step="0.1" value="1.17" oninput="update_line_height();"/>
+        </div>
+        <div class="col-auto pro-version-component">
+          <label for="paragraph-margin-input" class="col-form-label">Paragraph Margin</label>
+        </div>
+        <div class="col-auto pro-version-component">
+          <input id="paragraph-margin-input" class="form-control" type="number" value="6" oninput="update_paragraph_margin();"/>
+        </div>
+        <div class="col-auto basic-version-component">
+          <label for="compact-mode-input" class="col-form-label">Compact Mode</label>
+        </div>
+        <div class="col-auto basic-version-component">
+          <input class="form-check-input" id="compact-mode-input" type="checkbox" unchecked onchange="document.getElementById('line-height-input').value = (document.getElementById('compact-mode-input').checked && 1 || 1.17); update_line_height(); document.getElementById('paragraph-margin-input').value = (document.getElementById('compact-mode-input').checked && 2 || 10); update_paragraph_margin()"/>
         </div>
         <div class="col-auto">
           <label for="box-width-input" class="col-form-label">Hint Box Width</label>
@@ -154,12 +172,14 @@
             
           </div>
           <p></p>
-<p><div class="alert alert-danger" role="alert"></p>
-<p>  譴責林老師突襲考試</p>
-<p></div></p>
-<p><div class="alert alert-success" role="alert"></p>
-<p>  感謝黃祈安及楊敬彬加班協助</p>
-<p></div></p>
+<div class="alert alert-danger normal-text" role="alert">
+  譴責林老師突襲考試
+</div>
+<div class="alert alert-success normal-text" role="alert">
+  感謝黃祈安及楊敬彬加班協助
+</div>
+<div class="no-print basic-version-component"><h4> \(f(x)\) 新增功能提示</h4> 響應 SDG 12.5 ，已預設勾選上方列印排版控制版面第二行第二項 <i>Compact Mode</i> 以減省紙張用量。
+您可以取消勾選增加版面舒適度。</div>
 <p></p>
 <p><span class="q-inplace"><span class="qi-inplace">(1)</span><span class="q-inplace-slot">T                               s</span></span> is a terrible disease. 肺結核是一種可怕的疾病。</p>
 <p>My father <span class="q-inplace"><span class="qi-inplace">(2)</span><span class="q-inplace-slot">s                   s</span></span> <span class="q-inplace"><span class="qi-inplace">(3)</span><span class="q-inplace-slot">                  </span></span> <span class="q-inplace"><span class="qi-inplace">(4)</span><span class="q-inplace-slot">s                    h</span></span> <span class="q-inplace"><span class="qi-inplace">(5)</span><span class="q-inplace-slot">u                  r</span></span>. 我爸爸深受胃潰瘍所苦。</p>
@@ -234,12 +254,14 @@
         </h3>
         <div class="b5-port-col">
           <p></p>
-<p><div class="alert alert-danger" role="alert"></p>
-<p>  譴責林老師突襲考試</p>
-<p></div></p>
-<p><div class="alert alert-success" role="alert"></p>
-<p>  感謝黃祈安及楊敬彬加班協助</p>
-<p></div></p>
+<div class="alert alert-danger normal-text" role="alert">
+  譴責林老師突襲考試
+</div>
+<div class="alert alert-success normal-text" role="alert">
+  感謝黃祈安及楊敬彬加班協助
+</div>
+<div class="no-print basic-version-component"><h4> \(f(x)\) 新增功能提示</h4> 響應 SDG 12.5 ，已預設勾選上方列印排版控制版面第二行第二項 <i>Compact Mode</i> 以減省紙張用量。
+您可以取消勾選增加版面舒適度。</div>
 <p></p>
 <p><span class="q-inplace"><span class="qi-inplace">(1)</span><span class="q-inplace-slot"><span class="a-inplace-space">Tuberculosis</span></span></span> is a terrible disease. 肺結核是一種可怕的疾病。</p>
 <p>My father <span class="q-inplace"><span class="qi-inplace">(2)</span><span class="q-inplace-slot"><span class="a-inplace-space">suffers</span></span></span> <span class="q-inplace"><span class="qi-inplace">(3)</span><span class="q-inplace-slot"><span class="a-inplace-space">from</span></span></span> <span class="q-inplace"><span class="qi-inplace">(4)</span><span class="q-inplace-slot"><span class="a-inplace-space">stomach</span></span></span> <span class="q-inplace"><span class="qi-inplace">(5)</span><span class="q-inplace-slot"><span class="a-inplace-space">ulcer</span></span></span>. 我爸爸深受胃潰瘍所苦。</p>
@@ -469,6 +491,16 @@
       set_page_break('break-qa-input', 'inter-q-fa');
       set_page_break('break-aa-input', 'inter-fa-sa');
       update_title();
+      update_line_height();
+      if(document.getElementById('compact-mode-input').checkVisibility()){
+        document.getElementById('paragraph-margin-input').value = 10;
+        document.getElementById('compact-mode-input').checked = true;
+        document.getElementById('line-height-input').value = 1;
+        update_line_height();
+        document.getElementById('paragraph-margin-input').value = 2;
+        update_paragraph_margin();
+      }
+      update_paragraph_margin();
       document.querySelectorAll('.mid-answer-slot').forEach((elem) => {if (elem.innerHTML == '') {elem.innerHTML = ' '};});
       document.querySelectorAll('.big-answer-slot').forEach((elem) => {if (elem.innerHTML == '') {elem.innerHTML = ' '};});
       document.querySelectorAll('p:has(+ul.option-list), ul.option-list+p').forEach((elem) => {if (elem.innerHTML == '') {elem.remove()}});

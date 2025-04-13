@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/quiz-default.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css" integrity="sha384-zh0CIslj+VczCZtlzBcjt5ppRcsAmDnRem7ESsYwWwg3m/OaJ2l4x7YBZl9Kxxib" crossorigin="anonymous">
+
+    <!-- The loading of KaTeX is deferred to speed up page rendering -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js" integrity="sha384-Rma6DA2IPUwhNxmrB/7S3Tno0YY7sFu9WSYMCuulLhIqYSGZ2gKCJWIqhBWqMQfh" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/mhchem.min.js" integrity="sha384-F2ptQFZqNJuqfGGl28mIXyQ5kXH48spn7rcoS0Y9psqIKAcZPLd1NzwFlm/bl1mH"  crossorigin="anonymous"></script>
+    <!-- To automatically render math in text elements, include the auto-render extension: -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
+      onload="renderMathInElement(document.body);document.querySelectorAll('.text>.cjk_fallback').forEach((elem) => {elem.classList.add('normal-text');});"></script>
+  </head>
+  <body>
+    <style>
+      body {
+        font-size: 14pt;
+        font-family: Cambria, 'GenRyuMin TW', Cochin, Georgia, Times,
+          'Times New Roman', serif;
+      }
+      .text>.cjk_fallback{
+        font-size: 14pt;
+        font-family: 'GenRyuMin TW';
+      }
+      div{
+        line-height: 1.17;
+      }
+      :lang(en){
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+      }
+      h1 {
+        font-weight: normal;
+        font-family: FZYaoTi, 'Noto Sans TC Medium', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 30pt;
+      }
+      h2 {
+        font-weight: normal;
+        font-family: FZYaoTi, 'Noto Sans TC Medium', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 26pt;
+      }
+      h3 {
+        font-weight: normal;
+        font-family: 'Noto Sans TC Medium', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin-bottom: 5pt;
+        font-size: 20pt;
+      }
+      span.tagline {
+        font-size: 60%;
+        color: darkslategray;
+      }
+      p {
+        white-space: pre-wrap;
+        line-height: 1.1;
+        font-size: 14pt;
+      }
+      .normal-text {
+        font-size: 14pt;
+      }
+    </style>
+    <script src="js/quiz-default.js"></script>
+    <div class="no-print">
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="title-input" class="col-form-label">Title</label>
+        </div>
+        <div class="col-auto">
+          <input id="title-input" class="form-control" type="text" value="高級單字 L6U45 首捲挖啥物" oninput="update_title();"/>
+        </div>
+        <div class="col-auto">
+          <label for="h1-size-input" class="col-form-label">Title Font Size</label>
+        </div>
+        <div class="col-auto">
+          <input id="h1-size-input" class="form-control" type="number" value="30" oninput="update_title_font_size();"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="font-size-input" class="col-form-label">Content Font Size</label>
+        </div>
+        <div class="col-auto">
+          <input id="font-size-input" class="form-control" type="number" value="14" oninput="update_text_font_size();"/>
+        </div>
+        <div class="col-auto pro-version-component">
+          <label for="line-height-input" class="col-form-label">Content Line Height</label>
+        </div>
+        <div class="col-auto pro-version-component">
+          <input id="line-height-input" class="form-control" type="number" step="0.1" value="1.17" oninput="update_line_height();"/>
+        </div>
+        <div class="col-auto pro-version-component">
+          <label for="paragraph-margin-input" class="col-form-label">Paragraph Margin</label>
+        </div>
+        <div class="col-auto pro-version-component">
+          <input id="paragraph-margin-input" class="form-control" type="number" value="6" oninput="update_paragraph_margin();"/>
+        </div>
+        <div class="col-auto basic-version-component">
+          <label for="compact-mode-input" class="col-form-label">Compact Mode</label>
+        </div>
+        <div class="col-auto basic-version-component">
+          <input class="form-check-input" id="compact-mode-input" type="checkbox" unchecked onchange="document.getElementById('line-height-input').value = (document.getElementById('compact-mode-input').checked && 1 || 1.17); update_line_height(); document.getElementById('paragraph-margin-input').value = (document.getElementById('compact-mode-input').checked && 2 || 10); update_paragraph_margin()"/>
+        </div>
+        <div class="col-auto">
+          <label for="box-width-input" class="col-form-label">Hint Box Width</label>
+        </div>
+        <div class="col-auto">
+          <input id="box-width-input" class="form-control" type="number" value="200" oninput="update_hint_box_width();"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="part-question-include-input" class="col-form-label">Include Question Part</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-check-input" id="part-question-include-input" type="checkbox" checked onchange="set_visible('part-question-include-input', 'part-question');"/>
+        </div>
+        <div class="col-auto">
+          <label for="break-hq-input" class="col-form-label">Page Break(s) for Question</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-control" id="break-hq-input" type="number" value="0" oninput="set_page_break('break-hq-input', 'inter-h-q');"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="part-full-answer-include-input" class="col-form-label">Include Full Answer Part</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-check-input" id="part-full-answer-include-input" type="checkbox" checked onchange="set_visible('part-full-answer-include-input', 'part-full-answer');"/>
+        </div>
+        <div class="col-auto">
+          <label for="break-qa-input" class="col-form-label">Page Break(s) for Full Answer</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-control" id="break-qa-input" type="number" value="1" oninput="set_page_break('break-qa-input', 'inter-q-fa');"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="part-simple-answer-include-input" class="col-form-label">Include Simple Answer Part</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-check-input" id="part-simple-answer-include-input" type="checkbox" checked onchange="set_visible('part-simple-answer-include-input', 'part-simple-answer');"/>
+        </div>
+        <div class="col-auto">
+          <label for="break-aa-input" class="col-form-label">Page Break(s) for Simple Answer</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-control" id="break-aa-input" type="number" value="1" oninput="set_page_break('break-aa-input', 'inter-fa-sa');"/>
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary" onclick="window.print();" id="print-button">
+        Print The Quiz
+      </button>
+    </div>
+
+    <!-- start filling -->
+
+    <div id="paper">
+      <div id="inter-h-q"></div>
+      <h1 id="title-text">
+        高級單字 L6U45 首捲挖啥物
+      </h1>
+      <div id="part-question">
+        <h3>
+          題目
+        </h3>
+        <div class="b5-port-col">
+          <div class="box normal-text" id="hint-box">
+            
+          </div>
+          <p></p>
+<div class="no-print basic-version-component"><h4> \(f(x)\) 新增功能提示</h4> 響應 SDG 12.5 ，已預設勾選上方列印排版控制版面第二行第二項 <i>Compact Mode</i> 以減省紙張用量。
+您可以取消勾選增加版面舒適度。</div>
+<p></p>
+<p>The voices of the <span class="q-inplace"><span class="qi-inplace">(1)</span><span class="q-inplace-slot">d                        ts</span></span> grew louder and louder. 這些異議人士的聲音愈來愈大。</p>
+<p>I tried to <span class="q-inplace"><span class="qi-inplace">(2)</span><span class="q-inplace-slot">d                    e</span></span> her <span class="q-inplace"><span class="qi-inplace">(3)</span><span class="q-inplace-slot">                  </span></span> leaving. 我努力勸她不要離開。</p>
+<p>Don’t <span class="q-inplace"><span class="qi-inplace">(4)</span><span class="q-inplace-slot">d                    t</span></span> my attention. 不要分散我的注意力。</p>
+<p>The noise in the street <span class="q-inplace"><span class="qi-inplace">(5)</span><span class="q-inplace-slot">d                          ted</span></span> me <span class="q-inplace"><span class="qi-inplace">(6)</span><span class="q-inplace-slot">                  </span></span> my homework. 街上的噪音讓我不能專心做功課。</p>
+<p>There are too many <span class="q-inplace"><span class="qi-inplace">(7)</span><span class="q-inplace-slot">d                              ns</span></span> here. I can’t <span class="q-inplace"><span class="qi-inplace">(8)</span><span class="q-inplace-slot">co                              e</span></span>. 這兒有太多令人分心的事，我無法專心。</p>
+<p>I <span class="q-inplace"><span class="qi-inplace">(9)</span><span class="q-inplace-slot">d                    t</span></span> his sources. 我不信任他的消息來源。</p>
+<p>He has <mark>a <span class="q-inplace"><span class="qi-inplace">(10)</span><span class="q-inplace-slot">d                    t</span></span> <span class="q-inplace"><span class="qi-inplace">(11)</span><span class="q-inplace-slot">                  </span></span></mark> the media. 他不信任媒體。</p>
+<p>Most of the time, the weather is <span class="q-inplace"><span class="qi-inplace">(12)</span><span class="q-inplace-slot">d                  y</span></span> <span class="q-inplace"><span class="qi-inplace">(13)</span><span class="q-inplace-slot">                  </span></span> England. 在英國，大部分的時候天氣都很陰沉。</p>
+<p>It’s <span class="q-inplace"><span class="qi-inplace">(14)</span><span class="q-inplace-slot">d                  y</span></span> <span class="q-inplace"><span class="qi-inplace">(15)</span><span class="q-inplace-slot">                  </span></span> work <span class="q-inplace"><span class="qi-inplace">(16)</span><span class="q-inplace-slot">                  </span></span> the <span class="q-inplace"><span class="qi-inplace">(17)</span><span class="q-inplace-slot">a                      y</span></span> line. 在裝配線上工作是無聊乏味的。</p>
+<p>He was recommended a high <span class="q-inplace"><span class="qi-inplace">(18)</span><span class="q-inplace-slot">d                  e</span></span> <span class="q-inplace"><span class="qi-inplace">(19)</span><span class="q-inplace-slot">                  </span></span> <span class="q-inplace"><span class="qi-inplace">(20)</span><span class="q-inplace-slot">m                      e</span></span>. 他被建議服用高劑量的瑪啡。</p>
+<p><span class="q-inplace"><span class="qi-inplace">(21)</span><span class="q-inplace-slot">D                   c</span></span> measures must be taken to avoid environmental <span class="q-inplace"><span class="qi-inplace">(22)</span><span class="q-inplace-slot">ca                              e</span></span>. 必須採取激烈的措施才能避免環境的浩劫。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(23)</span><span class="q-inplace-slot">e                       e</span></span> <span class="q-inplace"><span class="qi-inplace">(24)</span><span class="q-inplace-slot">                  </span></span> land is the first step of farming. 圍地是農耕的第一步。</p>
+<p>This year a severe <span class="q-inplace"><span class="qi-inplace">(25)</span><span class="q-inplace-slot">d                   t</span></span> <span class="q-inplace"><span class="qi-inplace">(26)</span><span class="q-inplace-slot">r                  d</span></span> the <span class="q-inplace"><span class="qi-inplace">(27)</span><span class="q-inplace-slot">c                  s</span></span>. 今年一場嚴重旱災毀了農作物。</p>
+<p>We are <span class="q-inplace"><span class="qi-inplace">(28)</span><span class="q-inplace-slot">d                  s</span></span> <span class="q-inplace"><span class="qi-inplace">(29)</span><span class="q-inplace-slot">                  </span></span> his <span class="q-inplace"><span class="qi-inplace">(30)</span><span class="q-inplace-slot">h                   y</span></span>. 我們對他的誠實存疑。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(31)</span><span class="q-inplace-slot">as                           n</span></span> that war brings space is highly <span class="q-inplace"><span class="qi-inplace">(32)</span><span class="q-inplace-slot">d                  s</span></span>. 戰爭可帶來和平的這種假設令人十分質疑。</p>
+<p>The terrorists <span class="q-inplace"><span class="qi-inplace">(33)</span><span class="q-inplace-slot">b                  </span></span> <span class="q-inplace"><span class="qi-inplace">(34)</span><span class="q-inplace-slot">                  </span></span> the train station <span class="q-inplace"><span class="qi-inplace">(35)</span><span class="q-inplace-slot">                  </span></span> <span class="q-inplace"><span class="qi-inplace">(36)</span><span class="q-inplace-slot">d                      e</span></span>. 恐怖分子用炸藥炸毀火車站。</p>
+<p>Chicken <span class="q-inplace"><span class="qi-inplace">(37)</span><span class="q-inplace-slot">p                  </span></span> is an <span class="q-inplace"><span class="qi-inplace">(38)</span><span class="q-inplace-slot">e                    c</span></span> disease. 水痘是一種流行性疾病。</p>
+<p>Bird flu is a severe <span class="q-inplace"><span class="qi-inplace">(39)</span><span class="q-inplace-slot">e                    c</span></span>. 禽流感是很嚴重的流行疾病。</p>
+<p>How do I know if I <mark>am <span class="q-inplace"><span class="qi-inplace">(40)</span><span class="q-inplace-slot">e                  e</span></span> <span class="q-inplace"><span class="qi-inplace">(41)</span><span class="q-inplace-slot">                  </span></span></mark> a <span class="q-inplace"><span class="qi-inplace">(42)</span><span class="q-inplace-slot">sc                           p</span></span>? 我如何才能得知我是否有資格可以申請獎學金呢？</p>
+<p>We <span class="q-inplace"><span class="qi-inplace">(43)</span><span class="q-inplace-slot">e                       ked</span></span> <span class="q-inplace"><span class="qi-inplace">(44)</span><span class="q-inplace-slot">                  </span></span> a ship at Vancouver for Hawaii. 我們從溫哥華搭船前往夏威夷。</p>
+<p>We’re <span class="q-inplace"><span class="qi-inplace">(45)</span><span class="q-inplace-slot">e                        king</span></span> <span class="q-inplace"><span class="qi-inplace">(46)</span><span class="q-inplace-slot">                  </span></span> a new project this year. 我們今年要著手一項新計畫。</p>
+<p>Many Taiwanese want to <span class="q-inplace"><span class="qi-inplace">(47)</span><span class="q-inplace-slot">e                      e</span></span> <span class="q-inplace"><span class="qi-inplace">(48)</span><span class="q-inplace-slot">                  </span></span> Canada. 許多台灣人想要移民到加拿大。</p>
+<p>Many <span class="q-inplace"><span class="qi-inplace">(49)</span><span class="q-inplace-slot">e                        ts</span></span> leave their own countries for a better life. 許多移民離開祖國是為了尋求更好的生活。</p>
+<p><span class="q-inplace"><span class="qi-inplace">(50)</span><span class="q-inplace-slot">E                           n</span></span> <span class="q-inplace"><span class="qi-inplace">(51)</span><span class="q-inplace-slot">                  </span></span> Ireland to American <span class="q-inplace"><span class="qi-inplace">(52)</span><span class="q-inplace-slot">c                   s</span></span> began as early as 1662. 從愛爾蘭移居到美洲殖民地的情形早在一六六二年就開始了。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(53)</span><span class="q-inplace-slot">c                  s</span></span> are being <span class="q-inplace"><span class="qi-inplace">(54)</span><span class="q-inplace-slot">co                          y</span></span> <span class="q-inplace"><span class="qi-inplace">(55)</span><span class="q-inplace-slot">e                  ed</span></span> <span class="q-inplace"><span class="qi-inplace">(56)</span><span class="q-inplace-slot">                  </span></span> waves. 懸崖不斷地被波浪侵蝕。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(57)</span><span class="q-inplace-slot">e                  n</span></span> <span class="q-inplace"><span class="qi-inplace">(58)</span><span class="q-inplace-slot">                  </span></span> the waves has gradually <span class="q-inplace"><span class="qi-inplace">(59)</span><span class="q-inplace-slot">un                           d</span></span> the <span class="q-inplace"><span class="qi-inplace">(60)</span><span class="q-inplace-slot">fo                          n</span></span> <span class="q-inplace"><span class="qi-inplace">(61)</span><span class="q-inplace-slot">                  </span></span> the bridge. 海浪的侵噬已漸漸損壞了橋樑的根基。</p>
+<p>Oil prices are <span class="q-inplace"><span class="qi-inplace">(62)</span><span class="q-inplace-slot">e                        ing</span></span> again. 油價又在逐步上升了。</p>
+<p>As the war <span class="q-inplace"><span class="qi-inplace">(63)</span><span class="q-inplace-slot">e                       es</span></span>, there are more and more <span class="q-inplace"><span class="qi-inplace">(64)</span><span class="q-inplace-slot">ca                        s</span></span>. 隨著戰爭的逐步擴大，傷亡也愈來愈慘重。</p>
+<p>Muslims believe <mark><span class="q-inplace"><span class="qi-inplace">(65)</span><span class="q-inplace-slot">                  </span></span> the <span class="q-inplace"><span class="qi-inplace">(66)</span><span class="q-inplace-slot">e                    y</span></span> <span class="q-inplace"><span class="qi-inplace">(67)</span><span class="q-inplace-slot">                  </span></span></mark> the soul. 回教徒相信靈魂不朽。</p>
+<p>I will love you for (all) <span class="q-inplace"><span class="qi-inplace">(68)</span><span class="q-inplace-slot">e                    y</span></span>. I will never change. 我會永遠愛你，絕不改變。</p>
+<p>When the alarm sounded, all students were <span class="q-inplace"><span class="qi-inplace">(69)</span><span class="q-inplace-slot">e                        ed</span></span> <span class="q-inplace"><span class="qi-inplace">(70)</span><span class="q-inplace-slot">im                            y</span></span>. 當警報響起時，所有的學生立刻被疏散。</p>
+<p>Because of the <span class="q-inplace"><span class="qi-inplace">(71)</span><span class="q-inplace-slot">im                        e</span></span> <span class="q-inplace"><span class="qi-inplace">(72)</span><span class="q-inplace-slot">e                          n</span></span>, no one was hurt. 由於立即撤離的關係，沒有人受傷。</p>
+<p>It is sometimes very dangerous to keep <span class="q-inplace"><span class="qi-inplace">(73)</span><span class="q-inplace-slot">e                  c</span></span> animals as pets. 有時候時豢養珍奇的外國動物作為寵物是相當危險的。</p>
+<p>She loves eating out <span class="q-inplace"><span class="qi-inplace">(74)</span><span class="q-inplace-slot">                  </span></span> <span class="q-inplace"><span class="qi-inplace">(75)</span><span class="q-inplace-slot">e                  c</span></span> restaurants. 她喜歡在有異國風情的餐廳用餐。</p>
+<p>I read an <span class="q-inplace"><span class="qi-inplace">(76)</span><span class="q-inplace-slot">e                   t</span></span> <span class="q-inplace"><span class="qi-inplace">(77)</span><span class="q-inplace-slot">                  </span></span> Steven King’s latest novel in the magazine. 我在雜誌裡讀到史蒂芬金的最新小說的一段摘錄。</p>
+<p>The following <span class="q-inplace"><span class="qi-inplace">(78)</span><span class="q-inplace-slot">na                       e</span></span> is <span class="q-inplace"><span class="qi-inplace">(79)</span><span class="q-inplace-slot">e                        ted</span></span> <span class="q-inplace"><span class="qi-inplace">(80)</span><span class="q-inplace-slot">                  </span></span> Steven King’s latest novel. 以下這段敘述是從史蒂芬金的最新小說中摘錄出來的。</p>
+<p>Every student has to participate <span class="q-inplace"><span class="qi-inplace">(81)</span><span class="q-inplace-slot">                  </span></span> <span class="q-inplace"><span class="qi-inplace">(82)</span><span class="q-inplace-slot">e                                      r</span></span> activities. 每個學生都必須參加課外活動。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(83)</span><span class="q-inplace-slot">p                  </span></span>-war <span class="q-inplace"><span class="qi-inplace">(84)</span><span class="q-inplace-slot">f                  n</span></span> within the party <span class="q-inplace"><span class="qi-inplace">(85)</span><span class="q-inplace-slot">co                          d</span></span> any attempt <span class="q-inplace"><span class="qi-inplace">(86)</span><span class="q-inplace-slot">                  </span></span> <span class="q-inplace"><span class="qi-inplace">(87)</span><span class="q-inplace-slot">ne                           n</span></span>. 黨中的主戰派譴責任何想要協商的意圖。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(88)</span><span class="q-inplace-slot">ca                          t</span></span> is <span class="q-inplace"><span class="qi-inplace">(89)</span><span class="q-inplace-slot">f                  ing</span></span> <span class="q-inplace"><span class="qi-inplace">(90)</span><span class="q-inplace-slot">                  </span></span> the wind. 燭火在風中搖曳。</p>
+<p>The dark field is dotted <mark><span class="q-inplace"><span class="qi-inplace">(91)</span><span class="q-inplace-slot">                  </span></span> the <span class="q-inplace"><span class="qi-inplace">(92)</span><span class="q-inplace-slot">f                  e</span></span> <span class="q-inplace"><span class="qi-inplace">(93)</span><span class="q-inplace-slot">                  </span></span></mark> the <span class="q-inplace"><span class="qi-inplace">(94)</span><span class="q-inplace-slot">fi                    s</span></span>. 夜晚的田野點綴著螢火蟲一閃一閃的光芒。</p>
+<p>She has long red <span class="q-inplace"><span class="qi-inplace">(95)</span><span class="q-inplace-slot">f                          ls</span></span>. 她有長長的紅指甲。</p>
+<p>She used her <span class="q-inplace"><span class="qi-inplace">(96)</span><span class="q-inplace-slot">f                        ps</span></span> <span class="q-inplace"><span class="qi-inplace">(97)</span><span class="q-inplace-slot">                  </span></span> <span class="q-inplace"><span class="qi-inplace">(98)</span><span class="q-inplace-slot">w                  </span></span> the tears from Melissa’s face. 她用她的指尖擦掉梅麗莎臉上的淚水。</p>
+<p>She sits on the bed <span class="q-inplace"><span class="qi-inplace">(99)</span><span class="q-inplace-slot">po                    g</span></span> her <span class="q-inplace"><span class="qi-inplace">(100)</span><span class="q-inplace-slot">t                   ls</span></span>. 她坐在床上塗腳指甲油。</p>
+<p>His <span class="q-inplace"><span class="qi-inplace">(101)</span><span class="q-inplace-slot">f                              ts</span></span> were all over the <span class="q-inplace"><span class="qi-inplace">(102)</span><span class="q-inplace-slot">p                  l</span></span>. 這把手槍上滿是他的指紋。</p>
+<p>Derek noticed wet <span class="q-inplace"><span class="qi-inplace">(103)</span><span class="q-inplace-slot">f                          ts</span></span> <span class="q-inplace"><span class="qi-inplace">(104)</span><span class="q-inplace-slot">                  </span></span> the floor. 德瑞克注意到地板上的溼腳印。</p>
+<p>The candles <span class="q-inplace"><span class="qi-inplace">(105)</span><span class="q-inplace-slot">f                      red</span></span> <span class="q-inplace"><span class="qi-inplace">(106)</span><span class="q-inplace-slot">                  </span></span> the <span class="q-inplace"><span class="qi-inplace">(107)</span><span class="q-inplace-slot">d                      s</span></span>. 蠟燭在黑暗中明滅不定。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(108)</span><span class="q-inplace-slot">f                  r</span></span> <span class="q-inplace"><span class="qi-inplace">(109)</span><span class="q-inplace-slot">                  </span></span> the will-o’-the-<span class="q-inplace"><span class="qi-inplace">(110)</span><span class="q-inplace-slot">w                  </span></span> added some ghostly <span class="q-inplace"><span class="qi-inplace">(111)</span><span class="q-inplace-slot">at                            e</span></span>. 閃爍的鬼火增添了幾許鬼怪的氣氛。</p>
+<p>When their team won, people cheered and <span class="q-inplace"><span class="qi-inplace">(112)</span><span class="q-inplace-slot">f                  g</span></span> their hats <span class="q-inplace"><span class="qi-inplace">(113)</span><span class="q-inplace-slot">                  </span></span> the air. 當他們的隊伍勝利時，人們歡呼著，並將帽子抛向空中。</p>
+<p>Keep an eye on the notice boards <span class="q-inplace"><span class="qi-inplace">(114)</span><span class="q-inplace-slot">                  </span></span> <span class="q-inplace"><span class="qi-inplace">(115)</span><span class="q-inplace-slot">f                              g</span></span> events. 注意公告欄上即將來臨的活動。</p>
+<p>Why have you <span class="q-inplace"><span class="qi-inplace">(116)</span><span class="q-inplace-slot">f                      n</span></span> me? 你為何棄我於不顧呢？</p>
+<p>It’s difficult for him to <span class="q-inplace"><span class="qi-inplace">(117)</span><span class="q-inplace-slot">f                   e</span></span> drinking <span class="q-inplace"><span class="qi-inplace">(118)</span><span class="q-inplace-slot">l                  r</span></span>. 要他不再喝酒是很困難的。</p>
+<p>He’s been charged with tax <span class="q-inplace"><span class="qi-inplace">(119)</span><span class="q-inplace-slot">f                  d</span></span>. 他被控税務詐欺。</p>
+<p>Each <span class="q-inplace"><span class="qi-inplace">(120)</span><span class="q-inplace-slot">g                  y</span></span> contains billions of stars. 每個星系都包含數十億個恆星。</p>
+<p>How large is our <span class="q-inplace"><span class="qi-inplace">(121)</span><span class="q-inplace-slot">G                  y</span></span>? 我們的銀河系有多大？</p>
+<p>All the <span class="q-inplace"><span class="qi-inplace">(122)</span><span class="q-inplace-slot">co                        s</span></span> <mark>are <span class="q-inplace"><span class="qi-inplace">(123)</span><span class="q-inplace-slot">f                      ied</span></span> <span class="q-inplace"><span class="qi-inplace">(124)</span><span class="q-inplace-slot">                  </span></span></mark> prevent <span class="q-inplace"><span class="qi-inplace">(125)</span><span class="q-inplace-slot">st                           s</span></span> <span class="q-inplace"><span class="qi-inplace">(126)</span><span class="q-inplace-slot">                  </span></span> getting <span class="q-inplace"><span class="qi-inplace">(127)</span><span class="q-inplace-slot">a                  e</span></span>. 所有的海岸線都有設防，以防止偷渡客上岸。</p>
+<p>My teacher’s encouragement really <span class="q-inplace"><span class="qi-inplace">(128)</span><span class="q-inplace-slot">f                      ied</span></span> my spirit. 老師的鼓勵真的使我勇氣倍增。</p>
+<p>It <mark>is <span class="q-inplace"><span class="qi-inplace">(129)</span><span class="q-inplace-slot">u                  e</span></span> <span class="q-inplace"><span class="qi-inplace">(130)</span><span class="q-inplace-slot">                  </span></span></mark> let your children use <span class="q-inplace"><span class="qi-inplace">(131)</span><span class="q-inplace-slot">g                        e</span></span>. 讓小孩使用玻璃器皿是不智的。</p>
+<p><span class="q-inplace"><span class="qi-inplace">(132)</span><span class="q-inplace-slot">S                           e</span></span> is much more expensive than <span class="q-inplace"><span class="qi-inplace">(133)</span><span class="q-inplace-slot">i                      e</span></span>. 銀器比鐵器貴得多了。</p>
+<p>Studies show that <span class="q-inplace"><span class="qi-inplace">(134)</span><span class="q-inplace-slot">co                          s</span></span> noise <span class="q-inplace"><span class="qi-inplace">(135)</span><span class="q-inplace-slot">f                  </span></span> our nerves. 研究顯示，持續的噪音會使我們的神經煩躁不安。</p>
+<p>Don’t <span class="q-inplace"><span class="qi-inplace">(136)</span><span class="q-inplace-slot">f                  </span></span> <span class="q-inplace"><span class="qi-inplace">(137)</span><span class="q-inplace-slot">                  </span></span> something that hasn’t happened yet. 不要為那些還沒有發生的事煩惱。</p>
+<p>When it is winter in the northern <span class="q-inplace"><span class="qi-inplace">(138)</span><span class="q-inplace-slot">h                           e</span></span>, it is summer in the southern <span class="q-inplace"><span class="qi-inplace">(139)</span><span class="q-inplace-slot">h                           e</span></span>. 北半球冬天的時候，南半球是夏天。</p>
+<p>The left and right <span class="q-inplace"><span class="qi-inplace">(140)</span><span class="q-inplace-slot">h                              es</span></span> <span class="q-inplace"><span class="qi-inplace">(141)</span><span class="q-inplace-slot">                  </span></span> the brain are responsible for different functions. 左右腦掌管不同的功能。</p>
+<p>It <mark>is <span class="q-inplace"><span class="qi-inplace">(142)</span><span class="q-inplace-slot">i                          e</span></span> <span class="q-inplace"><span class="qi-inplace">(143)</span><span class="q-inplace-slot">                  </span></span></mark> <span class="q-inplace"><span class="qi-inplace">(144)</span><span class="q-inplace-slot">es                      h</span></span> a <span class="q-inplace"><span class="qi-inplace">(145)</span><span class="q-inplace-slot">s                  e</span></span> environment for our children. 我們急需為孩子們建立一個安全的環境。</p>
+<p>“Stand up” is an <span class="q-inplace"><span class="qi-inplace">(146)</span><span class="q-inplace-slot">i                          e</span></span> sentence. 「站起來」是個祈使句。</p>
+<p>The crowd <span class="q-inplace"><span class="qi-inplace">(147)</span><span class="q-inplace-slot">r                  d</span></span> <span class="q-inplace"><span class="qi-inplace">(148)</span><span class="q-inplace-slot">                  </span></span> <span class="q-inplace"><span class="qi-inplace">(149)</span><span class="q-inplace-slot">e                   y</span></span> <span class="q-inplace"><span class="qi-inplace">(150)</span><span class="q-inplace-slot">                  </span></span> the entrance of the singer. 當歌手進場的時候，全場觀眾高興地大吼。</p>
+<p>When you <span class="q-inplace"><span class="qi-inplace">(151)</span><span class="q-inplace-slot">                  </span></span> <span class="q-inplace"><span class="qi-inplace">(152)</span><span class="q-inplace-slot">e                   y</span></span>, your body temperature rises. 當你吃搖頭丸時，你的體溫會上升。</p>
+<p><span class="q-inplace"><span class="qi-inplace">(153)</span><span class="q-inplace-slot">H                  n</span></span> is <span class="q-inplace"><span class="qi-inplace">(154)</span><span class="q-inplace-slot">o                    d</span></span> <span class="q-inplace"><span class="qi-inplace">(155)</span><span class="q-inplace-slot">                  </span></span> <span class="q-inplace"><span class="qi-inplace">(156)</span><span class="q-inplace-slot">m                      e</span></span> and is <span class="q-inplace"><span class="qi-inplace">(157)</span><span class="q-inplace-slot">ex                        y</span></span> <span class="q-inplace"><span class="qi-inplace">(158)</span><span class="q-inplace-slot">ad                      e</span></span>. 海洛因是由嗎啡提煉出來的，而且極易成癮。</p>
+<p>Drugs, like <span class="q-inplace"><span class="qi-inplace">(159)</span><span class="q-inplace-slot">c                  e</span></span>, <span class="q-inplace"><span class="qi-inplace">(160)</span><span class="q-inplace-slot">o                  m</span></span> and <span class="q-inplace"><span class="qi-inplace">(161)</span><span class="q-inplace-slot">a                               e</span></span>, do great harm to our health. 像古柯鹼、鴉片和安非他命之類的毒品對健康造成極大的損害。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(162)</span><span class="q-inplace-slot">i                    g</span></span> <span class="q-inplace"><span class="qi-inplace">(163)</span><span class="q-inplace-slot">p                  e</span></span> is <span class="q-inplace"><span class="qi-inplace">(164)</span><span class="q-inplace-slot">br                               g</span></span>. 這宏偉的皇宫美得讓人說不出話來。</p>
+<p>Male <span class="q-inplace"><span class="qi-inplace">(165)</span><span class="q-inplace-slot">h                    e</span></span> is responsible for maintaining male <span class="q-inplace"><span class="qi-inplace">(166)</span><span class="q-inplace-slot">ch                                      s</span></span>. 男性荷爾蒙負責維持男性特徵。</p>
+<p>Most Americans buy houses or cars <span class="q-inplace"><span class="qi-inplace">(167)</span><span class="q-inplace-slot">                  </span></span> <span class="q-inplace"><span class="qi-inplace">(168)</span><span class="q-inplace-slot">i                              ts</span></span>. 大部分的美國人都是以分期付款的方式購買房子或汽車。</p>
+<p>Have you read the final <span class="q-inplace"><span class="qi-inplace">(169)</span><span class="q-inplace-slot">i                           t</span></span> <span class="q-inplace"><span class="qi-inplace">(170)</span><span class="q-inplace-slot">                  </span></span> the <span class="q-inplace"><span class="qi-inplace">(171)</span><span class="q-inplace-slot">s                  s</span></span>? 你讀過連載的最後一回了嗎？</p>
+
+        </div>
+      </div>
+      <div id="part-full-answer">
+        <div id="inter-q-fa"></div>
+        <h3>
+          詳解
+        </h3>
+        <div class="b5-port-col">
+          <p></p>
+<div class="no-print basic-version-component"><h4> \(f(x)\) 新增功能提示</h4> 響應 SDG 12.5 ，已預設勾選上方列印排版控制版面第二行第二項 <i>Compact Mode</i> 以減省紙張用量。
+您可以取消勾選增加版面舒適度。</div>
+<p></p>
+<p>The voices of the <span class="q-inplace"><span class="qi-inplace">(1)</span><span class="q-inplace-slot"><span class="a-inplace-space">dissidents</span></span></span> grew louder and louder. 這些異議人士的聲音愈來愈大。</p>
+<p>I tried to <span class="q-inplace"><span class="qi-inplace">(2)</span><span class="q-inplace-slot"><span class="a-inplace-space">dissuade</span></span></span> her <span class="q-inplace"><span class="qi-inplace">(3)</span><span class="q-inplace-slot"><span class="a-inplace-space">from</span></span></span> leaving. 我努力勸她不要離開。</p>
+<p>Don’t <span class="q-inplace"><span class="qi-inplace">(4)</span><span class="q-inplace-slot"><span class="a-inplace-space">distract</span></span></span> my attention. 不要分散我的注意力。</p>
+<p>The noise in the street <span class="q-inplace"><span class="qi-inplace">(5)</span><span class="q-inplace-slot"><span class="a-inplace-space">distracted</span></span></span> me <span class="q-inplace"><span class="qi-inplace">(6)</span><span class="q-inplace-slot"><span class="a-inplace-space">from</span></span></span> my homework. 街上的噪音讓我不能專心做功課。</p>
+<p>There are too many <span class="q-inplace"><span class="qi-inplace">(7)</span><span class="q-inplace-slot"><span class="a-inplace-space">distractions</span></span></span> here. I can’t <span class="q-inplace"><span class="qi-inplace">(8)</span><span class="q-inplace-slot"><span class="a-inplace-space">concentrate</span></span></span>. 這兒有太多令人分心的事，我無法專心。</p>
+<p>I <span class="q-inplace"><span class="qi-inplace">(9)</span><span class="q-inplace-slot"><span class="a-inplace-space">distrust</span></span></span> his sources. 我不信任他的消息來源。</p>
+<p>He has <mark>a <span class="q-inplace"><span class="qi-inplace">(10)</span><span class="q-inplace-slot"><span class="a-inplace-space">distrust</span></span></span> <span class="q-inplace"><span class="qi-inplace">(11)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span></mark> the media. 他不信任媒體。</p>
+<p>Most of the time, the weather is <span class="q-inplace"><span class="qi-inplace">(12)</span><span class="q-inplace-slot"><span class="a-inplace-space">dreary</span></span></span> <span class="q-inplace"><span class="qi-inplace">(13)</span><span class="q-inplace-slot"><span class="a-inplace-space">in</span></span></span> England. 在英國，大部分的時候天氣都很陰沉。</p>
+<p>It’s <span class="q-inplace"><span class="qi-inplace">(14)</span><span class="q-inplace-slot"><span class="a-inplace-space">dreary</span></span></span> <span class="q-inplace"><span class="qi-inplace">(15)</span><span class="q-inplace-slot"><span class="a-inplace-space">to</span></span></span> work <span class="q-inplace"><span class="qi-inplace">(16)</span><span class="q-inplace-slot"><span class="a-inplace-space">on</span></span></span> the <span class="q-inplace"><span class="qi-inplace">(17)</span><span class="q-inplace-slot"><span class="a-inplace-space">assembly</span></span></span> line. 在裝配線上工作是無聊乏味的。</p>
+<p>He was recommended a high <span class="q-inplace"><span class="qi-inplace">(18)</span><span class="q-inplace-slot"><span class="a-inplace-space">dosage</span></span></span> <span class="q-inplace"><span class="qi-inplace">(19)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span> <span class="q-inplace"><span class="qi-inplace">(20)</span><span class="q-inplace-slot"><span class="a-inplace-space">morphine</span></span></span>. 他被建議服用高劑量的瑪啡。</p>
+<p><span class="q-inplace"><span class="qi-inplace">(21)</span><span class="q-inplace-slot"><span class="a-inplace-space">Drastic</span></span></span> measures must be taken to avoid environmental <span class="q-inplace"><span class="qi-inplace">(22)</span><span class="q-inplace-slot"><span class="a-inplace-space">catastrophe</span></span></span>. 必須採取激烈的措施才能避免環境的浩劫。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(23)</span><span class="q-inplace-slot"><span class="a-inplace-space">enclosure</span></span></span> <span class="q-inplace"><span class="qi-inplace">(24)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span> land is the first step of farming. 圍地是農耕的第一步。</p>
+<p>This year a severe <span class="q-inplace"><span class="qi-inplace">(25)</span><span class="q-inplace-slot"><span class="a-inplace-space">drought</span></span></span> <span class="q-inplace"><span class="qi-inplace">(26)</span><span class="q-inplace-slot"><span class="a-inplace-space">ruined</span></span></span> the <span class="q-inplace"><span class="qi-inplace">(27)</span><span class="q-inplace-slot"><span class="a-inplace-space">crops</span></span></span>. 今年一場嚴重旱災毀了農作物。</p>
+<p>We are <span class="q-inplace"><span class="qi-inplace">(28)</span><span class="q-inplace-slot"><span class="a-inplace-space">dubious</span></span></span> <span class="q-inplace"><span class="qi-inplace">(29)</span><span class="q-inplace-slot"><span class="a-inplace-space">about</span></span></span> his <span class="q-inplace"><span class="qi-inplace">(30)</span><span class="q-inplace-slot"><span class="a-inplace-space">honesty</span></span></span>. 我們對他的誠實存疑。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(31)</span><span class="q-inplace-slot"><span class="a-inplace-space">assumption</span></span></span> that war brings space is highly <span class="q-inplace"><span class="qi-inplace">(32)</span><span class="q-inplace-slot"><span class="a-inplace-space">dubious</span></span></span>. 戰爭可帶來和平的這種假設令人十分質疑。</p>
+<p>The terrorists <span class="q-inplace"><span class="qi-inplace">(33)</span><span class="q-inplace-slot"><span class="a-inplace-space">blew</span></span></span> <span class="q-inplace"><span class="qi-inplace">(34)</span><span class="q-inplace-slot"><span class="a-inplace-space">up</span></span></span> the train station <span class="q-inplace"><span class="qi-inplace">(35)</span><span class="q-inplace-slot"><span class="a-inplace-space">with</span></span></span> <span class="q-inplace"><span class="qi-inplace">(36)</span><span class="q-inplace-slot"><span class="a-inplace-space">dynamite</span></span></span>. 恐怖分子用炸藥炸毀火車站。</p>
+<p>Chicken <span class="q-inplace"><span class="qi-inplace">(37)</span><span class="q-inplace-slot"><span class="a-inplace-space">pox</span></span></span> is an <span class="q-inplace"><span class="qi-inplace">(38)</span><span class="q-inplace-slot"><span class="a-inplace-space">epidemic</span></span></span> disease. 水痘是一種流行性疾病。</p>
+<p>Bird flu is a severe <span class="q-inplace"><span class="qi-inplace">(39)</span><span class="q-inplace-slot"><span class="a-inplace-space">epidemic</span></span></span>. 禽流感是很嚴重的流行疾病。</p>
+<p>How do I know if I <mark>am <span class="q-inplace"><span class="qi-inplace">(40)</span><span class="q-inplace-slot"><span class="a-inplace-space">eligible</span></span></span> <span class="q-inplace"><span class="qi-inplace">(41)</span><span class="q-inplace-slot"><span class="a-inplace-space">for</span></span></span></mark> a <span class="q-inplace"><span class="qi-inplace">(42)</span><span class="q-inplace-slot"><span class="a-inplace-space">scholarship</span></span></span>? 我如何才能得知我是否有資格可以申請獎學金呢？</p>
+<p>We <span class="q-inplace"><span class="qi-inplace">(43)</span><span class="q-inplace-slot"><span class="a-inplace-space">embarked</span></span></span> <span class="q-inplace"><span class="qi-inplace">(44)</span><span class="q-inplace-slot"><span class="a-inplace-space">on</span></span></span> a ship at Vancouver for Hawaii. 我們從溫哥華搭船前往夏威夷。</p>
+<p>We’re <span class="q-inplace"><span class="qi-inplace">(45)</span><span class="q-inplace-slot"><span class="a-inplace-space">embarking</span></span></span> <span class="q-inplace"><span class="qi-inplace">(46)</span><span class="q-inplace-slot"><span class="a-inplace-space">upon</span></span></span> a new project this year. 我們今年要著手一項新計畫。</p>
+<p>Many Taiwanese want to <span class="q-inplace"><span class="qi-inplace">(47)</span><span class="q-inplace-slot"><span class="a-inplace-space">emigrate</span></span></span> <span class="q-inplace"><span class="qi-inplace">(48)</span><span class="q-inplace-slot"><span class="a-inplace-space">to</span></span></span> Canada. 許多台灣人想要移民到加拿大。</p>
+<p>Many <span class="q-inplace"><span class="qi-inplace">(49)</span><span class="q-inplace-slot"><span class="a-inplace-space">emigrants</span></span></span> leave their own countries for a better life. 許多移民離開祖國是為了尋求更好的生活。</p>
+<p><span class="q-inplace"><span class="qi-inplace">(50)</span><span class="q-inplace-slot"><span class="a-inplace-space">Emigration</span></span></span> <span class="q-inplace"><span class="qi-inplace">(51)</span><span class="q-inplace-slot"><span class="a-inplace-space">from</span></span></span> Ireland to American <span class="q-inplace"><span class="qi-inplace">(52)</span><span class="q-inplace-slot"><span class="a-inplace-space">colonies</span></span></span> began as early as 1662. 從愛爾蘭移居到美洲殖民地的情形早在一六六二年就開始了。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(53)</span><span class="q-inplace-slot"><span class="a-inplace-space">cliffs</span></span></span> are being <span class="q-inplace"><span class="qi-inplace">(54)</span><span class="q-inplace-slot"><span class="a-inplace-space">constantly</span></span></span> <span class="q-inplace"><span class="qi-inplace">(55)</span><span class="q-inplace-slot"><span class="a-inplace-space">eroded</span></span></span> <span class="q-inplace"><span class="qi-inplace">(56)</span><span class="q-inplace-slot"><span class="a-inplace-space">by</span></span></span> waves. 懸崖不斷地被波浪侵蝕。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(57)</span><span class="q-inplace-slot"><span class="a-inplace-space">erosion</span></span></span> <span class="q-inplace"><span class="qi-inplace">(58)</span><span class="q-inplace-slot"><span class="a-inplace-space">by</span></span></span> the waves has gradually <span class="q-inplace"><span class="qi-inplace">(59)</span><span class="q-inplace-slot"><span class="a-inplace-space">undermined</span></span></span> the <span class="q-inplace"><span class="qi-inplace">(60)</span><span class="q-inplace-slot"><span class="a-inplace-space">foundation</span></span></span> <span class="q-inplace"><span class="qi-inplace">(61)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span> the bridge. 海浪的侵噬已漸漸損壞了橋樑的根基。</p>
+<p>Oil prices are <span class="q-inplace"><span class="qi-inplace">(62)</span><span class="q-inplace-slot"><span class="a-inplace-space">escalating</span></span></span> again. 油價又在逐步上升了。</p>
+<p>As the war <span class="q-inplace"><span class="qi-inplace">(63)</span><span class="q-inplace-slot"><span class="a-inplace-space">escalates</span></span></span>, there are more and more <span class="q-inplace"><span class="qi-inplace">(64)</span><span class="q-inplace-slot"><span class="a-inplace-space">casualties</span></span></span>. 隨著戰爭的逐步擴大，傷亡也愈來愈慘重。</p>
+<p>Muslims believe <mark><span class="q-inplace"><span class="qi-inplace">(65)</span><span class="q-inplace-slot"><span class="a-inplace-space">in</span></span></span> the <span class="q-inplace"><span class="qi-inplace">(66)</span><span class="q-inplace-slot"><span class="a-inplace-space">eternity</span></span></span> <span class="q-inplace"><span class="qi-inplace">(67)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span></mark> the soul. 回教徒相信靈魂不朽。</p>
+<p>I will love you for (all) <span class="q-inplace"><span class="qi-inplace">(68)</span><span class="q-inplace-slot"><span class="a-inplace-space">eternity</span></span></span>. I will never change. 我會永遠愛你，絕不改變。</p>
+<p>When the alarm sounded, all students were <span class="q-inplace"><span class="qi-inplace">(69)</span><span class="q-inplace-slot"><span class="a-inplace-space">evacuated</span></span></span> <span class="q-inplace"><span class="qi-inplace">(70)</span><span class="q-inplace-slot"><span class="a-inplace-space">immediately</span></span></span>. 當警報響起時，所有的學生立刻被疏散。</p>
+<p>Because of the <span class="q-inplace"><span class="qi-inplace">(71)</span><span class="q-inplace-slot"><span class="a-inplace-space">immediate</span></span></span> <span class="q-inplace"><span class="qi-inplace">(72)</span><span class="q-inplace-slot"><span class="a-inplace-space">evacuation</span></span></span>, no one was hurt. 由於立即撤離的關係，沒有人受傷。</p>
+<p>It is sometimes very dangerous to keep <span class="q-inplace"><span class="qi-inplace">(73)</span><span class="q-inplace-slot"><span class="a-inplace-space">exotic</span></span></span> animals as pets. 有時候時豢養珍奇的外國動物作為寵物是相當危險的。</p>
+<p>She loves eating out <span class="q-inplace"><span class="qi-inplace">(74)</span><span class="q-inplace-slot"><span class="a-inplace-space">in</span></span></span> <span class="q-inplace"><span class="qi-inplace">(75)</span><span class="q-inplace-slot"><span class="a-inplace-space">exotic</span></span></span> restaurants. 她喜歡在有異國風情的餐廳用餐。</p>
+<p>I read an <span class="q-inplace"><span class="qi-inplace">(76)</span><span class="q-inplace-slot"><span class="a-inplace-space">excerpt</span></span></span> <span class="q-inplace"><span class="qi-inplace">(77)</span><span class="q-inplace-slot"><span class="a-inplace-space">from</span></span></span> Steven King’s latest novel in the magazine. 我在雜誌裡讀到史蒂芬金的最新小說的一段摘錄。</p>
+<p>The following <span class="q-inplace"><span class="qi-inplace">(78)</span><span class="q-inplace-slot"><span class="a-inplace-space">narrative</span></span></span> is <span class="q-inplace"><span class="qi-inplace">(79)</span><span class="q-inplace-slot"><span class="a-inplace-space">excerpted</span></span></span> <span class="q-inplace"><span class="qi-inplace">(80)</span><span class="q-inplace-slot"><span class="a-inplace-space">from</span></span></span> Steven King’s latest novel. 以下這段敘述是從史蒂芬金的最新小說中摘錄出來的。</p>
+<p>Every student has to participate <span class="q-inplace"><span class="qi-inplace">(81)</span><span class="q-inplace-slot"><span class="a-inplace-space">in</span></span></span> <span class="q-inplace"><span class="qi-inplace">(82)</span><span class="q-inplace-slot"><span class="a-inplace-space">extracurricular</span></span></span> activities. 每個學生都必須參加課外活動。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(83)</span><span class="q-inplace-slot"><span class="a-inplace-space">pro</span></span></span>-war <span class="q-inplace"><span class="qi-inplace">(84)</span><span class="q-inplace-slot"><span class="a-inplace-space">faction</span></span></span> within the party <span class="q-inplace"><span class="qi-inplace">(85)</span><span class="q-inplace-slot"><span class="a-inplace-space">condemned</span></span></span> any attempt <span class="q-inplace"><span class="qi-inplace">(86)</span><span class="q-inplace-slot"><span class="a-inplace-space">at</span></span></span> <span class="q-inplace"><span class="qi-inplace">(87)</span><span class="q-inplace-slot"><span class="a-inplace-space">negotiation</span></span></span>. 黨中的主戰派譴責任何想要協商的意圖。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(88)</span><span class="q-inplace-slot"><span class="a-inplace-space">candlelight</span></span></span> is <span class="q-inplace"><span class="qi-inplace">(89)</span><span class="q-inplace-slot"><span class="a-inplace-space">flaring</span></span></span> <span class="q-inplace"><span class="qi-inplace">(90)</span><span class="q-inplace-slot"><span class="a-inplace-space">in</span></span></span> the wind. 燭火在風中搖曳。</p>
+<p>The dark field is dotted <mark><span class="q-inplace"><span class="qi-inplace">(91)</span><span class="q-inplace-slot"><span class="a-inplace-space">with</span></span></span> the <span class="q-inplace"><span class="qi-inplace">(92)</span><span class="q-inplace-slot"><span class="a-inplace-space">flare</span></span></span> <span class="q-inplace"><span class="qi-inplace">(93)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span></mark> the <span class="q-inplace"><span class="qi-inplace">(94)</span><span class="q-inplace-slot"><span class="a-inplace-space">fireflies</span></span></span>. 夜晚的田野點綴著螢火蟲一閃一閃的光芒。</p>
+<p>She has long red <span class="q-inplace"><span class="qi-inplace">(95)</span><span class="q-inplace-slot"><span class="a-inplace-space">fingernails</span></span></span>. 她有長長的紅指甲。</p>
+<p>She used her <span class="q-inplace"><span class="qi-inplace">(96)</span><span class="q-inplace-slot"><span class="a-inplace-space">fingertips</span></span></span> <span class="q-inplace"><span class="qi-inplace">(97)</span><span class="q-inplace-slot"><span class="a-inplace-space">to</span></span></span> <span class="q-inplace"><span class="qi-inplace">(98)</span><span class="q-inplace-slot"><span class="a-inplace-space">wipe</span></span></span> the tears from Melissa’s face. 她用她的指尖擦掉梅麗莎臉上的淚水。</p>
+<p>She sits on the bed <span class="q-inplace"><span class="qi-inplace">(99)</span><span class="q-inplace-slot"><span class="a-inplace-space">polishing</span></span></span> her <span class="q-inplace"><span class="qi-inplace">(100)</span><span class="q-inplace-slot"><span class="a-inplace-space">toenails</span></span></span>. 她坐在床上塗腳指甲油。</p>
+<p>His <span class="q-inplace"><span class="qi-inplace">(101)</span><span class="q-inplace-slot"><span class="a-inplace-space">fingerprints</span></span></span> were all over the <span class="q-inplace"><span class="qi-inplace">(102)</span><span class="q-inplace-slot"><span class="a-inplace-space">pistol</span></span></span>. 這把手槍上滿是他的指紋。</p>
+<p>Derek noticed wet <span class="q-inplace"><span class="qi-inplace">(103)</span><span class="q-inplace-slot"><span class="a-inplace-space">footprints</span></span></span> <span class="q-inplace"><span class="qi-inplace">(104)</span><span class="q-inplace-slot"><span class="a-inplace-space">on</span></span></span> the floor. 德瑞克注意到地板上的溼腳印。</p>
+<p>The candles <span class="q-inplace"><span class="qi-inplace">(105)</span><span class="q-inplace-slot"><span class="a-inplace-space">flickered</span></span></span> <span class="q-inplace"><span class="qi-inplace">(106)</span><span class="q-inplace-slot"><span class="a-inplace-space">in</span></span></span> the <span class="q-inplace"><span class="qi-inplace">(107)</span><span class="q-inplace-slot"><span class="a-inplace-space">darkness</span></span></span>. 蠟燭在黑暗中明滅不定。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(108)</span><span class="q-inplace-slot"><span class="a-inplace-space">flicker</span></span></span> <span class="q-inplace"><span class="qi-inplace">(109)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span> the will-o’-the-<span class="q-inplace"><span class="qi-inplace">(110)</span><span class="q-inplace-slot"><span class="a-inplace-space">wisp</span></span></span> added some ghostly <span class="q-inplace"><span class="qi-inplace">(111)</span><span class="q-inplace-slot"><span class="a-inplace-space">atmosphere</span></span></span>. 閃爍的鬼火增添了幾許鬼怪的氣氛。</p>
+<p>When their team won, people cheered and <span class="q-inplace"><span class="qi-inplace">(112)</span><span class="q-inplace-slot"><span class="a-inplace-space">flung</span></span></span> their hats <span class="q-inplace"><span class="qi-inplace">(113)</span><span class="q-inplace-slot"><span class="a-inplace-space">into</span></span></span> the air. 當他們的隊伍勝利時，人們歡呼著，並將帽子抛向空中。</p>
+<p>Keep an eye on the notice boards <span class="q-inplace"><span class="qi-inplace">(114)</span><span class="q-inplace-slot"><span class="a-inplace-space">for</span></span></span> <span class="q-inplace"><span class="qi-inplace">(115)</span><span class="q-inplace-slot"><span class="a-inplace-space">forthcoming</span></span></span> events. 注意公告欄上即將來臨的活動。</p>
+<p>Why have you <span class="q-inplace"><span class="qi-inplace">(116)</span><span class="q-inplace-slot"><span class="a-inplace-space">forsaken</span></span></span> me? 你為何棄我於不顧呢？</p>
+<p>It’s difficult for him to <span class="q-inplace"><span class="qi-inplace">(117)</span><span class="q-inplace-slot"><span class="a-inplace-space">forsake</span></span></span> drinking <span class="q-inplace"><span class="qi-inplace">(118)</span><span class="q-inplace-slot"><span class="a-inplace-space">liquor</span></span></span>. 要他不再喝酒是很困難的。</p>
+<p>He’s been charged with tax <span class="q-inplace"><span class="qi-inplace">(119)</span><span class="q-inplace-slot"><span class="a-inplace-space">fraud</span></span></span>. 他被控税務詐欺。</p>
+<p>Each <span class="q-inplace"><span class="qi-inplace">(120)</span><span class="q-inplace-slot"><span class="a-inplace-space">galaxy</span></span></span> contains billions of stars. 每個星系都包含數十億個恆星。</p>
+<p>How large is our <span class="q-inplace"><span class="qi-inplace">(121)</span><span class="q-inplace-slot"><span class="a-inplace-space">Galaxy</span></span></span>? 我們的銀河系有多大？</p>
+<p>All the <span class="q-inplace"><span class="qi-inplace">(122)</span><span class="q-inplace-slot"><span class="a-inplace-space">coastlines</span></span></span> <mark>are <span class="q-inplace"><span class="qi-inplace">(123)</span><span class="q-inplace-slot"><span class="a-inplace-space">fortified</span></span></span> <span class="q-inplace"><span class="qi-inplace">(124)</span><span class="q-inplace-slot"><span class="a-inplace-space">to</span></span></span></mark> prevent <span class="q-inplace"><span class="qi-inplace">(125)</span><span class="q-inplace-slot"><span class="a-inplace-space">stowaways</span></span></span> <span class="q-inplace"><span class="qi-inplace">(126)</span><span class="q-inplace-slot"><span class="a-inplace-space">from</span></span></span> getting <span class="q-inplace"><span class="qi-inplace">(127)</span><span class="q-inplace-slot"><span class="a-inplace-space">ashore</span></span></span>. 所有的海岸線都有設防，以防止偷渡客上岸。</p>
+<p>My teacher’s encouragement really <span class="q-inplace"><span class="qi-inplace">(128)</span><span class="q-inplace-slot"><span class="a-inplace-space">fortified</span></span></span> my spirit. 老師的鼓勵真的使我勇氣倍增。</p>
+<p>It <mark>is <span class="q-inplace"><span class="qi-inplace">(129)</span><span class="q-inplace-slot"><span class="a-inplace-space">unwise</span></span></span> <span class="q-inplace"><span class="qi-inplace">(130)</span><span class="q-inplace-slot"><span class="a-inplace-space">to</span></span></span></mark> let your children use <span class="q-inplace"><span class="qi-inplace">(131)</span><span class="q-inplace-slot"><span class="a-inplace-space">glassware</span></span></span>. 讓小孩使用玻璃器皿是不智的。</p>
+<p><span class="q-inplace"><span class="qi-inplace">(132)</span><span class="q-inplace-slot"><span class="a-inplace-space">Silverware</span></span></span> is much more expensive than <span class="q-inplace"><span class="qi-inplace">(133)</span><span class="q-inplace-slot"><span class="a-inplace-space">ironware</span></span></span>. 銀器比鐵器貴得多了。</p>
+<p>Studies show that <span class="q-inplace"><span class="qi-inplace">(134)</span><span class="q-inplace-slot"><span class="a-inplace-space">continuous</span></span></span> noise <span class="q-inplace"><span class="qi-inplace">(135)</span><span class="q-inplace-slot"><span class="a-inplace-space">frets</span></span></span> our nerves. 研究顯示，持續的噪音會使我們的神經煩躁不安。</p>
+<p>Don’t <span class="q-inplace"><span class="qi-inplace">(136)</span><span class="q-inplace-slot"><span class="a-inplace-space">fret</span></span></span> <span class="q-inplace"><span class="qi-inplace">(137)</span><span class="q-inplace-slot"><span class="a-inplace-space">about</span></span></span> something that hasn’t happened yet. 不要為那些還沒有發生的事煩惱。</p>
+<p>When it is winter in the northern <span class="q-inplace"><span class="qi-inplace">(138)</span><span class="q-inplace-slot"><span class="a-inplace-space">hemisphere</span></span></span>, it is summer in the southern <span class="q-inplace"><span class="qi-inplace">(139)</span><span class="q-inplace-slot"><span class="a-inplace-space">hemisphere</span></span></span>. 北半球冬天的時候，南半球是夏天。</p>
+<p>The left and right <span class="q-inplace"><span class="qi-inplace">(140)</span><span class="q-inplace-slot"><span class="a-inplace-space">hemispheres</span></span></span> <span class="q-inplace"><span class="qi-inplace">(141)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span> the brain are responsible for different functions. 左右腦掌管不同的功能。</p>
+<p>It <mark>is <span class="q-inplace"><span class="qi-inplace">(142)</span><span class="q-inplace-slot"><span class="a-inplace-space">imperative</span></span></span> <span class="q-inplace"><span class="qi-inplace">(143)</span><span class="q-inplace-slot"><span class="a-inplace-space">to</span></span></span></mark> <span class="q-inplace"><span class="qi-inplace">(144)</span><span class="q-inplace-slot"><span class="a-inplace-space">establish</span></span></span> a <span class="q-inplace"><span class="qi-inplace">(145)</span><span class="q-inplace-slot"><span class="a-inplace-space">secure</span></span></span> environment for our children. 我們急需為孩子們建立一個安全的環境。</p>
+<p>“Stand up” is an <span class="q-inplace"><span class="qi-inplace">(146)</span><span class="q-inplace-slot"><span class="a-inplace-space">imperative</span></span></span> sentence. 「站起來」是個祈使句。</p>
+<p>The crowd <span class="q-inplace"><span class="qi-inplace">(147)</span><span class="q-inplace-slot"><span class="a-inplace-space">roared</span></span></span> <span class="q-inplace"><span class="qi-inplace">(148)</span><span class="q-inplace-slot"><span class="a-inplace-space">in</span></span></span> <span class="q-inplace"><span class="qi-inplace">(149)</span><span class="q-inplace-slot"><span class="a-inplace-space">ecstasy</span></span></span> <span class="q-inplace"><span class="qi-inplace">(150)</span><span class="q-inplace-slot"><span class="a-inplace-space">over</span></span></span> the entrance of the singer. 當歌手進場的時候，全場觀眾高興地大吼。</p>
+<p>When you <span class="q-inplace"><span class="qi-inplace">(151)</span><span class="q-inplace-slot"><span class="a-inplace-space">take</span></span></span> <span class="q-inplace"><span class="qi-inplace">(152)</span><span class="q-inplace-slot"><span class="a-inplace-space">ecstasy</span></span></span>, your body temperature rises. 當你吃搖頭丸時，你的體溫會上升。</p>
+<p><span class="q-inplace"><span class="qi-inplace">(153)</span><span class="q-inplace-slot"><span class="a-inplace-space">Heroin</span></span></span> is <span class="q-inplace"><span class="qi-inplace">(154)</span><span class="q-inplace-slot"><span class="a-inplace-space">obtained</span></span></span> <span class="q-inplace"><span class="qi-inplace">(155)</span><span class="q-inplace-slot"><span class="a-inplace-space">from</span></span></span> <span class="q-inplace"><span class="qi-inplace">(156)</span><span class="q-inplace-slot"><span class="a-inplace-space">morphine</span></span></span> and is <span class="q-inplace"><span class="qi-inplace">(157)</span><span class="q-inplace-slot"><span class="a-inplace-space">extremely</span></span></span> <span class="q-inplace"><span class="qi-inplace">(158)</span><span class="q-inplace-slot"><span class="a-inplace-space">addictive</span></span></span>. 海洛因是由嗎啡提煉出來的，而且極易成癮。</p>
+<p>Drugs, like <span class="q-inplace"><span class="qi-inplace">(159)</span><span class="q-inplace-slot"><span class="a-inplace-space">cocaine</span></span></span>, <span class="q-inplace"><span class="qi-inplace">(160)</span><span class="q-inplace-slot"><span class="a-inplace-space">opium</span></span></span> and <span class="q-inplace"><span class="qi-inplace">(161)</span><span class="q-inplace-slot"><span class="a-inplace-space">amphetamine</span></span></span>, do great harm to our health. 像古柯鹼、鴉片和安非他命之類的毒品對健康造成極大的損害。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(162)</span><span class="q-inplace-slot"><span class="a-inplace-space">imposing</span></span></span> <span class="q-inplace"><span class="qi-inplace">(163)</span><span class="q-inplace-slot"><span class="a-inplace-space">palace</span></span></span> is <span class="q-inplace"><span class="qi-inplace">(164)</span><span class="q-inplace-slot"><span class="a-inplace-space">breathtaking</span></span></span>. 這宏偉的皇宫美得讓人說不出話來。</p>
+<p>Male <span class="q-inplace"><span class="qi-inplace">(165)</span><span class="q-inplace-slot"><span class="a-inplace-space">hormone</span></span></span> is responsible for maintaining male <span class="q-inplace"><span class="qi-inplace">(166)</span><span class="q-inplace-slot"><span class="a-inplace-space">characteristics</span></span></span>. 男性荷爾蒙負責維持男性特徵。</p>
+<p>Most Americans buy houses or cars <span class="q-inplace"><span class="qi-inplace">(167)</span><span class="q-inplace-slot"><span class="a-inplace-space">by</span></span></span> <span class="q-inplace"><span class="qi-inplace">(168)</span><span class="q-inplace-slot"><span class="a-inplace-space">installments</span></span></span>. 大部分的美國人都是以分期付款的方式購買房子或汽車。</p>
+<p>Have you read the final <span class="q-inplace"><span class="qi-inplace">(169)</span><span class="q-inplace-slot"><span class="a-inplace-space">installment</span></span></span> <span class="q-inplace"><span class="qi-inplace">(170)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span> the <span class="q-inplace"><span class="qi-inplace">(171)</span><span class="q-inplace-slot"><span class="a-inplace-space">series</span></span></span>? 你讀過連載的最後一回了嗎？</p>
+
+        </div>
+      </div>
+      <div id="part-simple-answer">
+        <div id="inter-fa-sa"></div>
+        <h3>
+          簡答
+        </h3>
+        <div class="narrow-col normal-text">
+          <span class="qi-left">1.</span>dissidents<br/>
+<span class="qi-left">2.</span>dissuade<br/>
+<span class="qi-left">3.</span>from<br/>
+<span class="qi-left">4.</span>distract<br/>
+<span class="qi-left">5.</span>distracted<br/>
+<span class="qi-left">6.</span>from<br/>
+<span class="qi-left">7.</span>distractions<br/>
+<span class="qi-left">8.</span>concentrate<br/>
+<span class="qi-left">9.</span>distrust<br/>
+<span class="qi-left">10.</span>distrust<br/>
+<span class="qi-left">11.</span>of<br/>
+<span class="qi-left">12.</span>dreary<br/>
+<span class="qi-left">13.</span>in<br/>
+<span class="qi-left">14.</span>dreary<br/>
+<span class="qi-left">15.</span>to<br/>
+<span class="qi-left">16.</span>on<br/>
+<span class="qi-left">17.</span>assembly<br/>
+<span class="qi-left">18.</span>dosage<br/>
+<span class="qi-left">19.</span>of<br/>
+<span class="qi-left">20.</span>morphine<br/>
+<span class="qi-left">21.</span>Drastic<br/>
+<span class="qi-left">22.</span>catastrophe<br/>
+<span class="qi-left">23.</span>enclosure<br/>
+<span class="qi-left">24.</span>of<br/>
+<span class="qi-left">25.</span>drought<br/>
+<span class="qi-left">26.</span>ruined<br/>
+<span class="qi-left">27.</span>crops<br/>
+<span class="qi-left">28.</span>dubious<br/>
+<span class="qi-left">29.</span>about<br/>
+<span class="qi-left">30.</span>honesty<br/>
+<span class="qi-left">31.</span>assumption<br/>
+<span class="qi-left">32.</span>dubious<br/>
+<span class="qi-left">33.</span>blew<br/>
+<span class="qi-left">34.</span>up<br/>
+<span class="qi-left">35.</span>with<br/>
+<span class="qi-left">36.</span>dynamite<br/>
+<span class="qi-left">37.</span>pox<br/>
+<span class="qi-left">38.</span>epidemic<br/>
+<span class="qi-left">39.</span>epidemic<br/>
+<span class="qi-left">40.</span>eligible<br/>
+<span class="qi-left">41.</span>for<br/>
+<span class="qi-left">42.</span>scholarship<br/>
+<span class="qi-left">43.</span>embarked<br/>
+<span class="qi-left">44.</span>on<br/>
+<span class="qi-left">45.</span>embarking<br/>
+<span class="qi-left">46.</span>upon<br/>
+<span class="qi-left">47.</span>emigrate<br/>
+<span class="qi-left">48.</span>to<br/>
+<span class="qi-left">49.</span>emigrants<br/>
+<span class="qi-left">50.</span>Emigration<br/>
+<span class="qi-left">51.</span>from<br/>
+<span class="qi-left">52.</span>colonies<br/>
+<span class="qi-left">53.</span>cliffs<br/>
+<span class="qi-left">54.</span>constantly<br/>
+<span class="qi-left">55.</span>eroded<br/>
+<span class="qi-left">56.</span>by<br/>
+<span class="qi-left">57.</span>erosion<br/>
+<span class="qi-left">58.</span>by<br/>
+<span class="qi-left">59.</span>undermined<br/>
+<span class="qi-left">60.</span>foundation<br/>
+<span class="qi-left">61.</span>of<br/>
+<span class="qi-left">62.</span>escalating<br/>
+<span class="qi-left">63.</span>escalates<br/>
+<span class="qi-left">64.</span>casualties<br/>
+<span class="qi-left">65.</span>in<br/>
+<span class="qi-left">66.</span>eternity<br/>
+<span class="qi-left">67.</span>of<br/>
+<span class="qi-left">68.</span>eternity<br/>
+<span class="qi-left">69.</span>evacuated<br/>
+<span class="qi-left">70.</span>immediately<br/>
+<span class="qi-left">71.</span>immediate<br/>
+<span class="qi-left">72.</span>evacuation<br/>
+<span class="qi-left">73.</span>exotic<br/>
+<span class="qi-left">74.</span>in<br/>
+<span class="qi-left">75.</span>exotic<br/>
+<span class="qi-left">76.</span>excerpt<br/>
+<span class="qi-left">77.</span>from<br/>
+<span class="qi-left">78.</span>narrative<br/>
+<span class="qi-left">79.</span>excerpted<br/>
+<span class="qi-left">80.</span>from<br/>
+<span class="qi-left">81.</span>in<br/>
+<span class="qi-left">82.</span>extracurricular<br/>
+<span class="qi-left">83.</span>pro<br/>
+<span class="qi-left">84.</span>faction<br/>
+<span class="qi-left">85.</span>condemned<br/>
+<span class="qi-left">86.</span>at<br/>
+<span class="qi-left">87.</span>negotiation<br/>
+<span class="qi-left">88.</span>candlelight<br/>
+<span class="qi-left">89.</span>flaring<br/>
+<span class="qi-left">90.</span>in<br/>
+<span class="qi-left">91.</span>with<br/>
+<span class="qi-left">92.</span>flare<br/>
+<span class="qi-left">93.</span>of<br/>
+<span class="qi-left">94.</span>fireflies<br/>
+<span class="qi-left">95.</span>fingernails<br/>
+<span class="qi-left">96.</span>fingertips<br/>
+<span class="qi-left">97.</span>to<br/>
+<span class="qi-left">98.</span>wipe<br/>
+<span class="qi-left">99.</span>polishing<br/>
+<span class="qi-left">100.</span>toenails<br/>
+<span class="qi-left">101.</span>fingerprints<br/>
+<span class="qi-left">102.</span>pistol<br/>
+<span class="qi-left">103.</span>footprints<br/>
+<span class="qi-left">104.</span>on<br/>
+<span class="qi-left">105.</span>flickered<br/>
+<span class="qi-left">106.</span>in<br/>
+<span class="qi-left">107.</span>darkness<br/>
+<span class="qi-left">108.</span>flicker<br/>
+<span class="qi-left">109.</span>of<br/>
+<span class="qi-left">110.</span>wisp<br/>
+<span class="qi-left">111.</span>atmosphere<br/>
+<span class="qi-left">112.</span>flung<br/>
+<span class="qi-left">113.</span>into<br/>
+<span class="qi-left">114.</span>for<br/>
+<span class="qi-left">115.</span>forthcoming<br/>
+<span class="qi-left">116.</span>forsaken<br/>
+<span class="qi-left">117.</span>forsake<br/>
+<span class="qi-left">118.</span>liquor<br/>
+<span class="qi-left">119.</span>fraud<br/>
+<span class="qi-left">120.</span>galaxy<br/>
+<span class="qi-left">121.</span>Galaxy<br/>
+<span class="qi-left">122.</span>coastlines<br/>
+<span class="qi-left">123.</span>fortified<br/>
+<span class="qi-left">124.</span>to<br/>
+<span class="qi-left">125.</span>stowaways<br/>
+<span class="qi-left">126.</span>from<br/>
+<span class="qi-left">127.</span>ashore<br/>
+<span class="qi-left">128.</span>fortified<br/>
+<span class="qi-left">129.</span>unwise<br/>
+<span class="qi-left">130.</span>to<br/>
+<span class="qi-left">131.</span>glassware<br/>
+<span class="qi-left">132.</span>Silverware<br/>
+<span class="qi-left">133.</span>ironware<br/>
+<span class="qi-left">134.</span>continuous<br/>
+<span class="qi-left">135.</span>frets<br/>
+<span class="qi-left">136.</span>fret<br/>
+<span class="qi-left">137.</span>about<br/>
+<span class="qi-left">138.</span>hemisphere<br/>
+<span class="qi-left">139.</span>hemisphere<br/>
+<span class="qi-left">140.</span>hemispheres<br/>
+<span class="qi-left">141.</span>of<br/>
+<span class="qi-left">142.</span>imperative<br/>
+<span class="qi-left">143.</span>to<br/>
+<span class="qi-left">144.</span>establish<br/>
+<span class="qi-left">145.</span>secure<br/>
+<span class="qi-left">146.</span>imperative<br/>
+<span class="qi-left">147.</span>roared<br/>
+<span class="qi-left">148.</span>in<br/>
+<span class="qi-left">149.</span>ecstasy<br/>
+<span class="qi-left">150.</span>over<br/>
+<span class="qi-left">151.</span>take<br/>
+<span class="qi-left">152.</span>ecstasy<br/>
+<span class="qi-left">153.</span>Heroin<br/>
+<span class="qi-left">154.</span>obtained<br/>
+<span class="qi-left">155.</span>from<br/>
+<span class="qi-left">156.</span>morphine<br/>
+<span class="qi-left">157.</span>extremely<br/>
+<span class="qi-left">158.</span>addictive<br/>
+<span class="qi-left">159.</span>cocaine<br/>
+<span class="qi-left">160.</span>opium<br/>
+<span class="qi-left">161.</span>amphetamine<br/>
+<span class="qi-left">162.</span>imposing<br/>
+<span class="qi-left">163.</span>palace<br/>
+<span class="qi-left">164.</span>breathtaking<br/>
+<span class="qi-left">165.</span>hormone<br/>
+<span class="qi-left">166.</span>characteristics<br/>
+<span class="qi-left">167.</span>by<br/>
+<span class="qi-left">168.</span>installments<br/>
+<span class="qi-left">169.</span>installment<br/>
+<span class="qi-left">170.</span>of<br/>
+<span class="qi-left">171.</span>series<br/>
+
+        </div>
+      </div>
+    </div>
+    <script>
+      set_page_break('break-qa-input', 'inter-q-fa');
+      set_page_break('break-aa-input', 'inter-fa-sa');
+      update_title();
+      update_line_height();
+      if(document.getElementById('compact-mode-input').checkVisibility()){
+        document.getElementById('paragraph-margin-input').value = 10;
+        document.getElementById('compact-mode-input').checked = true;
+        document.getElementById('line-height-input').value = 1;
+        update_line_height();
+        document.getElementById('paragraph-margin-input').value = 2;
+        update_paragraph_margin();
+        document.getElementById('font-size-input').value -= 1;
+        update_text_font_size();
+      }
+      update_paragraph_margin();
+      document.querySelectorAll('.mid-answer-slot').forEach((elem) => {if (elem.innerHTML == '') {elem.innerHTML = ' '};});
+      document.querySelectorAll('.big-answer-slot').forEach((elem) => {if (elem.innerHTML == '') {elem.innerHTML = ' '};});
+      document.querySelectorAll('p:has(+ul.option-list), ul.option-list+p').forEach((elem) => {if (elem.innerHTML == '') {elem.remove()}});
+    </script>
+  </body>
+</html>

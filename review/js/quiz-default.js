@@ -13,6 +13,17 @@ function update_text_font_size() {
     document.querySelectorAll('.normal-text').forEach((elem) => elem.style.fontSize = font_size);
     document.querySelectorAll('.option-list').forEach((elem) => elem.style.fontSize = font_size);
 }
+function update_line_height() {
+    const line_height = document.getElementById('line-height-input').value;
+    document.querySelectorAll('p').forEach((elem) => elem.style.lineHeight = line_height);
+    document.querySelectorAll('.normal-text').forEach((elem) => elem.style.lineHeight = line_height);
+    document.querySelectorAll('.option-list').forEach((elem) => elem.style.lineHeight = line_height);
+}
+function update_paragraph_margin() {
+    const paragraph_margin = document.getElementById('paragraph-margin-input').value + 'pt';
+    document.querySelectorAll('.b5-port-col > p').forEach((elem) => {elem.style.marginTop = paragraph_margin; elem.style.marginBottom = paragraph_margin});
+    document.querySelectorAll('.b4-port-col > p').forEach((elem) => {elem.style.marginTop = paragraph_margin; elem.style.marginBottom = paragraph_margin});
+}
 function update_hint_box_width() {
     const box_width = document.getElementById('box-width-input').value + 'px';
     document.querySelectorAll('.box > *').forEach((elem) => elem.style.width = box_width);

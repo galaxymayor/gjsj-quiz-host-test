@@ -289,3 +289,10 @@ input[type=number] {
     margin: 15px;
     border-radius: 12px;
 }
+
+/* version-based display config */
+
+.pro-version-component{
+    visibility: hidden;
+    display: none;
+}

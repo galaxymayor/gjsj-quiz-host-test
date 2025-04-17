@@ -18,6 +18,7 @@
         column-width: 50mm;
         column-gap: 10mm;
         column-fill: balance;
+        overflow-wrap: break-word;
     }
 }
 
@@ -54,6 +55,7 @@
         column-width: 50mm;
         column-gap: 10mm;
         column-fill: auto;
+        overflow-wrap: break-word;
     }
 
     #paper {

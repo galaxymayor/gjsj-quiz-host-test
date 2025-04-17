@@ -19,6 +19,14 @@ function update_line_height() {
     document.querySelectorAll('.normal-text').forEach((elem) => elem.style.lineHeight = line_height);
     document.querySelectorAll('.option-list').forEach((elem) => elem.style.lineHeight = line_height);
 }
+function set_compact_mode(val){
+    document.getElementById('line-height-input').value = (val && 1 || 1.17);
+    update_line_height();
+    document.getElementById('paragraph-margin-input').value = (val && 2 || 10);
+    update_paragraph_margin();
+    document.getElementById('narrow-column-width-input').value = (val && 44 || 50);
+    update_narrow_column_width();
+}
 function update_paragraph_margin() {
     const paragraph_margin = document.getElementById('paragraph-margin-input').value + 'pt';
     document.querySelectorAll('.b5-port-col > p').forEach((elem) => {elem.style.marginTop = paragraph_margin; elem.style.marginBottom = paragraph_margin});
@@ -27,6 +35,13 @@ function update_paragraph_margin() {
 function update_hint_box_width() {
     const box_width = document.getElementById('box-width-input').value + 'px';
     document.querySelectorAll('.box > *').forEach((elem) => elem.style.width = box_width);
+}
+function update_narrow_column_width() {
+    const column_width = document.getElementById('narrow-column-width-input').value + 'mm';
+    document.querySelectorAll('.narrow-col').forEach((elem) => {
+        elem.style.columnWidth = column_width;
+        elem.style.columnGap = (parseInt(column_width.slice(0, -2)) >= 45 && '10mm' || '5mm');
+    });
 }
 function set_page_break(input_id, out_div_id) {
     const quantity = document.getElementById(input_id).value;

@@ -70,20 +70,22 @@
         <div class="col-auto">
           <input id="title-input" class="form-control" type="text" value="高級單字 L6U45 首捲挖啥物" oninput="update_title();"/>
         </div>
+      </div>
+      <div class="row g-3 align-items-center">
         <div class="col-auto">
           <label for="h1-size-input" class="col-form-label">Title Font Size</label>
         </div>
         <div class="col-auto">
           <input id="h1-size-input" class="form-control" type="number" value="30" oninput="update_title_font_size();"/>
         </div>
-      </div>
-      <div class="row g-3 align-items-center">
         <div class="col-auto">
           <label for="font-size-input" class="col-form-label">Content Font Size</label>
         </div>
         <div class="col-auto">
           <input id="font-size-input" class="form-control" type="number" value="14" oninput="update_text_font_size();"/>
         </div>
+      </div>
+      <div class="row g-3 align-items-center">
         <div class="col-auto pro-version-component">
           <label for="line-height-input" class="col-form-label">Content Line Height</label>
         </div>
@@ -100,13 +102,19 @@
           <label for="compact-mode-input" class="col-form-label">Compact Mode</label>
         </div>
         <div class="col-auto basic-version-component">
-          <input class="form-check-input" id="compact-mode-input" type="checkbox" unchecked onchange="document.getElementById('line-height-input').value = (document.getElementById('compact-mode-input').checked && 1 || 1.17); update_line_height(); document.getElementById('paragraph-margin-input').value = (document.getElementById('compact-mode-input').checked && 2 || 10); update_paragraph_margin()"/>
+          <input class="form-check-input" id="compact-mode-input" type="checkbox" unchecked onchange="set_compact_mode(document.getElementById('compact-mode-input').checked)"/>
         </div>
         <div class="col-auto">
           <label for="box-width-input" class="col-form-label">Hint Box Width</label>
         </div>
         <div class="col-auto">
           <input id="box-width-input" class="form-control" type="number" value="200" oninput="update_hint_box_width();"/>
+        </div>
+        <div class="col-auto pro-version-component">
+          <label for="narrow-column-width-input" class="col-form-label">Simple Answer Width</label>
+        </div>
+        <div class="col-auto pro-version-component">
+          <input id="narrow-column-width-input" class="form-control" type="number" value="50" oninput="update_narrow_column_width();"/>
         </div>
       </div>
       <div class="row g-3 align-items-center">
@@ -221,7 +229,7 @@
 <p>His <span class="q-inplace"><span class="qi-inplace">(101)</span><span class="q-inplace-slot">f                              ts</span></span> were all over the <span class="q-inplace"><span class="qi-inplace">(102)</span><span class="q-inplace-slot">p                  l</span></span>. 這把手槍上滿是他的指紋。</p>
 <p>Derek noticed wet <span class="q-inplace"><span class="qi-inplace">(103)</span><span class="q-inplace-slot">f                          ts</span></span> <span class="q-inplace"><span class="qi-inplace">(104)</span><span class="q-inplace-slot">                  </span></span> the floor. 德瑞克注意到地板上的溼腳印。</p>
 <p>The candles <span class="q-inplace"><span class="qi-inplace">(105)</span><span class="q-inplace-slot">f                      red</span></span> <span class="q-inplace"><span class="qi-inplace">(106)</span><span class="q-inplace-slot">                  </span></span> the <span class="q-inplace"><span class="qi-inplace">(107)</span><span class="q-inplace-slot">d                      s</span></span>. 蠟燭在黑暗中明滅不定。</p>
-<p>The <span class="q-inplace"><span class="qi-inplace">(108)</span><span class="q-inplace-slot">f                  r</span></span> <span class="q-inplace"><span class="qi-inplace">(109)</span><span class="q-inplace-slot">                  </span></span> the will-o’-the-<span class="q-inplace"><span class="qi-inplace">(110)</span><span class="q-inplace-slot">w                  </span></span> added some ghostly <span class="q-inplace"><span class="qi-inplace">(111)</span><span class="q-inplace-slot">at                            e</span></span>. 閃爍的鬼火增添了幾許鬼怪的氣氛。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(108)</span><span class="q-inplace-slot">f                  r</span></span> <span class="q-inplace"><span class="qi-inplace">(109)</span><span class="q-inplace-slot">                  </span></span> the <span class="q-inplace"><span class="qi-inplace">(110)</span><span class="q-inplace-slot">wi                                     sp</span></span> added some ghostly <span class="q-inplace"><span class="qi-inplace">(111)</span><span class="q-inplace-slot">at                            e</span></span>. 閃爍的鬼火增添了幾許鬼怪的氣氛。</p>
 <p>When their team won, people cheered and <span class="q-inplace"><span class="qi-inplace">(112)</span><span class="q-inplace-slot">f                  g</span></span> their hats <span class="q-inplace"><span class="qi-inplace">(113)</span><span class="q-inplace-slot">                  </span></span> the air. 當他們的隊伍勝利時，人們歡呼著，並將帽子抛向空中。</p>
 <p>Keep an eye on the notice boards <span class="q-inplace"><span class="qi-inplace">(114)</span><span class="q-inplace-slot">                  </span></span> <span class="q-inplace"><span class="qi-inplace">(115)</span><span class="q-inplace-slot">f                              g</span></span> events. 注意公告欄上即將來臨的活動。</p>
 <p>Why have you <span class="q-inplace"><span class="qi-inplace">(116)</span><span class="q-inplace-slot">f                      n</span></span> me? 你為何棄我於不顧呢？</p>
@@ -306,7 +314,7 @@
 <p>His <span class="q-inplace"><span class="qi-inplace">(101)</span><span class="q-inplace-slot"><span class="a-inplace-space">fingerprints</span></span></span> were all over the <span class="q-inplace"><span class="qi-inplace">(102)</span><span class="q-inplace-slot"><span class="a-inplace-space">pistol</span></span></span>. 這把手槍上滿是他的指紋。</p>
 <p>Derek noticed wet <span class="q-inplace"><span class="qi-inplace">(103)</span><span class="q-inplace-slot"><span class="a-inplace-space">footprints</span></span></span> <span class="q-inplace"><span class="qi-inplace">(104)</span><span class="q-inplace-slot"><span class="a-inplace-space">on</span></span></span> the floor. 德瑞克注意到地板上的溼腳印。</p>
 <p>The candles <span class="q-inplace"><span class="qi-inplace">(105)</span><span class="q-inplace-slot"><span class="a-inplace-space">flickered</span></span></span> <span class="q-inplace"><span class="qi-inplace">(106)</span><span class="q-inplace-slot"><span class="a-inplace-space">in</span></span></span> the <span class="q-inplace"><span class="qi-inplace">(107)</span><span class="q-inplace-slot"><span class="a-inplace-space">darkness</span></span></span>. 蠟燭在黑暗中明滅不定。</p>
-<p>The <span class="q-inplace"><span class="qi-inplace">(108)</span><span class="q-inplace-slot"><span class="a-inplace-space">flicker</span></span></span> <span class="q-inplace"><span class="qi-inplace">(109)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span> the will-o’-the-<span class="q-inplace"><span class="qi-inplace">(110)</span><span class="q-inplace-slot"><span class="a-inplace-space">wisp</span></span></span> added some ghostly <span class="q-inplace"><span class="qi-inplace">(111)</span><span class="q-inplace-slot"><span class="a-inplace-space">atmosphere</span></span></span>. 閃爍的鬼火增添了幾許鬼怪的氣氛。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(108)</span><span class="q-inplace-slot"><span class="a-inplace-space">flicker</span></span></span> <span class="q-inplace"><span class="qi-inplace">(109)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span> the <span class="q-inplace"><span class="qi-inplace">(110)</span><span class="q-inplace-slot"><span class="a-inplace-space">will-o’-the-wisp</span></span></span> added some ghostly <span class="q-inplace"><span class="qi-inplace">(111)</span><span class="q-inplace-slot"><span class="a-inplace-space">atmosphere</span></span></span>. 閃爍的鬼火增添了幾許鬼怪的氣氛。</p>
 <p>When their team won, people cheered and <span class="q-inplace"><span class="qi-inplace">(112)</span><span class="q-inplace-slot"><span class="a-inplace-space">flung</span></span></span> their hats <span class="q-inplace"><span class="qi-inplace">(113)</span><span class="q-inplace-slot"><span class="a-inplace-space">into</span></span></span> the air. 當他們的隊伍勝利時，人們歡呼著，並將帽子抛向空中。</p>
 <p>Keep an eye on the notice boards <span class="q-inplace"><span class="qi-inplace">(114)</span><span class="q-inplace-slot"><span class="a-inplace-space">for</span></span></span> <span class="q-inplace"><span class="qi-inplace">(115)</span><span class="q-inplace-slot"><span class="a-inplace-space">forthcoming</span></span></span> events. 注意公告欄上即將來臨的活動。</p>
 <p>Why have you <span class="q-inplace"><span class="qi-inplace">(116)</span><span class="q-inplace-slot"><span class="a-inplace-space">forsaken</span></span></span> me? 你為何棄我於不顧呢？</p>
@@ -450,7 +458,7 @@
 <span class="qi-left">107.</span>darkness<br/>
 <span class="qi-left">108.</span>flicker<br/>
 <span class="qi-left">109.</span>of<br/>
-<span class="qi-left">110.</span>wisp<br/>
+<span class="qi-left">110.</span>will-o’-the-wisp<br/>
 <span class="qi-left">111.</span>atmosphere<br/>
 <span class="qi-left">112.</span>flung<br/>
 <span class="qi-left">113.</span>into<br/>
@@ -522,13 +530,9 @@
       update_title();
       update_line_height();
       if(document.getElementById('compact-mode-input').checkVisibility()){
-        document.getElementById('paragraph-margin-input').value = 10;
         document.getElementById('compact-mode-input').checked = true;
-        document.getElementById('line-height-input').value = 1;
-        update_line_height();
-        document.getElementById('paragraph-margin-input').value = 2;
-        update_paragraph_margin();
-        document.getElementById('font-size-input').value -= 1;
+        set_compact_mode(true);
+        document.getElementById('font-size-input').value -= 1; // [ ] reduce paper, decrease font size
         update_text_font_size();
       }
       update_paragraph_margin();

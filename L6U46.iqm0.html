@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/quiz-default.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css" integrity="sha384-zh0CIslj+VczCZtlzBcjt5ppRcsAmDnRem7ESsYwWwg3m/OaJ2l4x7YBZl9Kxxib" crossorigin="anonymous">
+
+    <!-- The loading of KaTeX is deferred to speed up page rendering -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js" integrity="sha384-Rma6DA2IPUwhNxmrB/7S3Tno0YY7sFu9WSYMCuulLhIqYSGZ2gKCJWIqhBWqMQfh" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/mhchem.min.js" integrity="sha384-F2ptQFZqNJuqfGGl28mIXyQ5kXH48spn7rcoS0Y9psqIKAcZPLd1NzwFlm/bl1mH"  crossorigin="anonymous"></script>
+    <!-- To automatically render math in text elements, include the auto-render extension: -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
+      onload="renderMathInElement(document.body);document.querySelectorAll('.text>.cjk_fallback').forEach((elem) => {elem.classList.add('normal-text');});"></script>
+  </head>
+  <body>
+    <style>
+      body {
+        font-size: 14pt;
+        font-family: Cambria, 'GenRyuMin TW', Cochin, Georgia, Times,
+          'Times New Roman', serif;
+      }
+      .text>.cjk_fallback{
+        font-size: 14pt;
+        font-family: 'GenRyuMin TW';
+      }
+      div{
+        line-height: 1.17;
+      }
+      :lang(en){
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+      }
+      h1 {
+        font-weight: normal;
+        font-family: FZYaoTi, 'Noto Sans TC Medium', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 30pt;
+      }
+      h2 {
+        font-weight: normal;
+        font-family: FZYaoTi, 'Noto Sans TC Medium', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 26pt;
+      }
+      h3 {
+        font-weight: normal;
+        font-family: 'Noto Sans TC Medium', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin-bottom: 5pt;
+        font-size: 20pt;
+      }
+      span.tagline {
+        font-size: 60%;
+        color: darkslategray;
+      }
+      p {
+        white-space: pre-wrap;
+        line-height: 1.1;
+        font-size: 14pt;
+      }
+      .normal-text {
+        font-size: 14pt;
+      }
+    </style>
+    <script src="js/quiz-default.js"></script>
+    <div class="no-print">
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="title-input" class="col-form-label">Title</label>
+        </div>
+        <div class="col-auto">
+          <input id="title-input" class="form-control" type="text" value="高級單字 L6U46 首捲挖啥物" oninput="update_title();"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="h1-size-input" class="col-form-label">Title Font Size</label>
+        </div>
+        <div class="col-auto">
+          <input id="h1-size-input" class="form-control" type="number" value="30" oninput="update_title_font_size();"/>
+        </div>
+        <div class="col-auto">
+          <label for="font-size-input" class="col-form-label">Content Font Size</label>
+        </div>
+        <div class="col-auto">
+          <input id="font-size-input" class="form-control" type="number" value="14" oninput="update_text_font_size();"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto pro-version-component">
+          <label for="line-height-input" class="col-form-label">Content Line Height</label>
+        </div>
+        <div class="col-auto pro-version-component">
+          <input id="line-height-input" class="form-control" type="number" step="0.1" value="1.17" oninput="update_line_height();"/>
+        </div>
+        <div class="col-auto pro-version-component">
+          <label for="paragraph-margin-input" class="col-form-label">Paragraph Margin</label>
+        </div>
+        <div class="col-auto pro-version-component">
+          <input id="paragraph-margin-input" class="form-control" type="number" value="6" oninput="update_paragraph_margin();"/>
+        </div>
+        <div class="col-auto basic-version-component">
+          <label for="compact-mode-input" class="col-form-label">Compact Mode</label>
+        </div>
+        <div class="col-auto basic-version-component">
+          <input class="form-check-input" id="compact-mode-input" type="checkbox" unchecked onchange="set_compact_mode(document.getElementById('compact-mode-input').checked)"/>
+        </div>
+        <div class="col-auto">
+          <label for="box-width-input" class="col-form-label">Hint Box Width</label>
+        </div>
+        <div class="col-auto">
+          <input id="box-width-input" class="form-control" type="number" value="200" oninput="update_hint_box_width();"/>
+        </div>
+        <div class="col-auto pro-version-component">
+          <label for="narrow-column-width-input" class="col-form-label">Simple Answer Width</label>
+        </div>
+        <div class="col-auto pro-version-component">
+          <input id="narrow-column-width-input" class="form-control" type="number" value="50" oninput="update_narrow_column_width();"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="part-question-include-input" class="col-form-label">Include Question Part</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-check-input" id="part-question-include-input" type="checkbox" checked onchange="set_visible('part-question-include-input', 'part-question');"/>
+        </div>
+        <div class="col-auto">
+          <label for="break-hq-input" class="col-form-label">Page Break(s) for Question</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-control" id="break-hq-input" type="number" value="0" oninput="set_page_break('break-hq-input', 'inter-h-q');"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="part-full-answer-include-input" class="col-form-label">Include Full Answer Part</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-check-input" id="part-full-answer-include-input" type="checkbox" checked onchange="set_visible('part-full-answer-include-input', 'part-full-answer');"/>
+        </div>
+        <div class="col-auto">
+          <label for="break-qa-input" class="col-form-label">Page Break(s) for Full Answer</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-control" id="break-qa-input" type="number" value="1" oninput="set_page_break('break-qa-input', 'inter-q-fa');"/>
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="part-simple-answer-include-input" class="col-form-label">Include Simple Answer Part</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-check-input" id="part-simple-answer-include-input" type="checkbox" checked onchange="set_visible('part-simple-answer-include-input', 'part-simple-answer');"/>
+        </div>
+        <div class="col-auto">
+          <label for="break-aa-input" class="col-form-label">Page Break(s) for Simple Answer</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-control" id="break-aa-input" type="number" value="1" oninput="set_page_break('break-aa-input', 'inter-fa-sa');"/>
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary" onclick="window.print();" id="print-button">
+        Print The Quiz
+      </button>
+    </div>
+
+    <!-- start filling -->
+
+    <div id="paper">
+      <div id="inter-h-q"></div>
+      <h1 id="title-text">
+        高級單字 L6U46 首捲挖啥物
+      </h1>
+      <div id="part-question">
+        <h3>
+          題目
+        </h3>
+        <div class="b5-port-col">
+          <div class="box normal-text" id="hint-box">
+            
+          </div>
+          <p>Joe is a well-known <span class="q-inplace"><span class="qi-inplace">(1)</span><span class="q-inplace-slot">h                               n</span></span>. 喬是一位著名的人道主義者。</p>
+<p>The Red Cross is famous for its <span class="q-inplace"><span class="qi-inplace">(2)</span><span class="q-inplace-slot">h                               n</span></span> efforts. 紅十字會以其人道主義的努力而著稱。</p>
+<p>I don’t think it’s <span class="q-inplace"><span class="qi-inplace">(3)</span><span class="q-inplace-slot">h                  e</span></span> <span class="q-inplace"><span class="qi-inplace">(4)</span><span class="q-inplace-slot">                  </span></span> keep people alive with machines. 我不認為用機器來維持人的生命是人道的做法。</p>
+<p>Use a can of corn <span class="q-inplace"><span class="qi-inplace">(5)</span><span class="q-inplace-slot">k                  ls</span></span> if you don’t have fresh corn on hand for the salad. 如果你手邊沒有新鮮的玉米可以用來做沙拉的話，可以改用玉米粒罐頭。</p>
+<p>It <mark>is <span class="q-inplace"><span class="qi-inplace">(6)</span><span class="q-inplace-slot">h                       y</span></span> <span class="q-inplace"><span class="qi-inplace">(7)</span><span class="q-inplace-slot">                  </span></span></mark> <span class="q-inplace"><span class="qi-inplace">(8)</span><span class="q-inplace-slot">p                   d</span></span> concern <mark><span class="q-inplace"><span class="qi-inplace">(9)</span><span class="q-inplace-slot">                  </span></span> the <span class="q-inplace"><span class="qi-inplace">(10)</span><span class="q-inplace-slot">w                   e</span></span> <span class="q-inplace"><span class="qi-inplace">(11)</span><span class="q-inplace-slot">                  </span></span></mark> others when the performance is to gain <span class="q-inplace"><span class="qi-inplace">(12)</span><span class="q-inplace-slot">a                    e</span></span>. 假裝關心他人的福祉，但其實只是為了要贏得掌聲的這種表現根本就是偽善。</p>
+<p>He’s a <span class="q-inplace"><span class="qi-inplace">(13)</span><span class="q-inplace-slot">h                       e</span></span> <span class="q-inplace"><span class="qi-inplace">(14)</span><span class="q-inplace-slot">                  </span></span> tell us not to smoke—he smokes himself! 他自己抽煙卻叫我們不要抽煙，真是個偽君子。</p>
+<p>It <mark>is <span class="q-inplace"><span class="qi-inplace">(15)</span><span class="q-inplace-slot">h                            l</span></span> <span class="q-inplace"><span class="qi-inplace">(16)</span><span class="q-inplace-slot">                  </span></span></mark> praise bad work. 稱讚低劣的作品是很虛偽的。</p>
+<p>He burst into <span class="q-inplace"><span class="qi-inplace">(17)</span><span class="q-inplace-slot">h                        l</span></span> laughter. 他爆出歇斯底里的笑聲。</p>
+<p>Black <span class="q-inplace"><span class="qi-inplace">(18)</span><span class="q-inplace-slot">a                  </span></span> and <span class="q-inplace"><span class="qi-inplace">(19)</span><span class="q-inplace-slot">l                  </span></span> <span class="q-inplace"><span class="qi-inplace">(20)</span><span class="q-inplace-slot">p                  d</span></span> out of the central <span class="q-inplace"><span class="qi-inplace">(21)</span><span class="q-inplace-slot">c                  r</span></span>. 黑色的火山灰和岩漿從中央的火山口冒出來。</p>
+<p>The US is the biggest <span class="q-inplace"><span class="qi-inplace">(22)</span><span class="q-inplace-slot">i                      r</span></span> <span class="q-inplace"><span class="qi-inplace">(23)</span><span class="q-inplace-slot">                  </span></span> oil. 美國是最大的石油進口國。</p>
+<p>Mr. Asnani is <mark>an <span class="q-inplace"><span class="qi-inplace">(24)</span><span class="q-inplace-slot">i                      r</span></span> <span class="q-inplace"><span class="qi-inplace">(25)</span><span class="q-inplace-slot">                  </span></span></mark> <span class="q-inplace"><span class="qi-inplace">(26)</span><span class="q-inplace-slot">el                        c</span></span> goods. 阿茲南尼先生是一個電子商品進口商。</p>
+<p>Venezuela is the fifth <span class="q-inplace"><span class="qi-inplace">(27)</span><span class="q-inplace-slot">l                  t</span></span> oil <span class="q-inplace"><span class="qi-inplace">(28)</span><span class="q-inplace-slot">e                      r</span></span> <span class="q-inplace"><span class="qi-inplace">(29)</span><span class="q-inplace-slot">                  </span></span> the world. 委內瑞拉是世界第五大石油輸出國。</p>
+<p>The company is <mark>an <span class="q-inplace"><span class="qi-inplace">(30)</span><span class="q-inplace-slot">e                      r</span></span> <span class="q-inplace"><span class="qi-inplace">(31)</span><span class="q-inplace-slot">                  </span></span></mark> dried flowers. 這家公司是乾燥花的出口商。</p>
+<p>Recently, I have <mark>been <span class="q-inplace"><span class="qi-inplace">(32)</span><span class="q-inplace-slot">l                  e</span></span> <span class="q-inplace"><span class="qi-inplace">(33)</span><span class="q-inplace-slot">                  </span></span></mark> colds. 最近我很容易感冒。</p>
+<p>Speeding on the highway <mark>is <span class="q-inplace"><span class="qi-inplace">(34)</span><span class="q-inplace-slot">l                  e</span></span> <span class="q-inplace"><span class="qi-inplace">(35)</span><span class="q-inplace-slot">                  </span></span></mark> a fine of NT3,600 dollars. 高速公路上超速可罰以新臺幣三千六百元。</p>
+<p>Is a son <span class="q-inplace"><span class="qi-inplace">(36)</span><span class="q-inplace-slot">l                  e</span></span> <span class="q-inplace"><span class="qi-inplace">(37)</span><span class="q-inplace-slot">                  </span></span> his father’s debt? 兒子有法律上的責任要替父親還債嗎？</p>
+<p>He figured out an <span class="q-inplace"><span class="qi-inplace">(38)</span><span class="q-inplace-slot">i                      s</span></span> plan <mark><span class="q-inplace"><span class="qi-inplace">(39)</span><span class="q-inplace-slot">                  </span></span> <span class="q-inplace"><span class="qi-inplace">(40)</span><span class="q-inplace-slot">di                      g</span></span> <span class="q-inplace"><span class="qi-inplace">(41)</span><span class="q-inplace-slot">                  </span></span></mark> the <span class="q-inplace"><span class="qi-inplace">(42)</span><span class="q-inplace-slot">r                   s</span></span>. 他想出了一個可以把這些殘羹剩菜處理掉的巧妙方法。</p>
+<p>Drug <span class="q-inplace"><span class="qi-inplace">(43)</span><span class="q-inplace-slot">sm                        s</span></span> <span class="q-inplace"><span class="qi-inplace">(44)</span><span class="q-inplace-slot">co                          y</span></span> use their <span class="q-inplace"><span class="qi-inplace">(45)</span><span class="q-inplace-slot">i                      y</span></span> <span class="q-inplace"><span class="qi-inplace">(46)</span><span class="q-inplace-slot">                  </span></span> find new ways of getting drugs into a country. 毒品走私者經常運用創意找出新方法來把毒品帶一個國家。</p>
+<p>I think he is a <span class="q-inplace"><span class="qi-inplace">(47)</span><span class="q-inplace-slot">l                  c</span></span>. 我認為他是個瘋子。</p>
+<p>People used to think it was the <span class="q-inplace"><span class="qi-inplace">(48)</span><span class="q-inplace-slot">l                  r</span></span> power that made a person go <span class="q-inplace"><span class="qi-inplace">(49)</span><span class="q-inplace-slot">l                  c</span></span>. 人們過去認為是月亮的力量使一個人發瘋的。</p>
+<p>Allen is a man of <span class="q-inplace"><span class="qi-inplace">(50)</span><span class="q-inplace-slot">i                    t</span></span>. 艾倫是個有思辨能力的人。</p>
+<p>The grass in the field was fresh and <span class="q-inplace"><span class="qi-inplace">(51)</span><span class="q-inplace-slot">l                  </span></span>. 原野上的草青翠嫩綠。</p>
+<p>If a person’s last name is “<span class="q-inplace"><span class="qi-inplace">(52)</span><span class="q-inplace-slot">M                  r</span></span>”, then his <span class="q-inplace"><span class="qi-inplace">(53)</span><span class="q-inplace-slot">an                        s</span></span> were probably <span class="q-inplace"><span class="qi-inplace">(54)</span><span class="q-inplace-slot">m                  rs</span></span>. 如果一個人姓「米勒」，那他的祖先很可能是磨坊主人。</p>
+<p>The nation <span class="q-inplace"><span class="qi-inplace">(55)</span><span class="q-inplace-slot">l                      ted</span></span> the death of its great war leader. 舉國為偉大的戰爭領袖之死而哀悼。</p>
+<p>The president expressed his <span class="q-inplace"><span class="qi-inplace">(56)</span><span class="q-inplace-slot">l                  t</span></span> <span class="q-inplace"><span class="qi-inplace">(57)</span><span class="q-inplace-slot">                  </span></span> the death of the great artist. 總統表達了對這位偉大的藝術家之死的哀悼之情。</p>
+<p>He made us laugh <span class="q-inplace"><span class="qi-inplace">(58)</span><span class="q-inplace-slot">                  </span></span> <span class="q-inplace"><span class="qi-inplace">(59)</span><span class="q-inplace-slot">m                       g</span></span> famous people. 他模仿名人，逗得我們哈哈大笑。</p>
+<p>The students began a <span class="q-inplace"><span class="qi-inplace">(60)</span><span class="q-inplace-slot">m                  c</span></span> battle and <span class="q-inplace"><span class="qi-inplace">(61)</span><span class="q-inplace-slot">bo                          d</span></span> each other with oranges and lemons. 學生們開始玩一場模擬戰役，用柳丁和檸檬互相猛烈轟擊。</p>
+<p>The boy is playing <span class="q-inplace"><span class="qi-inplace">(62)</span><span class="q-inplace-slot">                  </span></span> his <span class="q-inplace"><span class="qi-inplace">(63)</span><span class="q-inplace-slot">m                       e</span></span> toy <span class="q-inplace"><span class="qi-inplace">(64)</span><span class="q-inplace-slot">ex                        r</span></span>. 這名男孩正在玩他的迷你玩具怪手。</p>
+<p>We can see the <span class="q-inplace"><span class="qi-inplace">(65)</span><span class="q-inplace-slot">m                          es</span></span> <span class="q-inplace"><span class="qi-inplace">(66)</span><span class="q-inplace-slot">                  </span></span> famous buildings in “Window on the World”. 我們可以在「小人國」中看到著名建築物的縮小複製品。</p>
+<p>Those <span class="q-inplace"><span class="qi-inplace">(67)</span><span class="q-inplace-slot">m                            s</span></span> boys broke my window. 那些頑皮的男孩打破我的窗戶。</p>
+<p>She has <span class="q-inplace"><span class="qi-inplace">(68)</span><span class="q-inplace-slot">p                  d</span></span> rings all over her; she has <span class="q-inplace"><span class="qi-inplace">(69)</span><span class="q-inplace-slot">m                   e</span></span> earrings, a nose ring and a <span class="q-inplace"><span class="qi-inplace">(70)</span><span class="q-inplace-slot">n                  l</span></span> ring. 她全身多處穿環；好幾個耳環、一個鼻環，還有一個肚臍環。</p>
+<p>The ancient Chinese believed that garlic <span class="q-inplace"><span class="qi-inplace">(71)</span><span class="q-inplace-slot">p                       d</span></span> <span class="q-inplace"><span class="qi-inplace">(72)</span><span class="q-inplace-slot">l                      y</span></span>. 古代中國人相信大蒜可以延年益壽。</p>
+<p>All the tourists were waiting in the hotel <span class="q-inplace"><span class="qi-inplace">(73)</span><span class="q-inplace-slot">l                  e</span></span>. 所有的旅客都在旅館大廳等候。</p>
+<p>She described her terrible <span class="q-inplace"><span class="qi-inplace">(74)</span><span class="q-inplace-slot">o                  l</span></span> <span class="q-inplace"><span class="qi-inplace">(75)</span><span class="q-inplace-slot">                  </span></span> detail. 她詳細描述她所經歷的可怕苦難。</p>
+<p>Don’t beat around the <span class="q-inplace"><span class="qi-inplace">(76)</span><span class="q-inplace-slot">b                  </span></span>. I can accept your <span class="q-inplace"><span class="qi-inplace">(77)</span><span class="q-inplace-slot">o                    t</span></span> <span class="q-inplace"><span class="qi-inplace">(78)</span><span class="q-inplace-slot">r                  l</span></span>. 不要再拐彎抹角了，我可以接受你直率的拒絕。</p>
+<p>This game is an <span class="q-inplace"><span class="qi-inplace">(79)</span><span class="q-inplace-slot">o                    t</span></span> failure for us. 這場比賽對我們來說是徹底的失敗。</p>
+<p>He always says <span class="q-inplace"><span class="qi-inplace">(80)</span><span class="q-inplace-slot">o                    t</span></span> what he thinks without considering the <span class="q-inplace"><span class="qi-inplace">(81)</span><span class="q-inplace-slot">co                                 s</span></span>. 他總是直言不諱，絲毫不考慮後果。</p>
+<p>He rejected my <span class="q-inplace"><span class="qi-inplace">(82)</span><span class="q-inplace-slot">su                          n</span></span> <span class="q-inplace"><span class="qi-inplace">(83)</span><span class="q-inplace-slot">o                    t</span></span>. 他直接拒絕了我的建議。</p>
+<p>Throughout her career, she has very successfully <span class="q-inplace"><span class="qi-inplace">(84)</span><span class="q-inplace-slot">m                            ed</span></span> the media. 在她的職業生涯中，她一直非常成功地操控了媒體。</p>
+<p>He ordered the <span class="q-inplace"><span class="qi-inplace">(85)</span><span class="q-inplace-slot">m                       e</span></span> <span class="q-inplace"><span class="qi-inplace">(86)</span><span class="q-inplace-slot">                  </span></span> 2,000 <span class="q-inplace"><span class="qi-inplace">(87)</span><span class="q-inplace-slot">i                    t</span></span> women and children. 他下令屠殺兩千名無辜的婦孺。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(88)</span><span class="q-inplace-slot">m                   y</span></span> <span class="q-inplace"><span class="qi-inplace">(89)</span><span class="q-inplace-slot">m                          ed</span></span> 2,000 <span class="q-inplace"><span class="qi-inplace">(90)</span><span class="q-inplace-slot">i                    t</span></span> women and children. 軍隊屠殺了兩千名無事的婦孺。</p>
+<p>Korea is a <span class="q-inplace"><span class="qi-inplace">(91)</span><span class="q-inplace-slot">p                      a</span></span> shaped like a tiger. 韓國是一個形狀像老虎的半島。</p>
+<p>He has been <mark><span class="q-inplace"><span class="qi-inplace">(92)</span><span class="q-inplace-slot">                  </span></span> <span class="q-inplace"><span class="qi-inplace">(93)</span><span class="q-inplace-slot">m                          n</span></span> <span class="q-inplace"><span class="qi-inplace">(94)</span><span class="q-inplace-slot">                  </span></span></mark> high blood pressure for over 10 years. 他吃藥控制高血壓已超過十年了。</p>
+<p>She found him sitting alone, deep <span class="q-inplace"><span class="qi-inplace">(95)</span><span class="q-inplace-slot">                  </span></span> <span class="q-inplace"><span class="qi-inplace">(96)</span><span class="q-inplace-slot">m                          n</span></span>. 她發現他獨坐沉思。</p>
+<p>They sat in deep <span class="q-inplace"><span class="qi-inplace">(97)</span><span class="q-inplace-slot">m                          n</span></span> <span class="q-inplace"><span class="qi-inplace">(98)</span><span class="q-inplace-slot">                  </span></span> eight days and nights without sleeping. 他們不眠不休地打坐了八天八夜。</p>
+<p>He gave me <mark>a <span class="q-inplace"><span class="qi-inplace">(99)</span><span class="q-inplace-slot">b                  h</span></span> <span class="q-inplace"><span class="qi-inplace">(100)</span><span class="q-inplace-slot">                  </span></span></mark> <span class="q-inplace"><span class="qi-inplace">(101)</span><span class="q-inplace-slot">m                  w</span></span> grapes. 他給我一串甜美的葡萄。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(102)</span><span class="q-inplace-slot">m                  w</span></span> colors of the <span class="q-inplace"><span class="qi-inplace">(103)</span><span class="q-inplace-slot">wa                       r</span></span> make people <span class="q-inplace"><span class="qi-inplace">(104)</span><span class="q-inplace-slot">r                  x</span></span>. 壁紙柔和的色彩能讓人放鬆。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(105)</span><span class="q-inplace-slot">s                    e</span></span> <span class="q-inplace"><span class="qi-inplace">(106)</span><span class="q-inplace-slot">m                   ws</span></span> the grapes. 陽光使葡萄成熟。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(107)</span><span class="q-inplace-slot">jo                       t</span></span> was held <span class="q-inplace"><span class="qi-inplace">(108)</span><span class="q-inplace-slot">h                   e</span></span> <span class="q-inplace"><span class="qi-inplace">(109)</span><span class="q-inplace-slot">                  </span></span> a <span class="q-inplace"><span class="qi-inplace">(110)</span><span class="q-inplace-slot">m                   t</span></span> group in the Middle East. 這名記者被中東的一個好戰團體押做人質。</p>
+<p>Martin Luther King was a <span class="q-inplace"><span class="qi-inplace">(111)</span><span class="q-inplace-slot">m                   t</span></span> <span class="q-inplace"><span class="qi-inplace">(112)</span><span class="q-inplace-slot">                  </span></span> <span class="q-inplace"><span class="qi-inplace">(113)</span><span class="q-inplace-slot">h                  n</span></span> rights. 金恩博士是人權鬥士。</p>
+<p>It seems <span class="q-inplace"><span class="qi-inplace">(114)</span><span class="q-inplace-slot">m                          s</span></span> that no <span class="q-inplace"><span class="qi-inplace">(115)</span><span class="q-inplace-slot">pa                        r</span></span> was killed in the train accident. 在這次火車意外中，居然沒有乘客喪生，這真是有如奇蹟。</p>
+<p><span class="q-inplace"><span class="qi-inplace">(116)</span><span class="q-inplace-slot">M                               y</span></span>, Rose survived the <span class="q-inplace"><span class="qi-inplace">(117)</span><span class="q-inplace-slot">sh                        k</span></span>. 蘿絲在船難中奇蹟般地生還。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(118)</span><span class="q-inplace-slot">p                  t</span></span> <span class="q-inplace"><span class="qi-inplace">(119)</span><span class="q-inplace-slot">                  </span></span> the <span class="q-inplace"><span class="qi-inplace">(120)</span><span class="q-inplace-slot">r                      s</span></span> <span class="q-inplace"><span class="qi-inplace">(121)</span><span class="q-inplace-slot">a                   d</span></span> much <span class="q-inplace"><span class="qi-inplace">(122)</span><span class="q-inplace-slot">s                       y</span></span>. 這些難民的困境激發了許多人的同情。</p>
+<p>Many great <span class="q-inplace"><span class="qi-inplace">(123)</span><span class="q-inplace-slot">ma                                      s</span></span> are indeed <span class="q-inplace"><span class="qi-inplace">(124)</span><span class="q-inplace-slot">ma                                 l</span></span> <span class="q-inplace"><span class="qi-inplace">(125)</span><span class="q-inplace-slot">p                      ies</span></span> <span class="q-inplace"><span class="qi-inplace">(126)</span><span class="q-inplace-slot">                  </span></span> children. 許多偉大的數學家確實從兒時起就是數學神童。</p>
+<p>Many <span class="q-inplace"><span class="qi-inplace">(127)</span><span class="q-inplace-slot">ho                           s</span></span> dream of escaping the <span class="q-inplace"><span class="qi-inplace">(128)</span><span class="q-inplace-slot">m                       y</span></span> <span class="q-inplace"><span class="qi-inplace">(129)</span><span class="q-inplace-slot">                  </span></span> <span class="q-inplace"><span class="qi-inplace">(130)</span><span class="q-inplace-slot">e                      y</span></span> life. 許多家庭主婦夢想能夠跳脫每日的單調生活。</p>
+<p>I don’t like <span class="q-inplace"><span class="qi-inplace">(131)</span><span class="q-inplace-slot">m                            s</span></span> jobs that don’t <span class="q-inplace"><span class="qi-inplace">(132)</span><span class="q-inplace-slot">i                  e</span></span> any <span class="q-inplace"><span class="qi-inplace">(133)</span><span class="q-inplace-slot">cr                        y</span></span>. 我不喜歡不需要任何創造力的單調工作。</p>
+<p>The sports car is <span class="q-inplace"><span class="qi-inplace">(134)</span><span class="q-inplace-slot">p                      d</span></span> <span class="q-inplace"><span class="qi-inplace">(135)</span><span class="q-inplace-slot">                  </span></span> a <span class="q-inplace"><span class="qi-inplace">(136)</span><span class="q-inplace-slot">t                  o</span></span> engine. 這部跑車是由渦輪引擎推進的。</p>
+<p>The car company <span class="q-inplace"><span class="qi-inplace">(137)</span><span class="q-inplace-slot">i                  s</span></span> a lot of money in developing a new <span class="q-inplace"><span class="qi-inplace">(138)</span><span class="q-inplace-slot">p                      r</span></span>. 這家車廠投資很多錢在研發新的推進器。</p>
+<p>A <span class="q-inplace"><span class="qi-inplace">(139)</span><span class="q-inplace-slot">m                  </span></span> is unable to express his ideas or feelings with his voice. 啞巴不能用聲音表達他的想法或感受。</p>
+<p>Why are some people born <span class="q-inplace"><span class="qi-inplace">(140)</span><span class="q-inplace-slot">m                  </span></span>? 為什麼有些人生來就是啞的呢？</p>
+<p>She is <span class="q-inplace"><span class="qi-inplace">(141)</span><span class="q-inplace-slot">fa                          d</span></span> <span class="q-inplace"><span class="qi-inplace">(142)</span><span class="q-inplace-slot">                  </span></span> the stories of Greek and Roman <span class="q-inplace"><span class="qi-inplace">(143)</span><span class="q-inplace-slot">m                        y</span></span>. 她對希臘、羅馬神話故事深深著迷。</p>
+<p>The novel has three parts, each <span class="q-inplace"><span class="qi-inplace">(144)</span><span class="q-inplace-slot">n                      ed</span></span> <span class="q-inplace"><span class="qi-inplace">(145)</span><span class="q-inplace-slot">                  </span></span> a different character. 這本小說分三部分，每一部分由不同的角色來陳述。</p>
+<p>The movie <i>Titanic</i> is a touching <span class="q-inplace"><span class="qi-inplace">(146)</span><span class="q-inplace-slot">n                       e</span></span> <span class="q-inplace"><span class="qi-inplace">(147)</span><span class="q-inplace-slot">                  </span></span> a <span class="q-inplace"><span class="qi-inplace">(148)</span><span class="q-inplace-slot">t                  c</span></span> <span class="q-inplace"><span class="qi-inplace">(149)</span><span class="q-inplace-slot">r                    e</span></span>. 《鐵達尼號》這部電影是一個愛情悲劇的感人故事。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(150)</span><span class="q-inplace-slot">pr                        r</span></span> <span class="q-inplace"><span class="qi-inplace">(151)</span><span class="q-inplace-slot">cr                       d</span></span> my essay <span class="q-inplace"><span class="qi-inplace">(152)</span><span class="q-inplace-slot">                  </span></span> having too little argument and too much <span class="q-inplace"><span class="qi-inplace">(153)</span><span class="q-inplace-slot">n                       e</span></span>. 教授批評我寫的報告論說的部分太少，敘事的部分太多。</p>
+<p>The character in a book or a film who tells the story is the <span class="q-inplace"><span class="qi-inplace">(154)</span><span class="q-inplace-slot">n                      r</span></span>. 在書中或電影裡陳述故事的角色就是敘事者。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(155)</span><span class="q-inplace-slot">c                   h</span></span> <span class="q-inplace"><span class="qi-inplace">(156)</span><span class="q-inplace-slot">p                   led</span></span> towards its <span class="q-inplace"><span class="qi-inplace">(157)</span><span class="q-inplace-slot">p                  </span></span>. 這隻獵豹向牠的獵物潛行。</p>
+<p>Who will get the DPP <span class="q-inplace"><span class="qi-inplace">(158)</span><span class="q-inplace-slot">n                          n</span></span> <span class="q-inplace"><span class="qi-inplace">(159)</span><span class="q-inplace-slot">                  </span></span> president? 誰會得到民進黨的總統提名？</p>
+<p>Do you know who the <span class="q-inplace"><span class="qi-inplace">(160)</span><span class="q-inplace-slot">n                      es</span></span> <span class="q-inplace"><span class="qi-inplace">(161)</span><span class="q-inplace-slot">                  </span></span> Record of the Year are? 你知道年度最佳唱片的入圍者有誰嗎？</p>
+<p>That <span class="q-inplace"><span class="qi-inplace">(162)</span><span class="q-inplace-slot">n                       s</span></span> <span class="q-inplace"><span class="qi-inplace">(163)</span><span class="q-inplace-slot">c                   l</span></span> has been sent to prison. 這個惡名昭彰的罪犯已經被送去坐牢了。</p>
+<p>The company <mark>is <span class="q-inplace"><span class="qi-inplace">(164)</span><span class="q-inplace-slot">n                       s</span></span> <span class="q-inplace"><span class="qi-inplace">(165)</span><span class="q-inplace-slot">                  </span></span></mark> paying its bills late. 這公司因為常遲付帳單而惡名昭彰。</p>
+<p>The taxi driver dropped us off <mark><span class="q-inplace"><span class="qi-inplace">(166)</span><span class="q-inplace-slot">                  </span></span> the <span class="q-inplace"><span class="qi-inplace">(167)</span><span class="q-inplace-slot">r                  </span></span> <span class="q-inplace"><span class="qi-inplace">(168)</span><span class="q-inplace-slot">                  </span></span></mark> the hotel. 計程車司機讓我們在旅館的斜坡道上下車。</p>
+
+        </div>
+      </div>
+      <div id="part-full-answer">
+        <div id="inter-q-fa"></div>
+        <h3>
+          詳解
+        </h3>
+        <div class="b5-port-col">
+          <p>Joe is a well-known <span class="q-inplace"><span class="qi-inplace">(1)</span><span class="q-inplace-slot"><span class="a-inplace-space">humanitarian</span></span></span>. 喬是一位著名的人道主義者。</p>
+<p>The Red Cross is famous for its <span class="q-inplace"><span class="qi-inplace">(2)</span><span class="q-inplace-slot"><span class="a-inplace-space">humanitarian</span></span></span> efforts. 紅十字會以其人道主義的努力而著稱。</p>
+<p>I don’t think it’s <span class="q-inplace"><span class="qi-inplace">(3)</span><span class="q-inplace-slot"><span class="a-inplace-space">humane</span></span></span> <span class="q-inplace"><span class="qi-inplace">(4)</span><span class="q-inplace-slot"><span class="a-inplace-space">to</span></span></span> keep people alive with machines. 我不認為用機器來維持人的生命是人道的做法。</p>
+<p>Use a can of corn <span class="q-inplace"><span class="qi-inplace">(5)</span><span class="q-inplace-slot"><span class="a-inplace-space">kernels</span></span></span> if you don’t have fresh corn on hand for the salad. 如果你手邊沒有新鮮的玉米可以用來做沙拉的話，可以改用玉米粒罐頭。</p>
+<p>It <mark>is <span class="q-inplace"><span class="qi-inplace">(6)</span><span class="q-inplace-slot"><span class="a-inplace-space">hypocrisy</span></span></span> <span class="q-inplace"><span class="qi-inplace">(7)</span><span class="q-inplace-slot"><span class="a-inplace-space">to</span></span></span></mark> <span class="q-inplace"><span class="qi-inplace">(8)</span><span class="q-inplace-slot"><span class="a-inplace-space">pretend</span></span></span> concern <mark><span class="q-inplace"><span class="qi-inplace">(9)</span><span class="q-inplace-slot"><span class="a-inplace-space">for</span></span></span> the <span class="q-inplace"><span class="qi-inplace">(10)</span><span class="q-inplace-slot"><span class="a-inplace-space">welfare</span></span></span> <span class="q-inplace"><span class="qi-inplace">(11)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span></mark> others when the performance is to gain <span class="q-inplace"><span class="qi-inplace">(12)</span><span class="q-inplace-slot"><span class="a-inplace-space">applause</span></span></span>. 假裝關心他人的福祉，但其實只是為了要贏得掌聲的這種表現根本就是偽善。</p>
+<p>He’s a <span class="q-inplace"><span class="qi-inplace">(13)</span><span class="q-inplace-slot"><span class="a-inplace-space">hypocrite</span></span></span> <span class="q-inplace"><span class="qi-inplace">(14)</span><span class="q-inplace-slot"><span class="a-inplace-space">to</span></span></span> tell us not to smoke—he smokes himself! 他自己抽煙卻叫我們不要抽煙，真是個偽君子。</p>
+<p>It <mark>is <span class="q-inplace"><span class="qi-inplace">(15)</span><span class="q-inplace-slot"><span class="a-inplace-space">hypocritical</span></span></span> <span class="q-inplace"><span class="qi-inplace">(16)</span><span class="q-inplace-slot"><span class="a-inplace-space">to</span></span></span></mark> praise bad work. 稱讚低劣的作品是很虛偽的。</p>
+<p>He burst into <span class="q-inplace"><span class="qi-inplace">(17)</span><span class="q-inplace-slot"><span class="a-inplace-space">hysterical</span></span></span> laughter. 他爆出歇斯底里的笑聲。</p>
+<p>Black <span class="q-inplace"><span class="qi-inplace">(18)</span><span class="q-inplace-slot"><span class="a-inplace-space">ash</span></span></span> and <span class="q-inplace"><span class="qi-inplace">(19)</span><span class="q-inplace-slot"><span class="a-inplace-space">lava</span></span></span> <span class="q-inplace"><span class="qi-inplace">(20)</span><span class="q-inplace-slot"><span class="a-inplace-space">poured</span></span></span> out of the central <span class="q-inplace"><span class="qi-inplace">(21)</span><span class="q-inplace-slot"><span class="a-inplace-space">crater</span></span></span>. 黑色的火山灰和岩漿從中央的火山口冒出來。</p>
+<p>The US is the biggest <span class="q-inplace"><span class="qi-inplace">(22)</span><span class="q-inplace-slot"><span class="a-inplace-space">importer</span></span></span> <span class="q-inplace"><span class="qi-inplace">(23)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span> oil. 美國是最大的石油進口國。</p>
+<p>Mr. Asnani is <mark>an <span class="q-inplace"><span class="qi-inplace">(24)</span><span class="q-inplace-slot"><span class="a-inplace-space">importer</span></span></span> <span class="q-inplace"><span class="qi-inplace">(25)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span></mark> <span class="q-inplace"><span class="qi-inplace">(26)</span><span class="q-inplace-slot"><span class="a-inplace-space">electronic</span></span></span> goods. 阿茲南尼先生是一個電子商品進口商。</p>
+<p>Venezuela is the fifth <span class="q-inplace"><span class="qi-inplace">(27)</span><span class="q-inplace-slot"><span class="a-inplace-space">largest</span></span></span> oil <span class="q-inplace"><span class="qi-inplace">(28)</span><span class="q-inplace-slot"><span class="a-inplace-space">exporter</span></span></span> <span class="q-inplace"><span class="qi-inplace">(29)</span><span class="q-inplace-slot"><span class="a-inplace-space">in</span></span></span> the world. 委內瑞拉是世界第五大石油輸出國。</p>
+<p>The company is <mark>an <span class="q-inplace"><span class="qi-inplace">(30)</span><span class="q-inplace-slot"><span class="a-inplace-space">exporter</span></span></span> <span class="q-inplace"><span class="qi-inplace">(31)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span></mark> dried flowers. 這家公司是乾燥花的出口商。</p>
+<p>Recently, I have <mark>been <span class="q-inplace"><span class="qi-inplace">(32)</span><span class="q-inplace-slot"><span class="a-inplace-space">liable</span></span></span> <span class="q-inplace"><span class="qi-inplace">(33)</span><span class="q-inplace-slot"><span class="a-inplace-space">to</span></span></span></mark> colds. 最近我很容易感冒。</p>
+<p>Speeding on the highway <mark>is <span class="q-inplace"><span class="qi-inplace">(34)</span><span class="q-inplace-slot"><span class="a-inplace-space">liable</span></span></span> <span class="q-inplace"><span class="qi-inplace">(35)</span><span class="q-inplace-slot"><span class="a-inplace-space">to</span></span></span></mark> a fine of NT3,600 dollars. 高速公路上超速可罰以新臺幣三千六百元。</p>
+<p>Is a son <span class="q-inplace"><span class="qi-inplace">(36)</span><span class="q-inplace-slot"><span class="a-inplace-space">liable</span></span></span> <span class="q-inplace"><span class="qi-inplace">(37)</span><span class="q-inplace-slot"><span class="a-inplace-space">for</span></span></span> his father’s debt? 兒子有法律上的責任要替父親還債嗎？</p>
+<p>He figured out an <span class="q-inplace"><span class="qi-inplace">(38)</span><span class="q-inplace-slot"><span class="a-inplace-space">ingenious</span></span></span> plan <mark><span class="q-inplace"><span class="qi-inplace">(39)</span><span class="q-inplace-slot"><span class="a-inplace-space">for</span></span></span> <span class="q-inplace"><span class="qi-inplace">(40)</span><span class="q-inplace-slot"><span class="a-inplace-space">disposing</span></span></span> <span class="q-inplace"><span class="qi-inplace">(41)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span></mark> the <span class="q-inplace"><span class="qi-inplace">(42)</span><span class="q-inplace-slot"><span class="a-inplace-space">remains</span></span></span>. 他想出了一個可以把這些殘羹剩菜處理掉的巧妙方法。</p>
+<p>Drug <span class="q-inplace"><span class="qi-inplace">(43)</span><span class="q-inplace-slot"><span class="a-inplace-space">smugglers</span></span></span> <span class="q-inplace"><span class="qi-inplace">(44)</span><span class="q-inplace-slot"><span class="a-inplace-space">constantly</span></span></span> use their <span class="q-inplace"><span class="qi-inplace">(45)</span><span class="q-inplace-slot"><span class="a-inplace-space">ingenuity</span></span></span> <span class="q-inplace"><span class="qi-inplace">(46)</span><span class="q-inplace-slot"><span class="a-inplace-space">to</span></span></span> find new ways of getting drugs into a country. 毒品走私者經常運用創意找出新方法來把毒品帶一個國家。</p>
+<p>I think he is a <span class="q-inplace"><span class="qi-inplace">(47)</span><span class="q-inplace-slot"><span class="a-inplace-space">lunatic</span></span></span>. 我認為他是個瘋子。</p>
+<p>People used to think it was the <span class="q-inplace"><span class="qi-inplace">(48)</span><span class="q-inplace-slot"><span class="a-inplace-space">lunar</span></span></span> power that made a person go <span class="q-inplace"><span class="qi-inplace">(49)</span><span class="q-inplace-slot"><span class="a-inplace-space">lunatic</span></span></span>. 人們過去認為是月亮的力量使一個人發瘋的。</p>
+<p>Allen is a man of <span class="q-inplace"><span class="qi-inplace">(50)</span><span class="q-inplace-slot"><span class="a-inplace-space">intellect</span></span></span>. 艾倫是個有思辨能力的人。</p>
+<p>The grass in the field was fresh and <span class="q-inplace"><span class="qi-inplace">(51)</span><span class="q-inplace-slot"><span class="a-inplace-space">lush</span></span></span>. 原野上的草青翠嫩綠。</p>
+<p>If a person’s last name is “<span class="q-inplace"><span class="qi-inplace">(52)</span><span class="q-inplace-slot"><span class="a-inplace-space">Miller</span></span></span>”, then his <span class="q-inplace"><span class="qi-inplace">(53)</span><span class="q-inplace-slot"><span class="a-inplace-space">ancestors</span></span></span> were probably <span class="q-inplace"><span class="qi-inplace">(54)</span><span class="q-inplace-slot"><span class="a-inplace-space">millers</span></span></span>. 如果一個人姓「米勒」，那他的祖先很可能是磨坊主人。</p>
+<p>The nation <span class="q-inplace"><span class="qi-inplace">(55)</span><span class="q-inplace-slot"><span class="a-inplace-space">lamented</span></span></span> the death of its great war leader. 舉國為偉大的戰爭領袖之死而哀悼。</p>
+<p>The president expressed his <span class="q-inplace"><span class="qi-inplace">(56)</span><span class="q-inplace-slot"><span class="a-inplace-space">lament</span></span></span> <span class="q-inplace"><span class="qi-inplace">(57)</span><span class="q-inplace-slot"><span class="a-inplace-space">for</span></span></span> the death of the great artist. 總統表達了對這位偉大的藝術家之死的哀悼之情。</p>
+<p>He made us laugh <span class="q-inplace"><span class="qi-inplace">(58)</span><span class="q-inplace-slot"><span class="a-inplace-space">by</span></span></span> <span class="q-inplace"><span class="qi-inplace">(59)</span><span class="q-inplace-slot"><span class="a-inplace-space">mimicking</span></span></span> famous people. 他模仿名人，逗得我們哈哈大笑。</p>
+<p>The students began a <span class="q-inplace"><span class="qi-inplace">(60)</span><span class="q-inplace-slot"><span class="a-inplace-space">mimic</span></span></span> battle and <span class="q-inplace"><span class="qi-inplace">(61)</span><span class="q-inplace-slot"><span class="a-inplace-space">bombarded</span></span></span> each other with oranges and lemons. 學生們開始玩一場模擬戰役，用柳丁和檸檬互相猛烈轟擊。</p>
+<p>The boy is playing <span class="q-inplace"><span class="qi-inplace">(62)</span><span class="q-inplace-slot"><span class="a-inplace-space">with</span></span></span> his <span class="q-inplace"><span class="qi-inplace">(63)</span><span class="q-inplace-slot"><span class="a-inplace-space">miniature</span></span></span> toy <span class="q-inplace"><span class="qi-inplace">(64)</span><span class="q-inplace-slot"><span class="a-inplace-space">excavator</span></span></span>. 這名男孩正在玩他的迷你玩具怪手。</p>
+<p>We can see the <span class="q-inplace"><span class="qi-inplace">(65)</span><span class="q-inplace-slot"><span class="a-inplace-space">miniatures</span></span></span> <span class="q-inplace"><span class="qi-inplace">(66)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span> famous buildings in “Window on the World”. 我們可以在「小人國」中看到著名建築物的縮小複製品。</p>
+<p>Those <span class="q-inplace"><span class="qi-inplace">(67)</span><span class="q-inplace-slot"><span class="a-inplace-space">mischievous</span></span></span> boys broke my window. 那些頑皮的男孩打破我的窗戶。</p>
+<p>She has <span class="q-inplace"><span class="qi-inplace">(68)</span><span class="q-inplace-slot"><span class="a-inplace-space">pierced</span></span></span> rings all over her; she has <span class="q-inplace"><span class="qi-inplace">(69)</span><span class="q-inplace-slot"><span class="a-inplace-space">multiple</span></span></span> earrings, a nose ring and a <span class="q-inplace"><span class="qi-inplace">(70)</span><span class="q-inplace-slot"><span class="a-inplace-space">navel</span></span></span> ring. 她全身多處穿環；好幾個耳環、一個鼻環，還有一個肚臍環。</p>
+<p>The ancient Chinese believed that garlic <span class="q-inplace"><span class="qi-inplace">(71)</span><span class="q-inplace-slot"><span class="a-inplace-space">promoted</span></span></span> <span class="q-inplace"><span class="qi-inplace">(72)</span><span class="q-inplace-slot"><span class="a-inplace-space">longevity</span></span></span>. 古代中國人相信大蒜可以延年益壽。</p>
+<p>All the tourists were waiting in the hotel <span class="q-inplace"><span class="qi-inplace">(73)</span><span class="q-inplace-slot"><span class="a-inplace-space">lounge</span></span></span>. 所有的旅客都在旅館大廳等候。</p>
+<p>She described her terrible <span class="q-inplace"><span class="qi-inplace">(74)</span><span class="q-inplace-slot"><span class="a-inplace-space">ordeal</span></span></span> <span class="q-inplace"><span class="qi-inplace">(75)</span><span class="q-inplace-slot"><span class="a-inplace-space">in</span></span></span> detail. 她詳細描述她所經歷的可怕苦難。</p>
+<p>Don’t beat around the <span class="q-inplace"><span class="qi-inplace">(76)</span><span class="q-inplace-slot"><span class="a-inplace-space">bush</span></span></span>. I can accept your <span class="q-inplace"><span class="qi-inplace">(77)</span><span class="q-inplace-slot"><span class="a-inplace-space">outright</span></span></span> <span class="q-inplace"><span class="qi-inplace">(78)</span><span class="q-inplace-slot"><span class="a-inplace-space">refusal</span></span></span>. 不要再拐彎抹角了，我可以接受你直率的拒絕。</p>
+<p>This game is an <span class="q-inplace"><span class="qi-inplace">(79)</span><span class="q-inplace-slot"><span class="a-inplace-space">outright</span></span></span> failure for us. 這場比賽對我們來說是徹底的失敗。</p>
+<p>He always says <span class="q-inplace"><span class="qi-inplace">(80)</span><span class="q-inplace-slot"><span class="a-inplace-space">outright</span></span></span> what he thinks without considering the <span class="q-inplace"><span class="qi-inplace">(81)</span><span class="q-inplace-slot"><span class="a-inplace-space">consequences</span></span></span>. 他總是直言不諱，絲毫不考慮後果。</p>
+<p>He rejected my <span class="q-inplace"><span class="qi-inplace">(82)</span><span class="q-inplace-slot"><span class="a-inplace-space">suggestion</span></span></span> <span class="q-inplace"><span class="qi-inplace">(83)</span><span class="q-inplace-slot"><span class="a-inplace-space">outright</span></span></span>. 他直接拒絕了我的建議。</p>
+<p>Throughout her career, she has very successfully <span class="q-inplace"><span class="qi-inplace">(84)</span><span class="q-inplace-slot"><span class="a-inplace-space">manipulated</span></span></span> the media. 在她的職業生涯中，她一直非常成功地操控了媒體。</p>
+<p>He ordered the <span class="q-inplace"><span class="qi-inplace">(85)</span><span class="q-inplace-slot"><span class="a-inplace-space">massacre</span></span></span> <span class="q-inplace"><span class="qi-inplace">(86)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span> 2,000 <span class="q-inplace"><span class="qi-inplace">(87)</span><span class="q-inplace-slot"><span class="a-inplace-space">innocent</span></span></span> women and children. 他下令屠殺兩千名無辜的婦孺。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(88)</span><span class="q-inplace-slot"><span class="a-inplace-space">military</span></span></span> <span class="q-inplace"><span class="qi-inplace">(89)</span><span class="q-inplace-slot"><span class="a-inplace-space">massacred</span></span></span> 2,000 <span class="q-inplace"><span class="qi-inplace">(90)</span><span class="q-inplace-slot"><span class="a-inplace-space">innocent</span></span></span> women and children. 軍隊屠殺了兩千名無事的婦孺。</p>
+<p>Korea is a <span class="q-inplace"><span class="qi-inplace">(91)</span><span class="q-inplace-slot"><span class="a-inplace-space">peninsula</span></span></span> shaped like a tiger. 韓國是一個形狀像老虎的半島。</p>
+<p>He has been <mark><span class="q-inplace"><span class="qi-inplace">(92)</span><span class="q-inplace-slot"><span class="a-inplace-space">on</span></span></span> <span class="q-inplace"><span class="qi-inplace">(93)</span><span class="q-inplace-slot"><span class="a-inplace-space">medication</span></span></span> <span class="q-inplace"><span class="qi-inplace">(94)</span><span class="q-inplace-slot"><span class="a-inplace-space">for</span></span></span></mark> high blood pressure for over 10 years. 他吃藥控制高血壓已超過十年了。</p>
+<p>She found him sitting alone, deep <span class="q-inplace"><span class="qi-inplace">(95)</span><span class="q-inplace-slot"><span class="a-inplace-space">in</span></span></span> <span class="q-inplace"><span class="qi-inplace">(96)</span><span class="q-inplace-slot"><span class="a-inplace-space">meditation</span></span></span>. 她發現他獨坐沉思。</p>
+<p>They sat in deep <span class="q-inplace"><span class="qi-inplace">(97)</span><span class="q-inplace-slot"><span class="a-inplace-space">meditation</span></span></span> <span class="q-inplace"><span class="qi-inplace">(98)</span><span class="q-inplace-slot"><span class="a-inplace-space">for</span></span></span> eight days and nights without sleeping. 他們不眠不休地打坐了八天八夜。</p>
+<p>He gave me <mark>a <span class="q-inplace"><span class="qi-inplace">(99)</span><span class="q-inplace-slot"><span class="a-inplace-space">bunch</span></span></span> <span class="q-inplace"><span class="qi-inplace">(100)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span></mark> <span class="q-inplace"><span class="qi-inplace">(101)</span><span class="q-inplace-slot"><span class="a-inplace-space">mellow</span></span></span> grapes. 他給我一串甜美的葡萄。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(102)</span><span class="q-inplace-slot"><span class="a-inplace-space">mellow</span></span></span> colors of the <span class="q-inplace"><span class="qi-inplace">(103)</span><span class="q-inplace-slot"><span class="a-inplace-space">wallpaper</span></span></span> make people <span class="q-inplace"><span class="qi-inplace">(104)</span><span class="q-inplace-slot"><span class="a-inplace-space">relax</span></span></span>. 壁紙柔和的色彩能讓人放鬆。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(105)</span><span class="q-inplace-slot"><span class="a-inplace-space">sunshine</span></span></span> <span class="q-inplace"><span class="qi-inplace">(106)</span><span class="q-inplace-slot"><span class="a-inplace-space">mellows</span></span></span> the grapes. 陽光使葡萄成熟。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(107)</span><span class="q-inplace-slot"><span class="a-inplace-space">journalist</span></span></span> was held <span class="q-inplace"><span class="qi-inplace">(108)</span><span class="q-inplace-slot"><span class="a-inplace-space">hostage</span></span></span> <span class="q-inplace"><span class="qi-inplace">(109)</span><span class="q-inplace-slot"><span class="a-inplace-space">by</span></span></span> a <span class="q-inplace"><span class="qi-inplace">(110)</span><span class="q-inplace-slot"><span class="a-inplace-space">militant</span></span></span> group in the Middle East. 這名記者被中東的一個好戰團體押做人質。</p>
+<p>Martin Luther King was a <span class="q-inplace"><span class="qi-inplace">(111)</span><span class="q-inplace-slot"><span class="a-inplace-space">militant</span></span></span> <span class="q-inplace"><span class="qi-inplace">(112)</span><span class="q-inplace-slot"><span class="a-inplace-space">for</span></span></span> <span class="q-inplace"><span class="qi-inplace">(113)</span><span class="q-inplace-slot"><span class="a-inplace-space">human</span></span></span> rights. 金恩博士是人權鬥士。</p>
+<p>It seems <span class="q-inplace"><span class="qi-inplace">(114)</span><span class="q-inplace-slot"><span class="a-inplace-space">miraculous</span></span></span> that no <span class="q-inplace"><span class="qi-inplace">(115)</span><span class="q-inplace-slot"><span class="a-inplace-space">passenger</span></span></span> was killed in the train accident. 在這次火車意外中，居然沒有乘客喪生，這真是有如奇蹟。</p>
+<p><span class="q-inplace"><span class="qi-inplace">(116)</span><span class="q-inplace-slot"><span class="a-inplace-space">Miraculously</span></span></span>, Rose survived the <span class="q-inplace"><span class="qi-inplace">(117)</span><span class="q-inplace-slot"><span class="a-inplace-space">shipwreck</span></span></span>. 蘿絲在船難中奇蹟般地生還。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(118)</span><span class="q-inplace-slot"><span class="a-inplace-space">plight</span></span></span> <span class="q-inplace"><span class="qi-inplace">(119)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span> the <span class="q-inplace"><span class="qi-inplace">(120)</span><span class="q-inplace-slot"><span class="a-inplace-space">refugees</span></span></span> <span class="q-inplace"><span class="qi-inplace">(121)</span><span class="q-inplace-slot"><span class="a-inplace-space">aroused</span></span></span> much <span class="q-inplace"><span class="qi-inplace">(122)</span><span class="q-inplace-slot"><span class="a-inplace-space">sympathy</span></span></span>. 這些難民的困境激發了許多人的同情。</p>
+<p>Many great <span class="q-inplace"><span class="qi-inplace">(123)</span><span class="q-inplace-slot"><span class="a-inplace-space">mathematicians</span></span></span> are indeed <span class="q-inplace"><span class="qi-inplace">(124)</span><span class="q-inplace-slot"><span class="a-inplace-space">mathematical</span></span></span> <span class="q-inplace"><span class="qi-inplace">(125)</span><span class="q-inplace-slot"><span class="a-inplace-space">prodigies</span></span></span> <span class="q-inplace"><span class="qi-inplace">(126)</span><span class="q-inplace-slot"><span class="a-inplace-space">as</span></span></span> children. 許多偉大的數學家確實從兒時起就是數學神童。</p>
+<p>Many <span class="q-inplace"><span class="qi-inplace">(127)</span><span class="q-inplace-slot"><span class="a-inplace-space">housewives</span></span></span> dream of escaping the <span class="q-inplace"><span class="qi-inplace">(128)</span><span class="q-inplace-slot"><span class="a-inplace-space">monotony</span></span></span> <span class="q-inplace"><span class="qi-inplace">(129)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span> <span class="q-inplace"><span class="qi-inplace">(130)</span><span class="q-inplace-slot"><span class="a-inplace-space">everyday</span></span></span> life. 許多家庭主婦夢想能夠跳脫每日的單調生活。</p>
+<p>I don’t like <span class="q-inplace"><span class="qi-inplace">(131)</span><span class="q-inplace-slot"><span class="a-inplace-space">monotonous</span></span></span> jobs that don’t <span class="q-inplace"><span class="qi-inplace">(132)</span><span class="q-inplace-slot"><span class="a-inplace-space">involve</span></span></span> any <span class="q-inplace"><span class="qi-inplace">(133)</span><span class="q-inplace-slot"><span class="a-inplace-space">creativity</span></span></span>. 我不喜歡不需要任何創造力的單調工作。</p>
+<p>The sports car is <span class="q-inplace"><span class="qi-inplace">(134)</span><span class="q-inplace-slot"><span class="a-inplace-space">propelled</span></span></span> <span class="q-inplace"><span class="qi-inplace">(135)</span><span class="q-inplace-slot"><span class="a-inplace-space">by</span></span></span> a <span class="q-inplace"><span class="qi-inplace">(136)</span><span class="q-inplace-slot"><span class="a-inplace-space">turbo</span></span></span> engine. 這部跑車是由渦輪引擎推進的。</p>
+<p>The car company <span class="q-inplace"><span class="qi-inplace">(137)</span><span class="q-inplace-slot"><span class="a-inplace-space">invests</span></span></span> a lot of money in developing a new <span class="q-inplace"><span class="qi-inplace">(138)</span><span class="q-inplace-slot"><span class="a-inplace-space">propeller</span></span></span>. 這家車廠投資很多錢在研發新的推進器。</p>
+<p>A <span class="q-inplace"><span class="qi-inplace">(139)</span><span class="q-inplace-slot"><span class="a-inplace-space">mute</span></span></span> is unable to express his ideas or feelings with his voice. 啞巴不能用聲音表達他的想法或感受。</p>
+<p>Why are some people born <span class="q-inplace"><span class="qi-inplace">(140)</span><span class="q-inplace-slot"><span class="a-inplace-space">mute</span></span></span>? 為什麼有些人生來就是啞的呢？</p>
+<p>She is <span class="q-inplace"><span class="qi-inplace">(141)</span><span class="q-inplace-slot"><span class="a-inplace-space">fascinated</span></span></span> <span class="q-inplace"><span class="qi-inplace">(142)</span><span class="q-inplace-slot"><span class="a-inplace-space">by</span></span></span> the stories of Greek and Roman <span class="q-inplace"><span class="qi-inplace">(143)</span><span class="q-inplace-slot"><span class="a-inplace-space">mythology</span></span></span>. 她對希臘、羅馬神話故事深深著迷。</p>
+<p>The novel has three parts, each <span class="q-inplace"><span class="qi-inplace">(144)</span><span class="q-inplace-slot"><span class="a-inplace-space">narrated</span></span></span> <span class="q-inplace"><span class="qi-inplace">(145)</span><span class="q-inplace-slot"><span class="a-inplace-space">by</span></span></span> a different character. 這本小說分三部分，每一部分由不同的角色來陳述。</p>
+<p>The movie <i>Titanic</i> is a touching <span class="q-inplace"><span class="qi-inplace">(146)</span><span class="q-inplace-slot"><span class="a-inplace-space">narrative</span></span></span> <span class="q-inplace"><span class="qi-inplace">(147)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span> a <span class="q-inplace"><span class="qi-inplace">(148)</span><span class="q-inplace-slot"><span class="a-inplace-space">tragic</span></span></span> <span class="q-inplace"><span class="qi-inplace">(149)</span><span class="q-inplace-slot"><span class="a-inplace-space">romance</span></span></span>. 《鐵達尼號》這部電影是一個愛情悲劇的感人故事。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(150)</span><span class="q-inplace-slot"><span class="a-inplace-space">professor</span></span></span> <span class="q-inplace"><span class="qi-inplace">(151)</span><span class="q-inplace-slot"><span class="a-inplace-space">criticized</span></span></span> my essay <span class="q-inplace"><span class="qi-inplace">(152)</span><span class="q-inplace-slot"><span class="a-inplace-space">for</span></span></span> having too little argument and too much <span class="q-inplace"><span class="qi-inplace">(153)</span><span class="q-inplace-slot"><span class="a-inplace-space">narrative</span></span></span>. 教授批評我寫的報告論說的部分太少，敘事的部分太多。</p>
+<p>The character in a book or a film who tells the story is the <span class="q-inplace"><span class="qi-inplace">(154)</span><span class="q-inplace-slot"><span class="a-inplace-space">narrator</span></span></span>. 在書中或電影裡陳述故事的角色就是敘事者。</p>
+<p>The <span class="q-inplace"><span class="qi-inplace">(155)</span><span class="q-inplace-slot"><span class="a-inplace-space">cheetah</span></span></span> <span class="q-inplace"><span class="qi-inplace">(156)</span><span class="q-inplace-slot"><span class="a-inplace-space">prowled</span></span></span> towards its <span class="q-inplace"><span class="qi-inplace">(157)</span><span class="q-inplace-slot"><span class="a-inplace-space">prey</span></span></span>. 這隻獵豹向牠的獵物潛行。</p>
+<p>Who will get the DPP <span class="q-inplace"><span class="qi-inplace">(158)</span><span class="q-inplace-slot"><span class="a-inplace-space">nomination</span></span></span> <span class="q-inplace"><span class="qi-inplace">(159)</span><span class="q-inplace-slot"><span class="a-inplace-space">for</span></span></span> president? 誰會得到民進黨的總統提名？</p>
+<p>Do you know who the <span class="q-inplace"><span class="qi-inplace">(160)</span><span class="q-inplace-slot"><span class="a-inplace-space">nominees</span></span></span> <span class="q-inplace"><span class="qi-inplace">(161)</span><span class="q-inplace-slot"><span class="a-inplace-space">for</span></span></span> Record of the Year are? 你知道年度最佳唱片的入圍者有誰嗎？</p>
+<p>That <span class="q-inplace"><span class="qi-inplace">(162)</span><span class="q-inplace-slot"><span class="a-inplace-space">notorious</span></span></span> <span class="q-inplace"><span class="qi-inplace">(163)</span><span class="q-inplace-slot"><span class="a-inplace-space">criminal</span></span></span> has been sent to prison. 這個惡名昭彰的罪犯已經被送去坐牢了。</p>
+<p>The company <mark>is <span class="q-inplace"><span class="qi-inplace">(164)</span><span class="q-inplace-slot"><span class="a-inplace-space">notorious</span></span></span> <span class="q-inplace"><span class="qi-inplace">(165)</span><span class="q-inplace-slot"><span class="a-inplace-space">for</span></span></span></mark> paying its bills late. 這公司因為常遲付帳單而惡名昭彰。</p>
+<p>The taxi driver dropped us off <mark><span class="q-inplace"><span class="qi-inplace">(166)</span><span class="q-inplace-slot"><span class="a-inplace-space">at</span></span></span> the <span class="q-inplace"><span class="qi-inplace">(167)</span><span class="q-inplace-slot"><span class="a-inplace-space">ramp</span></span></span> <span class="q-inplace"><span class="qi-inplace">(168)</span><span class="q-inplace-slot"><span class="a-inplace-space">of</span></span></span></mark> the hotel. 計程車司機讓我們在旅館的斜坡道上下車。</p>
+
+        </div>
+      </div>
+      <div id="part-simple-answer">
+        <div id="inter-fa-sa"></div>
+        <h3>
+          簡答
+        </h3>
+        <div class="narrow-col normal-text">
+          <span class="qi-left">1.</span>humanitarian<br/>
+<span class="qi-left">2.</span>humanitarian<br/>
+<span class="qi-left">3.</span>humane<br/>
+<span class="qi-left">4.</span>to<br/>
+<span class="qi-left">5.</span>kernels<br/>
+<span class="qi-left">6.</span>hypocrisy<br/>
+<span class="qi-left">7.</span>to<br/>
+<span class="qi-left">8.</span>pretend<br/>
+<span class="qi-left">9.</span>for<br/>
+<span class="qi-left">10.</span>welfare<br/>
+<span class="qi-left">11.</span>of<br/>
+<span class="qi-left">12.</span>applause<br/>
+<span class="qi-left">13.</span>hypocrite<br/>
+<span class="qi-left">14.</span>to<br/>
+<span class="qi-left">15.</span>hypocritical<br/>
+<span class="qi-left">16.</span>to<br/>
+<span class="qi-left">17.</span>hysterical<br/>
+<span class="qi-left">18.</span>ash<br/>
+<span class="qi-left">19.</span>lava<br/>
+<span class="qi-left">20.</span>poured<br/>
+<span class="qi-left">21.</span>crater<br/>
+<span class="qi-left">22.</span>importer<br/>
+<span class="qi-left">23.</span>of<br/>
+<span class="qi-left">24.</span>importer<br/>
+<span class="qi-left">25.</span>of<br/>
+<span class="qi-left">26.</span>electronic<br/>
+<span class="qi-left">27.</span>largest<br/>
+<span class="qi-left">28.</span>exporter<br/>
+<span class="qi-left">29.</span>in<br/>
+<span class="qi-left">30.</span>exporter<br/>
+<span class="qi-left">31.</span>of<br/>
+<span class="qi-left">32.</span>liable<br/>
+<span class="qi-left">33.</span>to<br/>
+<span class="qi-left">34.</span>liable<br/>
+<span class="qi-left">35.</span>to<br/>
+<span class="qi-left">36.</span>liable<br/>
+<span class="qi-left">37.</span>for<br/>
+<span class="qi-left">38.</span>ingenious<br/>
+<span class="qi-left">39.</span>for<br/>
+<span class="qi-left">40.</span>disposing<br/>
+<span class="qi-left">41.</span>of<br/>
+<span class="qi-left">42.</span>remains<br/>
+<span class="qi-left">43.</span>smugglers<br/>
+<span class="qi-left">44.</span>constantly<br/>
+<span class="qi-left">45.</span>ingenuity<br/>
+<span class="qi-left">46.</span>to<br/>
+<span class="qi-left">47.</span>lunatic<br/>
+<span class="qi-left">48.</span>lunar<br/>
+<span class="qi-left">49.</span>lunatic<br/>
+<span class="qi-left">50.</span>intellect<br/>
+<span class="qi-left">51.</span>lush<br/>
+<span class="qi-left">52.</span>Miller<br/>
+<span class="qi-left">53.</span>ancestors<br/>
+<span class="qi-left">54.</span>millers<br/>
+<span class="qi-left">55.</span>lamented<br/>
+<span class="qi-left">56.</span>lament<br/>
+<span class="qi-left">57.</span>for<br/>
+<span class="qi-left">58.</span>by<br/>
+<span class="qi-left">59.</span>mimicking<br/>
+<span class="qi-left">60.</span>mimic<br/>
+<span class="qi-left">61.</span>bombarded<br/>
+<span class="qi-left">62.</span>with<br/>
+<span class="qi-left">63.</span>miniature<br/>
+<span class="qi-left">64.</span>excavator<br/>
+<span class="qi-left">65.</span>miniatures<br/>
+<span class="qi-left">66.</span>of<br/>
+<span class="qi-left">67.</span>mischievous<br/>
+<span class="qi-left">68.</span>pierced<br/>
+<span class="qi-left">69.</span>multiple<br/>
+<span class="qi-left">70.</span>navel<br/>
+<span class="qi-left">71.</span>promoted<br/>
+<span class="qi-left">72.</span>longevity<br/>
+<span class="qi-left">73.</span>lounge<br/>
+<span class="qi-left">74.</span>ordeal<br/>
+<span class="qi-left">75.</span>in<br/>
+<span class="qi-left">76.</span>bush<br/>
+<span class="qi-left">77.</span>outright<br/>
+<span class="qi-left">78.</span>refusal<br/>
+<span class="qi-left">79.</span>outright<br/>
+<span class="qi-left">80.</span>outright<br/>
+<span class="qi-left">81.</span>consequences<br/>
+<span class="qi-left">82.</span>suggestion<br/>
+<span class="qi-left">83.</span>outright<br/>
+<span class="qi-left">84.</span>manipulated<br/>
+<span class="qi-left">85.</span>massacre<br/>
+<span class="qi-left">86.</span>of<br/>
+<span class="qi-left">87.</span>innocent<br/>
+<span class="qi-left">88.</span>military<br/>
+<span class="qi-left">89.</span>massacred<br/>
+<span class="qi-left">90.</span>innocent<br/>
+<span class="qi-left">91.</span>peninsula<br/>
+<span class="qi-left">92.</span>on<br/>
+<span class="qi-left">93.</span>medication<br/>
+<span class="qi-left">94.</span>for<br/>
+<span class="qi-left">95.</span>in<br/>
+<span class="qi-left">96.</span>meditation<br/>
+<span class="qi-left">97.</span>meditation<br/>
+<span class="qi-left">98.</span>for<br/>
+<span class="qi-left">99.</span>bunch<br/>
+<span class="qi-left">100.</span>of<br/>
+<span class="qi-left">101.</span>mellow<br/>
+<span class="qi-left">102.</span>mellow<br/>
+<span class="qi-left">103.</span>wallpaper<br/>
+<span class="qi-left">104.</span>relax<br/>
+<span class="qi-left">105.</span>sunshine<br/>
+<span class="qi-left">106.</span>mellows<br/>
+<span class="qi-left">107.</span>journalist<br/>
+<span class="qi-left">108.</span>hostage<br/>
+<span class="qi-left">109.</span>by<br/>
+<span class="qi-left">110.</span>militant<br/>
+<span class="qi-left">111.</span>militant<br/>
+<span class="qi-left">112.</span>for<br/>
+<span class="qi-left">113.</span>human<br/>
+<span class="qi-left">114.</span>miraculous<br/>
+<span class="qi-left">115.</span>passenger<br/>
+<span class="qi-left">116.</span>Miraculously<br/>
+<span class="qi-left">117.</span>shipwreck<br/>
+<span class="qi-left">118.</span>plight<br/>
+<span class="qi-left">119.</span>of<br/>
+<span class="qi-left">120.</span>refugees<br/>
+<span class="qi-left">121.</span>aroused<br/>
+<span class="qi-left">122.</span>sympathy<br/>
+<span class="qi-left">123.</span>mathematicians<br/>
+<span class="qi-left">124.</span>mathematical<br/>
+<span class="qi-left">125.</span>prodigies<br/>
+<span class="qi-left">126.</span>as<br/>
+<span class="qi-left">127.</span>housewives<br/>
+<span class="qi-left">128.</span>monotony<br/>
+<span class="qi-left">129.</span>of<br/>
+<span class="qi-left">130.</span>everyday<br/>
+<span class="qi-left">131.</span>monotonous<br/>
+<span class="qi-left">132.</span>involve<br/>
+<span class="qi-left">133.</span>creativity<br/>
+<span class="qi-left">134.</span>propelled<br/>
+<span class="qi-left">135.</span>by<br/>
+<span class="qi-left">136.</span>turbo<br/>
+<span class="qi-left">137.</span>invests<br/>
+<span class="qi-left">138.</span>propeller<br/>
+<span class="qi-left">139.</span>mute<br/>
+<span class="qi-left">140.</span>mute<br/>
+<span class="qi-left">141.</span>fascinated<br/>
+<span class="qi-left">142.</span>by<br/>
+<span class="qi-left">143.</span>mythology<br/>
+<span class="qi-left">144.</span>narrated<br/>
+<span class="qi-left">145.</span>by<br/>
+<span class="qi-left">146.</span>narrative<br/>
+<span class="qi-left">147.</span>of<br/>
+<span class="qi-left">148.</span>tragic<br/>
+<span class="qi-left">149.</span>romance<br/>
+<span class="qi-left">150.</span>professor<br/>
+<span class="qi-left">151.</span>criticized<br/>
+<span class="qi-left">152.</span>for<br/>
+<span class="qi-left">153.</span>narrative<br/>
+<span class="qi-left">154.</span>narrator<br/>
+<span class="qi-left">155.</span>cheetah<br/>
+<span class="qi-left">156.</span>prowled<br/>
+<span class="qi-left">157.</span>prey<br/>
+<span class="qi-left">158.</span>nomination<br/>
+<span class="qi-left">159.</span>for<br/>
+<span class="qi-left">160.</span>nominees<br/>
+<span class="qi-left">161.</span>for<br/>
+<span class="qi-left">162.</span>notorious<br/>
+<span class="qi-left">163.</span>criminal<br/>
+<span class="qi-left">164.</span>notorious<br/>
+<span class="qi-left">165.</span>for<br/>
+<span class="qi-left">166.</span>at<br/>
+<span class="qi-left">167.</span>ramp<br/>
+<span class="qi-left">168.</span>of<br/>
+
+        </div>
+      </div>
+    </div>
+    <script>
+      set_page_break('break-qa-input', 'inter-q-fa');
+      set_page_break('break-aa-input', 'inter-fa-sa');
+      update_title();
+      update_line_height();
+      if(document.getElementById('compact-mode-input').checkVisibility()){
+        document.getElementById('compact-mode-input').checked = true;
+        set_compact_mode(true);
+        document.getElementById('font-size-input').value -= 1; // [ ] reduce paper, decrease font size
+        update_text_font_size();
+      }
+      update_paragraph_margin();
+      document.querySelectorAll('.mid-answer-slot').forEach((elem) => {if (elem.innerHTML == '') {elem.innerHTML = ' '};});
+      document.querySelectorAll('.big-answer-slot').forEach((elem) => {if (elem.innerHTML == '') {elem.innerHTML = ' '};});
+      document.querySelectorAll('p:has(+ul.option-list), ul.option-list+p').forEach((elem) => {if (elem.innerHTML == '') {elem.remove()}});
+    </script>
+  </body>
+</html>

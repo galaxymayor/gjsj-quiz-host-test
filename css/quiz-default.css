@@ -2,6 +2,10 @@
     font-family: "GenRyuMin TW";
     src: url(../fonts/GenRyuMin2TW-R.otf);
 }
+@font-face {
+    font-family: "Cambria";
+    src: url(../fonts/cambria.ttc);
+}
 
 @page {
     @bottom-center {
